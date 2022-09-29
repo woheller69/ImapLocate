@@ -13,8 +13,8 @@ decided to name this one "imapnote2". It is under the GPL v3 License, same as "i
 It is based on Apple way to manage notes. They are stored in an imap folder named "Notes". imapnote
 uses Gmail for syncing. As I use my own imap server, I have modified it to be used with any imap
 server that respects Apple method. It has been tested with Gmail, iCloud (imap.mail.me.com),
-Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com) and of course my server. Even if not still tested,
-it should work with others.
+Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com), posteo.de and of course my server. Even if not
+still tested, it should work with others.
 
 Main changes V5
 
@@ -22,6 +22,7 @@ Main changes V5
 - sdk version 33
 - load libs during compile time
 - switch no maven
+- notes from posteo.de are working again
 
 Main changes are:
 
