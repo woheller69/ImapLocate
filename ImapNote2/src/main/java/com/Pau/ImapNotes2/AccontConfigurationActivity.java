@@ -16,7 +16,9 @@ import android.content.ContentResolver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.NavUtils;
+
+import androidx.core.app.NavUtils;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,8 +37,8 @@ import android.widget.Toast;
 
 public class AccontConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener{
   public static final int TO_REFRESH = 999;
-  public static final String AUTHORITY = "com.Pau.ImapNotes2.provider";
-  private static final String TAG = "AccontConfigurationActivity";
+    public static final String AUTHORITY = "com.Pau.ImapNotes2.provider";
+    private static final String TAG = "AccountConfigurationActivity";
   
   private Imaper imapFolder;
   
@@ -58,44 +60,44 @@ public class AccontConfigurationActivity extends AccountAuthenticatorActivity im
   private static Account myAccount = null;
   private static AccountManager accountManager;
 
-  private OnClickListener clickListenerLogin = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-          // Click on Login Button
-    	  if (((String) accountnameTextView.getText().toString()).contains("'")) {
-    	      // Single quotation marks are not allowed in accountname
-              Toast.makeText(getApplicationContext(), "Quotation marks are not allowed in accountname",
-                      Toast.LENGTH_LONG).show();
-    	  } else {
-              DoLogin(v);
-    	  }
+    private final OnClickListener clickListenerLogin = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // Click on Login Button
+            if (((String) accountnameTextView.getText().toString()).contains("'")) {
+                // Single quotation marks are not allowed in accountname
+                Toast.makeText(getApplicationContext(), "Quotation marks are not allowed in accountname",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                DoLogin(v);
+            }
       }
   };
 
-  private OnClickListener clickListenerEdit = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-          // Click on Edit Button
-    	  if (((String) accountnameTextView.getText().toString()).contains("'")) {
-    	      // Single quotation marks are not allowed in accountname
-              Toast.makeText(getApplicationContext(), "Quotation marks are not allowed in accountname",
-                      Toast.LENGTH_LONG).show();
-    	  } else {
-              DoLogin(v);
-    	  }
+    private final OnClickListener clickListenerEdit = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // Click on Edit Button
+            if (((String) accountnameTextView.getText().toString()).contains("'")) {
+                // Single quotation marks are not allowed in accountname
+                Toast.makeText(getApplicationContext(), "Quotation marks are not allowed in accountname",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                DoLogin(v);
+            }
       }
   };
 
-  private OnClickListener clickListenerRemove = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-          // Clic on Remove Button
-          accountManager.removeAccount(myAccount, null, null);
-          Toast.makeText(getApplicationContext(), "Account has been removed",
-                Toast.LENGTH_LONG).show();
-          finish();//finishing activity
-      }
-  };
+    private final OnClickListener clickListenerRemove = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // Clic on Remove Button
+            accountManager.removeAccount(myAccount, null, null);
+            Toast.makeText(getApplicationContext(), "Account has been removed",
+                    Toast.LENGTH_LONG).show();
+            finish();//finishing activity
+        }
+    };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -165,19 +167,21 @@ public class AccontConfigurationActivity extends AccountAuthenticatorActivity im
         }
     }
 
-    if ((this.action == null) || (this.myAccount == null)) { this.action = "CREATE_ACCOUNT"; }
+      if ((this.action == null) || (myAccount == null)) {
+          this.action = "CREATE_ACCOUNT";
+      }
 
     if (this.action.equals("EDIT_ACCOUNT")) {
         // Here we have to edit an existing account
         this.accountnameTextView.setText(this.accountname);
-       	this.usernameTextView.setText(this.accountManager.getUserData (myAccount, "username"));
-       	this.passwordTextView.setText(this.accountManager.getPassword(myAccount));
-        this.serverTextView.setText(this.accountManager.getUserData(myAccount, "server"));
-        this.portnumTextView.setText(this.accountManager.getUserData(myAccount, "portnum"));
-        this.security = this.accountManager.getUserData (myAccount, "security");
-        this.stickyCheckBox.setChecked(Boolean.parseBoolean(this.accountManager.getUserData(myAccount,"usesticky")));
-        this.syncintervalTextView.setText(this.accountManager.getUserData(myAccount, "syncinterval"));
-        this.folderTextView.setText(this.accountManager.getUserData (myAccount, "imapfolder"));
+        this.usernameTextView.setText(accountManager.getUserData(myAccount, "username"));
+        this.passwordTextView.setText(accountManager.getPassword(myAccount));
+        this.serverTextView.setText(accountManager.getUserData(myAccount, "server"));
+        this.portnumTextView.setText(accountManager.getUserData(myAccount, "portnum"));
+        this.security = accountManager.getUserData(myAccount, "security");
+        this.stickyCheckBox.setChecked(Boolean.parseBoolean(accountManager.getUserData(myAccount, "usesticky")));
+        this.syncintervalTextView.setText(accountManager.getUserData(myAccount, "syncinterval"));
+        this.folderTextView.setText(accountManager.getUserData(myAccount, "imapfolder"));
         if (this.security == null) this.security = "0";
         this.security_i = Integer.parseInt(this.security);
         this.securitySpinner.setSelection(this.security_i);
