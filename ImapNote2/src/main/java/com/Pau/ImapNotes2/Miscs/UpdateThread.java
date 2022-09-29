@@ -11,9 +11,11 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
 
+import javax.mail.Address;
 import javax.mail.Flags;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MailDateFormat;
 
@@ -168,30 +170,33 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean>{
       message.setHeader("X-Uniform-Type-Identifier","com.apple.mail-note");
       UUID uuid = UUID.randomUUID();
       message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
-      body = noteBody;
-      body = body.replaceFirst("<p dir=ltr>", "<div>");
-      body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
-      body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
-      body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
-      body = body.replaceAll("</p>", "</div>");
-      body = body.replaceAll("<br>\n", "</div><div>");
-      message.setText(body, "utf-8", "html");
-      message.setFlag(Flags.Flag.SEEN,true);
+        body = noteBody;
+        body = body.replaceFirst("<p dir=ltr>", "<div>");
+        body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
+        body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
+        body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
+        body = body.replaceAll("</p>", "</div>");
+        body = body.replaceAll("<br>\n", "</div><div>");
+        message.setText(body, "utf-8", "html");
+        message.setFlag(Flags.Flag.SEEN, true);
     }
-    message.setSubject(note.GetTitle());
-    MailDateFormat mailDateFormat = new MailDateFormat();
-    // Remove (CET) or (GMT+1) part as asked in github issue #13
-    String headerDate = (mailDateFormat.format(new Date())).replaceAll("\\(.*$", "");
-    message.addHeader("Date", headerDate);
-    //déterminer l'uid temporaire
-    String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
-    File directory = new File ((ImapNotes2.getAppContext()).getFilesDir() + "/" +
-            Listactivity.imapNotes2Account.GetAccountname() + "/new");
-    //message.setFrom(new InternetAddress("ImapNotes2", Listactivity.imapNotes2Account.GetAccountname()));
-    message.setFrom(Listactivity.imapNotes2Account.GetAccountname());
-    File outfile = new File (directory, uid);
-    OutputStream str = new FileOutputStream(outfile);
-    message.writeTo(str);
+      message.setSubject(note.GetTitle());
+      MailDateFormat mailDateFormat = new MailDateFormat();
+      // Remove (CET) or (GMT+1) part as asked in github issue #13
+      String headerDate = (mailDateFormat.format(new Date())).replaceAll("\\(.*$", "");
+      message.addHeader("Date", headerDate);
+      //déterminer l'uid temporaire
+      String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
+      File directory = new File((ImapNotes2.getAppContext()).getFilesDir() + "/" +
+              Listactivity.imapNotes2Account.GetAccountname() + "/new");
+
+
+      message.setFrom(new InternetAddress("ImapNotes2", Listactivity.imapNotes2Account.GetAccountname()));
+      //message.setFrom (Listactivity.imapNotes2Account.GetAccountname());
+
+      File outfile = new File(directory, uid);
+      OutputStream str = new FileOutputStream(outfile);
+      message.writeTo(str);
 
   }
 

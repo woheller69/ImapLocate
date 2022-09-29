@@ -58,13 +58,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Listactivity extends Activity  implements OnItemSelectedListener,Filterable {
+public class Listactivity extends Activity implements OnItemSelectedListener, Filterable {
     private static final int SEE_DETAIL = 2;
     private static final int DELETE_BUTTON = 3;
     private static final int NEW_BUTTON = 4;
     private static final int SAVE_BUTTON = 5;
     private static final int EDIT_BUTTON = 6;
-        
+
     private ArrayList<OneNote> noteList;
     private NotesListAdapter listToView;
     private ArrayAdapter<String> spinnerList;
@@ -82,16 +82,16 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
     private ListView listview;
     public static final String AUTHORITY = "com.Pau.ImapNotes2.provider";
     private static final String TAG = "IN_Listactivity";
-    
 
-    private OnClickListener clickListenerEditAccount = new View.OnClickListener() {
+
+    private final OnClickListener clickListenerEditAccount = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             // Clic on editAccount Button
             Intent res = new Intent();
             String mPackage = "com.Pau.ImapNotes2";
             String mClass = ".AccontConfigurationActivity";
-            res.setComponent(new ComponentName(mPackage,mPackage+mClass));
+            res.setComponent(new ComponentName(mPackage, mPackage + mClass));
             res.putExtra("action", "EDIT_ACCOUNT");
             res.putExtra("accountname", Listactivity.imapNotes2Account.GetAccountname());
             startActivity(res);
@@ -166,12 +166,38 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
 //        this.imapFolder.SetPrefs();
     }
 
-    public void onStart() {
-        super.onStart();
-        int len = this.accounts == null ? 0 : this.accounts.length;
-        if (len > 0) updateAccountSpinner();
-    }
-    
+    private final BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String accountname = intent.getStringExtra("ACCOUNTNAME");
+            Boolean isChanged = intent.getBooleanExtra("CHANGED", false);
+            Boolean isSynced = intent.getBooleanExtra("SYNCED", false);
+            String syncInterval = intent.getStringExtra("SYNCINTERVAL");
+            if (accountname.equals(Listactivity.imapNotes2Account.GetAccountname())) {
+                if (isSynced) {
+                    // Display last sync date
+                    DateFormat dateFormat =
+                            android.text.format.DateFormat.getDateFormat(getApplicationContext());
+                    Date date = new Date();
+                    String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
+                    String sinterval = " (interval:" + syncInterval + " min)";
+                    status.setText("Last sync: " + sdate + sinterval);
+                } else {
+                    status.setText(OldStatus);
+                }
+
+                if (isChanged) {
+                    if (Listactivity.storedNotes == null)
+                        storedNotes = new NotesDb(getApplicationContext());
+                    storedNotes.OpenDb();
+                    storedNotes.GetStoredNotes(noteList, accountname);
+                    listToView.notifyDataSetChanged();
+                    storedNotes.CloseDb();
+                }
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -184,79 +210,54 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
         unregisterReceiver(syncFinishedReceiver);
     }
 
-    private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+    public void onStart() {
+        super.onStart();
+        int len = accounts == null ? 0 : accounts.length;
+        if (len > 0) updateAccountSpinner();
+    }
 
-        public void onReceive(Context context, Intent intent) {
-            String accountname = intent.getStringExtra("ACCOUNTNAME");
-            Boolean isChanged = intent.getBooleanExtra("CHANGED", false);
-            Boolean isSynced = intent.getBooleanExtra("SYNCED", false);
-            String syncInterval = intent.getStringExtra("SYNCINTERVAL");
-            if (accountname.equals(Listactivity.imapNotes2Account.GetAccountname())) {
-                if (isSynced) {
-                    // Display last sync date
-                    DateFormat dateFormat =
-                        android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                    Date date = new Date();
-                    String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(date);
-                    String sinterval = " (interval:" + String.valueOf(syncInterval) + " min)";
-                    status.setText("Last sync: " + sdate + sinterval);
-                } else {
-                    status.setText(OldStatus);
-                }
+    public void RefreshList() {
+        ProgressDialog loadingDialog = ProgressDialog.show(this, "ImapNotes2", "Refreshing notes list... ", true);
 
-                if (isChanged) {
-                    if (Listactivity.storedNotes == null)
-                         storedNotes = new NotesDb(getApplicationContext());
-                    storedNotes.OpenDb();
-                    storedNotes.GetStoredNotes(noteList, accountname);
-                    listToView.notifyDataSetChanged();
-                    storedNotes.CloseDb();
-                }
-            }
-        }
-    };
-
-    public void RefreshList(){
-        ProgressDialog loadingDialog = ProgressDialog.show(this, "ImapNotes2" , "Refreshing notes list... ", true);
-
-        new SyncThread().execute(this.imapFolder, Listactivity.imapNotes2Account, this.noteList, this.listToView, loadingDialog, this.storedNotes, this.getApplicationContext());
+        new SyncThread().execute(this.imapFolder, Listactivity.imapNotes2Account, this.noteList, this.listToView, loadingDialog, storedNotes, this.getApplicationContext());
         status.setText("Welcome");
     }
-    
-    public void UpdateList(String suid, String noteBody, String color, String action){
-        ProgressDialog loadingDialog = ProgressDialog.show(this, "imapnote2" , "Updating notes list... ", true);
 
-        new UpdateThread().execute(this.imapFolder, Listactivity.imapNotes2Account, this.noteList, this.listToView, loadingDialog, suid, noteBody, color, this.getApplicationContext(), action, this.storedNotes);
+    public void UpdateList(String suid, String noteBody, String color, String action) {
+        ProgressDialog loadingDialog = ProgressDialog.show(this, "imapnote2", "Updating notes list... ", true);
+
+        new UpdateThread().execute(this.imapFolder, Listactivity.imapNotes2Account, this.noteList, this.listToView, loadingDialog, suid, noteBody, color, this.getApplicationContext(), action, storedNotes);
 
     }
-    
-    public boolean onCreateOptionsMenu(Menu menu){
-    getMenuInflater().inflate(R.menu.list, menu);
-    
-    // Associate searchable configuration with the SearchView
-    SearchManager searchManager =
-           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-    SearchView searchView =
-            (SearchView) menu.findItem(R.id.search).getActionView();
-    searchView.setSearchableInfo(
-            searchManager.getSearchableInfo(getComponentName()));
-     SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
-         @Override
-         public boolean onQueryTextChange(String newText) {
-             // this is your adapter that will be filtered
-             listToView.getFilter().filter(newText);
-             return true;
-         }
 
-         @Override
-         public boolean onQueryTextSubmit(String query) {
-             // this is your adapter that will be filtered
-             listToView.getFilter().filter(query);
-             return true;
-         }
-     };
-     searchView.setOnQueryTextListener(textChangeListener);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list, menu);
 
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        if (searchView != null) {
+            searchView.setSearchableInfo(
+                    searchManager.getSearchableInfo(getComponentName()));
+            SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    // this is your adapter that will be filtered
+                    listToView.getFilter().filter(newText);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    // this is your adapter that will be filtered
+                    listToView.getFilter().filter(query);
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(textChangeListener);
+        }
     return true;
     }
     
@@ -271,7 +272,7 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
             startActivity(res);
             return true;
         case R.id.refresh:
-            this.TriggerSync(this.status);
+            TriggerSync(this.status);
             return true;
         case R.id.newnote:
             Intent toNew = new Intent(this, NewNoteActivity.class);
@@ -283,52 +284,53 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
                 ComponentName comp = new ComponentName(this.getApplicationContext(), Listactivity.class);
                 PackageInfo pinfo = this.getApplicationContext().getPackageManager().getPackageInfo(comp.getPackageName(), 0);
                 String versionName = "Version: " + pinfo.versionName;
-                String versionCode = "Code: " + String.valueOf(pinfo.versionCode);
+                String versionCode = "Code: " + pinfo.versionCode;
 
                 new AlertDialog.Builder(this)
-                    .setTitle("About ImapNotes2")
-                    .setMessage(versionName + "\n" + versionCode)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) { 
+                        .setTitle("About ImapNotes2")
+                        .setMessage(versionName + "\n" + versionCode)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                                 // Do nothing
                             }
-                         })
-                    .show();
+                        })
+                        .show();
             } catch (android.content.pm.PackageManager.NameNotFoundException e) {
-                Log.d("XXXXX","except");
+                Log.d("XXXXX", "except");
             }
             return true;
         default:
             return super.onOptionsItemSelected(item);
     }
     }
-    
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){ 
-        switch(requestCode) {
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
             case Listactivity.SEE_DETAIL:
-            // Returning from NoteDetailActivity
-            if (resultCode == Listactivity.DELETE_BUTTON) {
-                // Delete Message asked for
-                // String suid will contain the Message Imap UID to delete
-                String suid = data.getStringExtra("DELETE_ITEM_NUM_IMAP");
-                this.UpdateList(suid, null, null, "delete");
-            }
-            if (resultCode == Listactivity.EDIT_BUTTON) {
-                String txt = data.getStringExtra("EDIT_ITEM_TXT");
-                String suid = data.getStringExtra("EDIT_ITEM_NUM_IMAP");
-                String color = data.getStringExtra("EDIT_ITEM_COLOR");
-                //Log.d(TAG,"Received request to delete message:"+suid);
-                //Log.d(TAG,"Received request to replace message with:"+txt);
-                this.UpdateList(suid, txt, color, "update");
-            }
+                // Returning from NoteDetailActivity
+                if (resultCode == Listactivity.DELETE_BUTTON) {
+                    // Delete Message asked for
+                    // String suid will contain the Message Imap UID to delete
+                    String suid = data.getStringExtra("DELETE_ITEM_NUM_IMAP");
+                    this.UpdateList(suid, null, null, "delete");
+                }
+                if (resultCode == Listactivity.EDIT_BUTTON) {
+                    String txt = data.getStringExtra("EDIT_ITEM_TXT");
+                    String suid = data.getStringExtra("EDIT_ITEM_NUM_IMAP");
+                    String color = data.getStringExtra("EDIT_ITEM_COLOR");
+                    //Log.d(TAG,"Received request to delete message:"+suid);
+                    //Log.d(TAG,"Received request to replace message with:"+txt);
+                    this.UpdateList(suid, txt, color, "update");
+                }
             case Listactivity.NEW_BUTTON:
-            // Returning from NewNoteActivity
-            if (resultCode == Listactivity.SAVE_BUTTON) {
-                String res = data.getStringExtra("SAVE_ITEM");
-                //Log.d(TAG,"Received request to save message:"+res);
-                String color = data.getStringExtra("SAVE_ITEM_COLOR");
-                this.UpdateList(null, res, color, "insert");
-            }
+                // Returning from NewNoteActivity
+                if (resultCode == Listactivity.SAVE_BUTTON) {
+                    String res = data.getStringExtra("SAVE_ITEM");
+                    //Log.d(TAG,"Received request to save message:"+res);
+                    String color = data.getStringExtra("SAVE_ITEM_COLOR");
+                    this.UpdateList(null, res, color, "insert");
+                }
         }
     }
 
@@ -486,7 +488,7 @@ public class Listactivity extends Activity  implements OnItemSelectedListener,Fi
     
         //send file using email
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        String to[] = {"nb@dagami.org"};
+        String[] to = {"nb@dagami.org"};
         emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
         // the attachment
         emailIntent .putExtra(Intent.EXTRA_TEXT, emailData);

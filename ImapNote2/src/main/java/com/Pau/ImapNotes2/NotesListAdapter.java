@@ -46,7 +46,7 @@ import java.util.Map;
  * If the returned value is false, the following views are then tried in order:
  * <ul>
  * <li> A view that implements Checkable (e.g. CheckBox).  The expected bind value is a boolean.
- * <li> TextView.  The expected bind value is a string and {@link #setViewText(TextView, String)} 
+ * <li> TextView.  The expected bind value is a string and {@link #setViewText(TextView, String)}
  * is invoked.
  * <li> ImageView. The expected bind value is a resource id or a string and 
  * {@link #setViewImage(ImageView, int)} or {@link #setViewImage(ImageView, String)} is invoked. 
@@ -54,15 +54,15 @@ import java.util.Map;
  * If no appropriate binding can be found, an {@link IllegalStateException} is thrown.
  */
 public class NotesListAdapter extends BaseAdapter implements Filterable {
-    private int[] mTo;
-    private String[] mFrom;
+    private final int[] mTo;
+    private final String[] mFrom;
     private ViewBinder mViewBinder;
 
     private List<? extends Map<String, ?>> mData;
 
-    private int mResource;
+    private final int mResource;
     private int mDropDownResource;
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
 
     private SimpleFilter mFilter;
     private ArrayList<Map<String, ?>> mUnfilteredData;
@@ -302,7 +302,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
      * @see SimpleAdapter#setViewImage(ImageView, String)
      * @see SimpleAdapter#setViewText(TextView, String)
      */
-    public static interface ViewBinder {
+    public interface ViewBinder {
         /**
          * Binds the specified data to the specified view.
          *

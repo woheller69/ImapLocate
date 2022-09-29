@@ -27,29 +27,29 @@ import com.Pau.ImapNotes2.Listactivity;
 import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
 
 public class Imaper {
-  
-  private Store store;
-  private Session session;
-  private static final String TAG = "IN_Imaper";
-  private String proto;
-  private String acceptcrt;
-  private static String sfolder = "Notes";
-  private String folderoverride;
-  private Folder notesFolder = null;
-  private ImapNotes2Result res;
-  private Long UIDValidity;
-private Boolean useProxy = false;
-public static final String PREFS_NAME = "PrefsFile";
-  
-  public ImapNotes2Result ConnectToProvider(String username, String password, String server, String portnum, String security, String usesticky, String override) throws MessagingException{
-    if (this.IsConnected())
-      this.store.close();
-    
-  res = new ImapNotes2Result();
-    if (override==null) {
-      this.folderoverride = "";
-    } else {
-      this.folderoverride = override;
+
+    private Store store;
+    private Session session;
+    private static final String TAG = "IN_Imaper";
+    private String proto;
+    private String acceptcrt;
+    private static String sfolder = "Notes";
+    private String folderoverride;
+    public static final String PREFS_NAME = "PrefsFile";
+    private final Folder notesFolder = null;
+    private final Boolean useProxy = false;
+    private ImapNotes2Result res;
+    private Long UIDValidity;
+
+    public ImapNotes2Result ConnectToProvider(String username, String password, String server, String portnum, String security, String usesticky, String override) throws MessagingException {
+        if (this.IsConnected())
+            this.store.close();
+
+        res = new ImapNotes2Result();
+        if (override == null) {
+            this.folderoverride = "";
+        } else {
+            this.folderoverride = override;
     }
   this.proto = "";
   this.acceptcrt = "";
@@ -101,7 +101,7 @@ public static final String PREFS_NAME = "PrefsFile";
     props.setProperty("mail.store.protocol", this.proto);
 
     if ((this.acceptcrt.equals("true"))) {
-      sf.setTrustedHosts(new String[] {server});
+        sf.setTrustedHosts(server);
       if (this.proto.equals("imap")) {
         props.put("mail.imap.ssl.socketFactory", sf);
         props.put("mail.imap.starttls.enable", "true");

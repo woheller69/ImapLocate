@@ -19,27 +19,26 @@ import android.util.Log;
 public class NotesDb {
 
 	private static final int NOTES_VERSION = 3;
-	private static final String TAG = "IN_NotesDb";
-	private Context ctx;
-	
-	private static final String CREATE_NOTES_DB = "CREATE TABLE IF NOT EXISTS "
-            + "notesTable (" 
+    private static final String TAG = "IN_NotesDb";
+    private final Context ctx;
+
+    private static final String CREATE_NOTES_DB = "CREATE TABLE IF NOT EXISTS "
+            + "notesTable ("
             + "pk integer primary key autoincrement, "
             + "title text not null, "
             + "date text not null, "
             + "number text not null, "
             + "accountname text not null);";
+    private final NotesDbHelper defaultHelper;
+    private SQLiteDatabase notesDb;
 
-	private SQLiteDatabase notesDb;
-	private NotesDbHelper defaultHelper;
-	
-	public NotesDb(Context applicationContext){
-		this.defaultHelper = new NotesDbHelper(applicationContext, "NotesDb", NOTES_VERSION);
-		this.ctx = applicationContext;
-		
-	}
-	
-	public void OpenDb(){ 
+    public NotesDb(Context applicationContext) {
+        this.defaultHelper = new NotesDbHelper(applicationContext, "NotesDb", NOTES_VERSION);
+        this.ctx = applicationContext;
+
+    }
+
+    public void OpenDb() {
         this.notesDb = this.defaultHelper.getWritableDatabase();
         
 	}

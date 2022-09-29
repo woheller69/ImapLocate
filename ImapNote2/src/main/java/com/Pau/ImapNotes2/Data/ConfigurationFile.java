@@ -16,7 +16,7 @@ import android.util.Xml;
 
 public class ConfigurationFile {
 
-    private Context applicationContext;
+    private final Context applicationContext;
     private static final String TAG = "IN_ConfigurationFile";
     
     private String accountname;

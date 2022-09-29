@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,28 +47,28 @@ public class SyncUtils {
   
   static Store store;
   static Session session;
-  static final String TAG = "IN_SyncUtils";
-  static String proto;
-  static String acceptcrt;
-  static String sfolder = "Notes";
-  static private String folderoverride;
-  static Folder notesFolder = null;
-  static ImapNotes2Result res;
-  static Long UIDValidity;
-  private final static int NEW = 1;
-  private final static int DELETED = 2;
-  private final static int ROOT_AND_NEW = 3;
-private static Boolean useProxy = false;
-  
-  public static ImapNotes2Result ConnectToRemote(String username, String password, String server, String portnum, String security, String usesticky, String override) throws MessagingException{
-    if (IsConnected())
-      store.close();
+    static final String TAG = "IN_SyncUtils";
+    static String proto;
+    static String acceptcrt;
+    static String sfolder = "Notes";
+    static private String folderoverride;
+    static Folder notesFolder = null;
+    static ImapNotes2Result res;
+    static Long UIDValidity;
+    private final static int NEW = 1;
+    private final static int DELETED = 2;
+    private final static int ROOT_AND_NEW = 3;
+    private static final Boolean useProxy = false;
 
-  res = new ImapNotes2Result();
-  if (override==null) {
-    folderoverride = "";
-  } else {
-    folderoverride = override;
+    public static ImapNotes2Result ConnectToRemote(String username, String password, String server, String portnum, String security, String usesticky, String override) throws MessagingException {
+        if (IsConnected())
+            store.close();
+
+        res = new ImapNotes2Result();
+        if (override == null) {
+            folderoverride = "";
+        } else {
+            folderoverride = override;
   }
   proto = "";
   acceptcrt = "";
@@ -119,7 +120,7 @@ private static Boolean useProxy = false;
     props.setProperty("mail.store.protocol", proto);
 
     if ((acceptcrt.equals("true"))) {
-      sf.setTrustedHosts(new String[] {server});
+        sf.setTrustedHosts(server);
       if (proto.equals("imap")) {
         props.put("mail.imap.ssl.socketFactory", sf);
         props.put("mail.imap.starttls.enable", "true");
@@ -201,29 +202,33 @@ private static Boolean useProxy = false;
   }
 
   public static Sticky ReadStickynote(String stringres) {
-    String color=new String("");
-    String position=new String("");
-    String text=new String("");
-    Pattern p = null;
-    Matcher m = null;
+      String color = "";
+      String position = "";
+      String text = "";
+      Pattern p = null;
+      Matcher m = null;
 
-    p = Pattern.compile("^COLOR:(.*?)$",Pattern.MULTILINE);
-    m = p.matcher(stringres);
-    if (m.find()) { color = m.group(1); }
+      p = Pattern.compile("^COLOR:(.*?)$", Pattern.MULTILINE);
+      m = p.matcher(stringres);
+      if (m.find()) {
+          color = m.group(1);
+      }
 
-    p = Pattern.compile("^POSITION:(.*?)$",Pattern.MULTILINE);
-    m = p.matcher(stringres);
-    if (m.find()) { position = m.group(1); }
+      p = Pattern.compile("^POSITION:(.*?)$", Pattern.MULTILINE);
+      m = p.matcher(stringres);
+      if (m.find()) {
+          position = m.group(1);
+      }
 
-    p = Pattern.compile("TEXT:(.*?)(END:|POSITION:)",Pattern.DOTALL);
-    m = p.matcher(stringres);
-    if (m.find()) {
-      text = m.group(1);
-      // Kerio Connect puts CR+LF+space every 78 characters from line 2
-      // first line seem to be smaller. We remove these characters
-      text = text.replaceAll("\r\n ", "");
-      // newline in Kerio is the string (not the character) "\n"
-      text = text.replaceAll("\\\\n", "<br>");
+      p = Pattern.compile("TEXT:(.*?)(END:|POSITION:)", Pattern.DOTALL);
+      m = p.matcher(stringres);
+      if (m.find()) {
+          text = m.group(1);
+          // Kerio Connect puts CR+LF+space every 78 characters from line 2
+          // first line seem to be smaller. We remove these characters
+          text = text.replaceAll("\r\n ", "");
+          // newline in Kerio is the string (not the character) "\n"
+          text = text.replaceAll("\\\\n", "<br>");
     }
     return new Sticky(text, position, color);
   }
@@ -381,14 +386,30 @@ private static Boolean useProxy = false;
       // "lä ö ë" subject should be stored as =?charset?encoding?encoded-text?=
       // either =?utf-8?B?bMOkIMO2IMOr?=  -> Quoted printable
       // or =?utf-8?Q?l=C3=A4 =C3=B6 =C3=AB?=  -> Base64
-      try { rawvalue = notesMessage.getHeader("Subject"); } catch (Exception e) {e.printStackTrace(); };
-      try { title = notesMessage.getSubject(); } catch (Exception e) {e.printStackTrace();}
+      try {
+          rawvalue = notesMessage.getHeader("Subject");
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+      try {
+          title = notesMessage.getSubject();
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
       if (rawvalue[0].length() >= 2) {
-    	  if (!(rawvalue[0].substring(0,2).equals("=?"))) {
-    		  try { title = new String ( title.getBytes("ISO-8859-1")); } catch (Exception e) {e.printStackTrace();}
-    	  }
+          if (!(rawvalue[0].startsWith("=?"))) {
+              try {
+                  title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+          }
       } else {
-          try { title = new String ( title.getBytes("ISO-8859-1")); } catch (Exception e) {e.printStackTrace();}
+          try {
+              title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
       }
 
       // Get INTERNALDATE

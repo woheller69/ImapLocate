@@ -32,7 +32,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     private String[] listOfNew;
     private String[] listOfDeleted;
     private static Account account;
-    private Long UIDValidity = (long) -1;
+    private final Long UIDValidity = (long) -1;
     private static ImapNotes2Result res;
     private final static int NEW = 1;
     private final static int DELETED = 2;
@@ -42,31 +42,31 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContentResolver = context.getContentResolver();
-        this.context = context;
+        SyncAdapter.context = context;
     }
 
     public SyncAdapter(Context context, boolean autoInitialize, 
                        boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
         mContentResolver = context.getContentResolver();
-        this.context = context;
+        SyncAdapter.context = context;
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
         //Log.d(TAG, "Beginning network synchronization of account: "+account.name);
-        this.account = account;
+        SyncAdapter.account = account;
         isChanged = false;
         isSynced = false;
         String syncinterval;
-        
-        SyncUtils.CreateDirs (account.name, this.context);
 
-        storedNotes = new NotesDb(this.context);
+        SyncUtils.CreateDirs(account.name, context);
+
+        storedNotes = new NotesDb(context);
         storedNotes.OpenDb();
 
-        AccountManager am = AccountManager.get(this.context);
+        AccountManager am = AccountManager.get(context);
         syncinterval = am.getUserData(account, "syncinterval");
 /*
 // Temporary workaround for a bug
@@ -77,13 +77,13 @@ else am.setUserData(account, "syncinterval", "15");
 */
 
         // Connect to remote and get UIDValidity
-        this.res = ConnectToRemote();
-        if (this.res.returnCode != 0) {
+        res = ConnectToRemote();
+        if (res.returnCode != 0) {
             storedNotes.CloseDb();
 
             // Notify Listactivity that it's finished, but it can't refresh display
             Intent i = new Intent(SyncService.SYNC_FINISHED);
-            i.putExtra("ACCOUNTNAME",account.name);
+            i.putExtra("ACCOUNTNAME", account.name);
             isChanged = false;
             isSynced = false;
             i.putExtra("CHANGED", isChanged);
@@ -93,17 +93,17 @@ else am.setUserData(account, "syncinterval", "15");
             return;
         }
         // Compare UIDValidity to old saved one
-        if (!(this.res.UIDValidity.equals
-                (SyncUtils.GetUIDValidity(this.account, this.context)))) {
+        if (!(res.UIDValidity.equals
+                (SyncUtils.GetUIDValidity(SyncAdapter.account, context)))) {
             // Replace local data by remote
             try {
                 // delete notes in NotesDb for this account
                 storedNotes.ClearDb(account.name);
                 // delete notes in folders for this account and recreate dirs
-                SyncUtils.ClearHomeDir(account, this.context);
-                SyncUtils.CreateDirs (account.name, this.context);
+                SyncUtils.ClearHomeDir(account, context);
+                SyncUtils.CreateDirs(account.name, context);
                 // Get all notes from remote and replace local
-                SyncUtils.GetNotes(account,this.res.notesFolder,this.context,storedNotes);
+                SyncUtils.GetNotes(account, res.notesFolder, context, storedNotes);
                 storedNotes.CloseDb();
             } catch (MessagingException e) {
             // TODO Auto-generated catch block
@@ -112,7 +112,7 @@ else am.setUserData(account, "syncinterval", "15");
             // TODO Auto-generated catch block
             e.printStackTrace();
             }
-            SyncUtils.SetUIDValidity(account, this.res.UIDValidity, this.context);
+            SyncUtils.SetUIDValidity(account, res.UIDValidity, context);
             // Notify Listactivity that it's finished, and that it can refresh display
             Intent i = new Intent(SyncService.SYNC_FINISHED);
             i.putExtra("ACCOUNTNAME",account.name);
@@ -164,7 +164,7 @@ else am.setUserData(account, "syncinterval", "15");
     }
 
     ImapNotes2Result ConnectToRemote() {
-        AccountManager am = AccountManager.get(this.context);
+        AccountManager am = AccountManager.get(context);
         ImapNotes2Result res = null;
         try {
         res = SyncUtils.ConnectToRemote(
@@ -236,7 +236,7 @@ else am.setUserData(account, "syncinterval", "15");
         listOfDeleted = dirDeleted.list();
         for (String fileDeleted : listOfDeleted) {
             try {
-                SyncUtils.DeleteNote(this.res.notesFolder, Integer.parseInt(fileDeleted));
+                SyncUtils.DeleteNote(res.notesFolder, Integer.parseInt(fileDeleted));
             } catch (Exception e) {
                 e.printStackTrace();
             }

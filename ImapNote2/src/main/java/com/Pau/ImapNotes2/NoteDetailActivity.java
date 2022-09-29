@@ -1,30 +1,9 @@
 package com.Pau.ImapNotes2;
 
-import java.util.HashMap;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.internet.ContentType;
-import javax.mail.internet.MimeMessage;
-
-import org.apache.commons.io.IOUtils;
-
-import com.Pau.ImapNotes2.Miscs.OneNote;
-import com.Pau.ImapNotes2.Miscs.Sticky;
-import com.Pau.ImapNotes2.Sync.SyncUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -34,8 +13,26 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import androidx.core.app.NavUtils;
+
+import com.Pau.ImapNotes2.Miscs.Sticky;
+import com.Pau.ImapNotes2.Sync.SyncUtils;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.internet.ContentType;
+
 public class NoteDetailActivity extends Activity {
-    
+
     private static final int DELETE_BUTTON = 3;
     private static final int EDIT_BUTTON = 6;
     private HashMap hm;
@@ -122,11 +119,7 @@ public class NoteDetailActivity extends Activity {
         MenuItem item= menu.findItem(R.id.color);
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
-        if (this.usesticky.equals("true")) {
-                item.setVisible(true);
-        } else {
-                item.setVisible(false);
-        }
+        item.setVisible(this.usesticky.equals("true"));
         menu.findItem(this.realColor).setChecked(true);
         return true;
     }
@@ -202,11 +195,12 @@ public class NoteDetailActivity extends Activity {
         String charset;
         Sticky sticky = null;
         try {
-//Log.d(TAG, "Contenttype as string:"+message.getContentType());
-            contentType = new ContentType(message.getContentType() );
+            Log.d(TAG, "Contenttype as string:" + message.getContentType());
+            contentType = new ContentType(message.getContentType());
             charset = contentType.getParameter("charset");
-            iis = (InputStream)message.getContent();
+            iis = (InputStream) message.getContent();
             stringres = IOUtils.toString(iis, charset);
+            //stringres=message.getContent().toString();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
