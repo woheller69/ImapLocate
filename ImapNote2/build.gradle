@@ -13,6 +13,7 @@ android {
     compileSdkVersion 33
     buildToolsVersion "33.0.0"
 
+    //noinspection GroovyMissingReturnStatement
     defaultConfig {
         applicationId "com.Pau.ImapNotes2"
         minSdkVersion 19
@@ -27,6 +28,7 @@ android {
         }
     }
 
+    //noinspection GroovyMissingReturnStatement
     packagingOptions {
         resources {
             excludes += ['META-INF/LICENSE.txt']
@@ -50,6 +52,9 @@ dependencies {
     implementation 'com.sun.mail:android-mail:1.6.7'
     implementation 'com.sun.mail:android-activation:1.6.7'
     implementation 'commons-io:commons-io:2.11.0'
+    implementation 'jdiff:jdiff:1.0.9'
+    implementation 'jp.wasabeef:richeditor-android:2.0.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
 }
 
 // ToDo

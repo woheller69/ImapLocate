@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ImapNotes2k</string>
+    <string name="account">Konto</string>
+    <string name="titleNew">Neu</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="about">Über</string>
+    <string name="search">Suche</string>
+    <string name="account_removed">Konte wurde entfernt</string>
+    <string name="quotation_marks_not_allowed">Anführungszeichen nicht erlaubt</string>
+    <string name="remove">Entfernen</string>
+    <string name="save">Speichern</string>
+    <string name="check_and_create_account">"Überprüfen "</string>
+    <string name="logging_in">Anmelden</string>
+    <string name="account_already_exists_or_is_null">Konte existiert</string>
+    <string name="account_added">Konto angelegt</string>
+    <string name="add_account">Konto hinzufügen</string>
+    <string name="account_name">Name</string>
+    <string name="choose_a_name_for_this_account">Namen wählen</string>
+    <string name="username">Benutzer</string>
+    <string name="your_login_name">Login</string>
+    <string name="password">Passwort</string>
+    <string name="your_password">Passwort</string>
+    <string name="server">IMAP Server</string>
+    <string name="note_title">Titel</string>
+    <string name="delete">Löschen</string>
+    <string name="imap_notes_server">IMAP Server</string>
+    <string name="server_port_number_to_use">Portnummer</string>
+    <string name="sync_interval_minutes">Synchr. Intervall (Minuten)</string>
+    <string name="sync_interval_for_this_account_in_minutes">Synchr. Intervall (Minuten)</string>
+    <string name="welcome">Willkommen</string>
+    <string name="color">Farbe</string>
+    <string name="blue">Blau</string>
+    <string name="white">Weiß</string>
+    <string name="yellow">Gelb</string>
+    <string name="pink">Pink</string>
+    <string name="green">Grün</string>
+    <string name="syncing">Sychronisieren...</string>
+    <string name="device_name">Gerätename</string>
+    <string name="editAccount">Konte bearbeiten</string>
+    <string name="choose_a_name_for_this_device">Gerätename wählen</string>
+</resources>
