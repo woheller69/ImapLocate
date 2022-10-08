@@ -63,19 +63,18 @@ public class NoteDetailActivity extends Activity {
         );
 
         Bundle extras = getIntent().getExtras();
-        HashMap hm = (HashMap) extras.get(selectedNote);
-        usesticky = (boolean) extras.get(useSticky);
+        HashMap hm = (HashMap) extras.getSerializable(selectedNote);
+        usesticky = extras.getBoolean(useSticky);
         Sticky sticky;
         String stringres = "";
         if (hm != null) {
-//        assert hm != null;
             suid = hm.get("uid").toString();
             File rootDir = new File(getApplicationContext().getFilesDir(),
                     Listactivity.imapNotes2Account.accountName);
             Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
             //Log.d(TAG, "rootDir is null: " + (rootDir == null));
 
-            Log.d(TAG, "rootDir: " + rootDir.toString());
+            Log.d(TAG, "rootDir: " + rootDir);
 
             if (message != null) {
                 sticky = GetInfoFromMessage(message);
@@ -86,16 +85,15 @@ public class NoteDetailActivity extends Activity {
             //Spanned plainText = Html.fromHtml(stringres);
             //EditText editText = ((EditText) findViewById(R.id.bodyView));
 
-            editText = (RichEditor) findViewById(R.id.bodyView);
+            editText = findViewById(R.id.bodyView);
             //editText.setText(plainText);
             SetupRichEditor(editText);
             editText.setHtml(stringres);
         } else {   // neuer Eintrag
             color = Colors.YELLOW;
-            editText = (RichEditor) findViewById(R.id.bodyView);
+            editText = findViewById(R.id.bodyView);
             SetupRichEditor(editText);
         }
-        ;
 
 /*        // TODO: Watch for changes so that we can auto save.
         // See http://stackoverflow.com/questions/7117209/how-to-know-key-presses-in-edittext#14251047
@@ -373,7 +371,7 @@ public class NoteDetailActivity extends Activity {
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
         item.setVisible(usesticky);
-        Log.d(TAG, "color.id: " + Integer.toString(color.id));
+        Log.d(TAG, "color.id: " + color.id);
         Log.d(TAG, "mfi: " + (menu.findItem(color.id) == null));
         if (BuildConfig.DEBUG && (color == null)) {
             throw new AssertionError("color is null");
@@ -565,7 +563,7 @@ public class NoteDetailActivity extends Activity {
                 if (color.id == id)
                     return color;
             }
-            throw new IllegalArgumentException("id not found in Colors: " + Integer.toString(id));
+            throw new IllegalArgumentException("id not found in Colors: " + id);
         }
     }
 
