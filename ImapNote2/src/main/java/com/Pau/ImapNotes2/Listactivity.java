@@ -123,8 +123,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         public void onReceive(Context context, @NonNull Intent intent) {
             Log.d(TAG, "BroadcastReceiver.onReceive");
             String accountName = intent.getStringExtra(ACCOUNTNAME);
-            Boolean isChanged = intent.getBooleanExtra(CHANGED, false);
-            Boolean isSynced = intent.getBooleanExtra(SYNCED, false);
+            boolean isChanged = intent.getBooleanExtra(CHANGED, false);
+            boolean isSynced = intent.getBooleanExtra(SYNCED, false);
             String syncInterval = intent.getStringExtra(SYNCINTERVAL);
             Log.d(TAG, "if " + accountName + " " + Listactivity.imapNotes2Account.accountName);
             if (accountName.equals(Listactivity.imapNotes2Account.accountName)) {
@@ -188,7 +188,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         Log.d(TAG, "onCreate");
         setContentView(R.layout.main);
 
-        this.accountSpinner = (Spinner) findViewById(R.id.accountSpinner);
+        this.accountSpinner = findViewById(R.id.accountSpinner);
         Listactivity.currentList = new ArrayList<>();
 
         this.accountSpinner.setOnItemSelectedListener(this);
@@ -198,7 +198,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         Listactivity.accountManager.addOnAccountsUpdatedListener(
                 new AccountsUpdateListener(), null, true);
 
-        status = (TextView) findViewById(R.id.status);
+        status = findViewById(R.id.status);
 
         this.spinnerList = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item, Listactivity.currentList);
@@ -213,7 +213,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 this.noteList,
                 new String[]{OneNote.TITLE, OneNote.DATE},
                 new int[]{R.id.noteTitle, R.id.noteInformation});
-        ListView listview = (ListView) findViewById(R.id.notesList);
+        ListView listview = findViewById(R.id.notesList);
         listview.setAdapter(this.listToView);
 
         listview.setTextFilterEnabled(true);
@@ -241,7 +241,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             }
         });
 
-        Button editAccountButton = (Button) findViewById(R.id.editAccountButton);
+        Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
 
     }
@@ -364,7 +364,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     ComponentName comp = new ComponentName(this.getApplicationContext(), Listactivity.class);
                     PackageInfo pinfo = this.getApplicationContext().getPackageManager().getPackageInfo(comp.getPackageName(), 0);
                     String versionName = "Version: " + pinfo.versionName;
-                    String versionCode = "Code: " + String.valueOf(pinfo.versionCode);
+                    String versionCode = "Code: " + pinfo.versionCode;
 
                     new AlertDialog.Builder(this)
                             .setTitle("About ImapNotes2")
@@ -417,7 +417,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 }
                 return;
             default:
-                ;
+                Log.d(TAG, "Received wrong request to save message");
         }
     }
 
@@ -515,23 +515,22 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     }
 
     private class AccountsUpdateListener implements OnAccountsUpdateListener {
-        private ArrayList<Account> newAccounts;
 
         @Override
         public void onAccountsUpdated(@NonNull Account[] accounts) {
             List<String> newList;
             //Integer newListSize = 0;
             //invoked when the AccountManager starts up and whenever the account set changes
-            this.newAccounts = new ArrayList<>();
+            ArrayList<Account> newAccounts = new ArrayList<>();
             for (final Account account : accounts) {
                 if (account.type.equals("com.Pau.ImapNotes2")) {
-                    this.newAccounts.add(account);
+                    newAccounts.add(account);
                 }
             }
-            if (this.newAccounts.size() > 0) {
-                Account[] imapNotes2Accounts = new Account[this.newAccounts.size()];
+            if (newAccounts.size() > 0) {
+                Account[] imapNotes2Accounts = new Account[newAccounts.size()];
                 int i = 0;
-                for (final Account account : this.newAccounts) {
+                for (final Account account : newAccounts) {
                     imapNotes2Accounts[i] = account;
                     i++;
                 }
@@ -542,7 +541,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 }
                 if (newList.size() == 0) return;
 
-                Boolean equalLists = true;
+                boolean equalLists = true;
                 ListIterator<String> iter = Listactivity.currentList.listIterator();
                 while (iter.hasNext()) {
                     String s = iter.next();
