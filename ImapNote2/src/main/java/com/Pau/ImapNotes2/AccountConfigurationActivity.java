@@ -419,7 +419,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                         imapNotes2Account.portnum,
                         imapNotes2Account.security
                 );
-                //accountConfigurationActivity = acountConfigurationActivity;
+                //accountConfigurationActivity = accountConfigurationActivity;
                 if (res.returnCode != Imaper.ResultCodeSuccess) {
                     return new Result<>("IMAP operation failed: " + res.errorMessage, false);
                 }

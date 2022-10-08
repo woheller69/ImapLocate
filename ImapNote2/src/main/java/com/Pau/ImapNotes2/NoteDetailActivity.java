@@ -91,14 +91,9 @@ public class NoteDetailActivity extends Activity {
             SetupRichEditor(editText);
             editText.setHtml(stringres);
         } else {   // neuer Eintrag
-            suid = "0";
             color = Colors.YELLOW;
-            //if (usesticky) {
-            //    stringres = UseSticky();
-            //}
             editText = (RichEditor) findViewById(R.id.bodyView);
             SetupRichEditor(editText);
-            //editText.setHtml(stringres);
         }
         ;
 

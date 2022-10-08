@@ -125,7 +125,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             String accountName = intent.getStringExtra(ACCOUNTNAME);
             boolean isChanged = intent.getBooleanExtra(CHANGED, false);
             boolean isSynced = intent.getBooleanExtra(SYNCED, false);
-            String syncInterval = intent.getStringExtra(SYNCINTERVAL);
+            String syncInterval = String.valueOf(intent.getIntExtra(SYNCINTERVAL, 14));
             Log.d(TAG, "if " + accountName + " " + Listactivity.imapNotes2Account.accountName);
             if (accountName.equals(Listactivity.imapNotes2Account.accountName)) {
                 String statusText;
@@ -405,17 +405,17 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     //TextView status = (TextView) findViewById(R.id.status);
                     TriggerSync(status);
                 }
-                return;
+                break;
             case Listactivity.NEW_BUTTON:
                 // Returning from NewNoteActivity
                 if (resultCode == Listactivity.EDIT_BUTTON) {
                     //String res = data.getStringExtra(SAVE_ITEM);
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
-                    Colors color = (Colors) data.getSerializableExtra(SAVE_ITEM_COLOR);
+                    Colors color = (Colors) data.getSerializableExtra(EDIT_ITEM_COLOR);
                     UpdateList(null, txt, color, UpdateThread.Action.Insert);
                 }
-                return;
+                break;
             default:
                 Log.d(TAG, "Received wrong request to save message");
         }
