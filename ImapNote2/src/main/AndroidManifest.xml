@@ -60,15 +60,6 @@
                 android:value="com.Pau.ImapNotes2.Listactivity" />
         </activity>
 
-        <activity
-            android:name=".NewNoteActivity"
-            android:parentActivityName="com.Pau.ImapNotes2.Listactivity">
-            <!-- What is this meta-data for?  There doesn't seem to be any code that uses it -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.Pau.ImapNotes2.Listactivity" />
-        </activity>
-
         <service
             android:name="com.Pau.ImapNotes2.Sync.ImapNotesAuthenticatorService"
             android:exported="true"

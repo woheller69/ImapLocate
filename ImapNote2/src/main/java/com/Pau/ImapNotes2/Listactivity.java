@@ -3,6 +3,7 @@ package com.Pau.ImapNotes2;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -134,7 +135,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     //        android.text.format.DateFormat.getDateFormat(getApplicationContext());
                     Date date = new Date();
                     String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
-                    String sinterval = " (interval:" + String.valueOf(syncInterval) + " min)";
+                    String sinterval = " (interval:" + syncInterval + " min)";
                     statusText = "Last sync: " + sdate + sinterval;
                 } else {
                     statusText = OldStatus;
@@ -180,6 +181,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     /**
      * Called when the activity is first created.
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -353,8 +355,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 TriggerSync(status);
                 return true;
             case R.id.newnote:
-                Intent toNew = new Intent(this, NewNoteActivity.class);
-                toNew.putExtra(NewNoteActivity.usesSticky, Listactivity.imapNotes2Account.usesticky);
+                Intent toNew = new Intent(this, NoteDetailActivity.class);
+                toNew.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
                 startActivityForResult(toNew, Listactivity.NEW_BUTTON);
                 return true;
             case R.id.about:
@@ -403,14 +405,19 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     //TextView status = (TextView) findViewById(R.id.status);
                     TriggerSync(status);
                 }
+                return;
             case Listactivity.NEW_BUTTON:
                 // Returning from NewNoteActivity
-                if (resultCode == Listactivity.SAVE_BUTTON) {
-                    String res = data.getStringExtra(SAVE_ITEM);
+                if (resultCode == Listactivity.EDIT_BUTTON) {
+                    //String res = data.getStringExtra(SAVE_ITEM);
+                    String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
                     Colors color = (Colors) data.getSerializableExtra(SAVE_ITEM_COLOR);
-                    UpdateList(null, res, color, UpdateThread.Action.Insert);
+                    UpdateList(null, txt, color, UpdateThread.Action.Insert);
                 }
+                return;
+            default:
+                ;
         }
     }
 

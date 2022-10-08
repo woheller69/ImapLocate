@@ -65,23 +65,42 @@ public class NoteDetailActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         HashMap hm = (HashMap) extras.get(selectedNote);
         usesticky = (boolean) extras.get(useSticky);
-        assert hm != null;
-        suid = hm.get("uid").toString();
-        File rootDir = new File(getApplicationContext().getFilesDir(),
-                Listactivity.imapNotes2Account.accountName);
-        Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
-        //Log.d(TAG, "rootDir is null: " + (rootDir == null));
-        Log.d(TAG, "rootDir: " + rootDir.toString());
-        Sticky sticky = GetInfoFromMessage(message);
-        String stringres = sticky.text;
-        //String position = sticky.position;
-        color = sticky.color;
-        //Spanned plainText = Html.fromHtml(stringres);
-        //EditText editText = ((EditText) findViewById(R.id.bodyView));
-        editText = (RichEditor) findViewById(R.id.bodyView);
-        //editText.setText(plainText);
-        SetupRichEditor(editText);
-        editText.setHtml(stringres);
+        Sticky sticky;
+        String stringres = "";
+        if (hm != null) {
+//        assert hm != null;
+            suid = hm.get("uid").toString();
+            File rootDir = new File(getApplicationContext().getFilesDir(),
+                    Listactivity.imapNotes2Account.accountName);
+            Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
+            //Log.d(TAG, "rootDir is null: " + (rootDir == null));
+
+            Log.d(TAG, "rootDir: " + rootDir.toString());
+
+            if (message != null) {
+                sticky = GetInfoFromMessage(message);
+                stringres = sticky.text;
+                //String position = sticky.position;
+                color = sticky.color;
+            }
+            //Spanned plainText = Html.fromHtml(stringres);
+            //EditText editText = ((EditText) findViewById(R.id.bodyView));
+
+            editText = (RichEditor) findViewById(R.id.bodyView);
+            //editText.setText(plainText);
+            SetupRichEditor(editText);
+            editText.setHtml(stringres);
+        } else {   // neuer Eintrag
+            suid = "0";
+            color = Colors.YELLOW;
+            //if (usesticky) {
+            //    stringres = UseSticky();
+            //}
+            editText = (RichEditor) findViewById(R.id.bodyView);
+            SetupRichEditor(editText);
+            //editText.setHtml(stringres);
+        }
+        ;
 
 /*        // TODO: Watch for changes so that we can auto save.
         // See http://stackoverflow.com/questions/7117209/how-to-know-key-presses-in-edittext#14251047
