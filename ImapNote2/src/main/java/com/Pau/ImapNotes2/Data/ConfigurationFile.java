@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import android.util.Log;
 
-import com.Pau.ImapNotes2.ImapNotes2k;
+import com.Pau.ImapNotes2.ImapNotes2;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -54,7 +54,7 @@ public class ConfigurationFile {
         this.applicationContext = applicationContext;
         try {
             Document fileToLoad = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
-                    new File(ImapNotes2k.ConfigurationFilePath(applicationContext)));
+                    new File(ImapNotes2.ConfigurationFilePath(applicationContext)));
             username = NodeValueFromXML(fileToLoad, ConfigurationFieldNames.UserName);
             password = NodeValueFromXML(fileToLoad, ConfigurationFieldNames.Password);
             server = NodeValueFromXML(fileToLoad, ConfigurationFieldNames.Server);
@@ -180,7 +180,7 @@ public class ConfigurationFile {
 
     public void Clear() {
         //noinspection ResultOfMethodCallIgnored
-        new File(ImapNotes2k.ConfigurationFilePath(applicationContext)).delete();
+        new File(ImapNotes2.ConfigurationFilePath(applicationContext)).delete();
         username = null;
         password = null;
         server = null;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ImapNotes2k</string>
+    <string name="app_name">ImapNotes2</string>
     <string name="delete">Slette</string>
     <string name="green">Grøṇn</string>
     <string name="note_title">Tittel</string>

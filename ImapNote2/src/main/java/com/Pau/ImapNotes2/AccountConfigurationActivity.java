@@ -176,7 +176,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         securitySpinner.setOnItemSelectedListener(this);
 
         //imapNotes2Account = new ImapNotes2Account();
-        imapFolder = ((ImapNotes2k) getApplicationContext()).GetImaper();
+        imapFolder = ((ImapNotes2) getApplicationContext()).GetImaper();
         //settings = new ConfigurationFile();
 
         Bundle extras = getIntent().getExtras();
@@ -424,6 +424,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     return new Result<>("IMAP operation failed: " + res.errorMessage, false);
                 }
                 // TODO: Find out if "com.Pau.ImapNotes2" is the same as getApplicationContext().getPackageName().
+                String test = getApplicationContext().getPackageName();
                 final Account account = new Account(imapNotes2Account.accountName, "com.Pau.ImapNotes2");
                 final AccountManager am = AccountManager.get(accountConfigurationActivity);
                 accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);

@@ -14,7 +14,7 @@ import java.io.File;
 Changed name by appending a k so that I can have this and the original installed side by side,
 perhaps.
  */
-public class ImapNotes2k extends Application {
+public class ImapNotes2 extends Application {
 
     private static final String configurationFileName = "ImapNotes2.conf";
     private Imaper thisSessionImapFolder;

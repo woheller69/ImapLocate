@@ -219,7 +219,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         listview.setTextFilterEnabled(true);
 
         Imaper imapFolder = new Imaper();
-        ((ImapNotes2k) this.getApplicationContext()).SetImaper(imapFolder);
+        ((ImapNotes2) this.getApplicationContext()).SetImaper(imapFolder);
 
         if (Listactivity.storedNotes == null)
             storedNotes = new Db(getApplicationContext());
@@ -549,7 +549,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                         iter.remove();
                         // Why try here?
                         try {
-                            String stringDir = ImapNotes2k.ConfigurationDirPath(getApplicationContext()) + "/" + s;
+                            String stringDir = ImapNotes2.ConfigurationDirPath(getApplicationContext()) + "/" + s;
                             FileUtils.deleteDirectory(new File(stringDir));
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
@@ -569,7 +569,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 if (equalLists) return;
                 updateAccountSpinner();
             } else {
-                File filesDir = ImapNotes2k.ConfigurationDir(getApplicationContext());
+                File filesDir = ImapNotes2.ConfigurationDir(getApplicationContext());
                 try {
                     FileUtils.cleanDirectory(filesDir);
                 } catch (IOException e) {
