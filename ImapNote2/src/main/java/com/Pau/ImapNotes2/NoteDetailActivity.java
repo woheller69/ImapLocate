@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javax.mail.Message;
 import javax.mail.internet.ContentType;
@@ -40,6 +41,9 @@ public class NoteDetailActivity extends Activity {
     //region Intent item names
     public static final String useSticky = "useSticky";
     public static final String selectedNote = "selectedNote";
+    public static final String ActivityType = "ActivityType";
+    public static final String ActivityTypeEdit = "ActivityTypeEdit";
+    public static final String ActivityTypeAdd = "ActivityTypeAdd";
     //private static final int DELETE_BUTTON = 3;
     private static final int EDIT_BUTTON = 6;
     // --Commented out by Inspection (11/26/16 11:52 PM):private final static int ROOT_AND_NEW = 3;
@@ -63,33 +67,40 @@ public class NoteDetailActivity extends Activity {
         );
 
         Bundle extras = getIntent().getExtras();
-        HashMap hm = (HashMap) extras.getSerializable(selectedNote);
-        usesticky = extras.getBoolean(useSticky);
         Sticky sticky;
         String stringres = "";
-        if (hm != null) {
-            suid = hm.get("uid").toString();
-            File rootDir = new File(getApplicationContext().getFilesDir(),
-                    Listactivity.imapNotes2Account.accountName);
-            Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
-            //Log.d(TAG, "rootDir is null: " + (rootDir == null));
+        String ChangeNote = extras.getString(ActivityType);
+        if (ChangeNote.equals(ActivityTypeEdit)) {
+            HashMap hm = (HashMap) extras.getSerializable(selectedNote);
+            usesticky = extras.getBoolean(useSticky);
 
-            Log.d(TAG, "rootDir: " + rootDir);
+            if (hm != null) {
+                suid = hm.get("uid").toString();
+                File rootDir = new File(getApplicationContext().getFilesDir(),
+                        Listactivity.imapNotes2Account.accountName);
+                Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
+                //Log.d(TAG, "rootDir is null: " + (rootDir == null));
 
-            if (message != null) {
-                sticky = GetInfoFromMessage(message);
-                stringres = sticky.text;
-                //String position = sticky.position;
-                color = sticky.color;
+                Log.d(TAG, "rootDir: " + rootDir);
+                if (message != null) {
+                    sticky = GetInfoFromMessage(message);
+                    stringres = sticky.text;
+                    //String position = sticky.position;
+                    color = sticky.color;
+                    //Spanned plainText = Html.fromHtml(stringres);
+                    //EditText editText = ((EditText) findViewById(R.id.bodyView));
+
+                    editText = findViewById(R.id.bodyView);
+                    //editText.setText(plainText);
+                    SetupRichEditor(editText);
+                    editText.setHtml(stringres);
+                } else {
+                    // Entry can not opened..
+                    // Fixme
+                    finish();
+                }
             }
-            //Spanned plainText = Html.fromHtml(stringres);
-            //EditText editText = ((EditText) findViewById(R.id.bodyView));
-
-            editText = findViewById(R.id.bodyView);
-            //editText.setText(plainText);
-            SetupRichEditor(editText);
-            editText.setHtml(stringres);
-        } else {   // neuer Eintrag
+        } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
             color = Colors.YELLOW;
             editText = findViewById(R.id.bodyView);
             SetupRichEditor(editText);

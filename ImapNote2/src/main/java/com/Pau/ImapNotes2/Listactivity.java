@@ -234,6 +234,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 Intent toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
                 toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
                 toDetail.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
+                toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
                 startActivityForResult(toDetail, SEE_DETAIL);
                 Log.d(TAG, "onItemClick, back from detail.");
 
@@ -357,6 +358,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             case R.id.newnote:
                 Intent toNew = new Intent(this, NoteDetailActivity.class);
                 toNew.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
+                toNew.putExtra(NoteDetailActivity.ActivityTypeEdit, NoteDetailActivity.ActivityTypeAdd);
                 startActivityForResult(toNew, Listactivity.NEW_BUTTON);
                 return true;
             case R.id.about:
@@ -413,7 +415,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
                     Colors color = (Colors) data.getSerializableExtra(EDIT_ITEM_COLOR);
-                    UpdateList(null, txt, color, UpdateThread.Action.Insert);
+                    this.UpdateList(null, txt, color, UpdateThread.Action.Insert);
+                    TriggerSync(status);
                 }
                 break;
             default:

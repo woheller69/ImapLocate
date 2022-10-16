@@ -80,7 +80,7 @@ public class NotesDb {
     }
 
     public String GetTempNumber(@NonNull String accountname) {
-        String selectQuery = "select case when cast(max(abs(number)+1) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number < '0' and accountname='" + accountname + "'";
+        String selectQuery = "select case when cast(max(abs(number)+1) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number > '0' and accountname='" + accountname + "'";
         try (Cursor c = db.notesDb.rawQuery(selectQuery, null)) {
             if (c.moveToFirst()) {
                 return c.getString(0);
