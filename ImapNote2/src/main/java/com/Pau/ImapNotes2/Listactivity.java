@@ -358,7 +358,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             case R.id.newnote:
                 Intent toNew = new Intent(this, NoteDetailActivity.class);
                 toNew.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
-                toNew.putExtra(NoteDetailActivity.ActivityTypeEdit, NoteDetailActivity.ActivityTypeAdd);
+                toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
                 startActivityForResult(toNew, Listactivity.NEW_BUTTON);
                 return true;
             case R.id.about:
