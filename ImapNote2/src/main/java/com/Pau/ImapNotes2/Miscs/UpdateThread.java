@@ -128,7 +128,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 suid = storedNotes.notes.GetTempNumber(Listactivity.imapNotes2Account.accountName);
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
-                // Must be done AFTER uid has been set in currenteNote
+                // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: " + body);
                 WriteMailToNew(currentNote,
                         imapNotes2Account.usesticky,
@@ -136,7 +136,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         body);
                 storedNotes.notes.InsertANoteInDb(currentNote, Listactivity.imapNotes2Account.accountName);
                 storedNotes.CloseDb();
-                // Add note to noteList but chage date format before
+                // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
