@@ -470,7 +470,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             am.setUserData(account, ConfigurationFieldNames.DeviceId, imapNotes2Account.deviceId);
             am.setUserData(account, ConfigurationFieldNames.Server, imapNotes2Account.server);
             am.setUserData(account, ConfigurationFieldNames.PortNumber, imapNotes2Account.portnum);
-            am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(imapNotes2Account.syncInterval));
+            // why? - otherwise the configuration will not be written correctly on the very first start
+            // FIXME
+            String tmpSyncInterval = Integer.toString(imapNotes2Account.syncInterval);
+            am.setUserData(account, ConfigurationFieldNames.SyncInterval, tmpSyncInterval);
             am.setUserData(account, ConfigurationFieldNames.Security, imapNotes2Account.security.name());
             am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(imapNotes2Account.usesticky));
             am.setUserData(account, ConfigurationFieldNames.ImapFolder, imapNotes2Account.imapfolder);
