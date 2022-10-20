@@ -16,7 +16,7 @@ android {
     //noinspection GroovyMissingReturnStatement
     defaultConfig {
         applicationId "com.Pau.ImapNotes2"
-        minSdkVersion 19
+        minSdkVersion 26
         signingConfig signingConfigs.release
     }
     buildTypes {
