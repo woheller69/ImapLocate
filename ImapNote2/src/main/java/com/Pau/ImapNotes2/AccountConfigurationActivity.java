@@ -411,6 +411,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         */
         @NonNull
         protected Result<String> doInBackground(Void... none) {
+            Log.d(TAG, "doInBackground");
             try {
                 ImapNotes2Result res = imapFolder.ConnectToProvider(
                         imapNotes2Account.username,
@@ -421,10 +422,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 );
                 //accountConfigurationActivity = accountConfigurationActivity;
                 if (res.returnCode != Imaper.ResultCodeSuccess) {
+                    Log.d(TAG, "doInBackground IMAP Failed");
                     return new Result<>("IMAP operation failed: " + res.errorMessage, false);
                 }
-                // TODO: Find out if "com.Pau.ImapNotes2" is the same as getApplicationContext().getPackageName().
-                String test = getApplicationContext().getPackageName();
+                // TODO: Find out if "com.Pau.ImapNotes2" is the same as getApplicationContext().getPackageName(). -YES
                 final Account account = new Account(imapNotes2Account.accountName, "com.Pau.ImapNotes2");
                 final AccountManager am = AccountManager.get(accountConfigurationActivity);
                 accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);
@@ -453,12 +454,14 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
                     ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), imapNotes2Account.syncInterval);
+                    Log.d(TAG, "doInBackground End");
                     return new Result<>(getString(R.string.account_added), true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 return new Result<>("Unexpected exception: " + e.getMessage(), false);
             } finally {
+                Log.d(TAG, "doInBackground Finally");
                 progressDialog.dismiss();
             }
         }
@@ -470,10 +473,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             am.setUserData(account, ConfigurationFieldNames.DeviceId, imapNotes2Account.deviceId);
             am.setUserData(account, ConfigurationFieldNames.Server, imapNotes2Account.server);
             am.setUserData(account, ConfigurationFieldNames.PortNumber, imapNotes2Account.portnum);
-            // why? - otherwise the configuration will not be written correctly on the very first start
-            // FIXME
-            String tmpSyncInterval = Integer.toString(imapNotes2Account.syncInterval);
-            am.setUserData(account, ConfigurationFieldNames.SyncInterval, tmpSyncInterval);
+            am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(imapNotes2Account.syncInterval));
             am.setUserData(account, ConfigurationFieldNames.Security, imapNotes2Account.security.name());
             am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(imapNotes2Account.usesticky));
             am.setUserData(account, ConfigurationFieldNames.ImapFolder, imapNotes2Account.imapfolder);
@@ -482,8 +482,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         protected void onPostExecute(@NonNull Result<String> result) {
             if (result.succeeded) {
                 accountConfigurationActivity.Clear();
+                // Hack! accountManager.addOnAccountsUpdatedListener
+                setResult(RESULT_OK);
+            } else {
+                // Hack! accountManager.addOnAccountsUpdatedListener
+                setResult(RESULT_CANCELED);
             }
-            ShowToast(result.result, 5);
+            ShowToast(result.result, 3);
             if (action == Actions.EDIT_ACCOUNT) {
                 finish();
             }

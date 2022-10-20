@@ -74,6 +74,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     private static final int NEW_BUTTON = 4;
     private static final int SAVE_BUTTON = 5;
     private static final int EDIT_BUTTON = 6;
+    private static final int ADD_ACCOUNT = 7;
 
 
     //region Intent item names
@@ -99,6 +100,11 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     @Nullable
     private static Db storedNotes = null;
     private static List<String> currentList;
+    // FIXME
+    // Hack! accountManager.addOnAccountsUpdatedListener
+    // OnAccountsUpdatedListener is called to early - so not all
+    // Date in AccountManager is saved - it gives crashes on the very first start
+    public Boolean EnableAccountsUpdate = true;
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
     private static Account[] accounts = new Account[0];
@@ -418,6 +424,15 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     TriggerSync(status);
                 }
                 break;
+            case Listactivity.ADD_ACCOUNT:
+                Log.d(TAG, "onActivityResult AccountsUpdateListener");
+                // Hack! accountManager.addOnAccountsUpdatedListener
+                if (resultCode == RESULT_OK) {
+                    EnableAccountsUpdate = true;
+                    Listactivity.accountManager.addOnAccountsUpdatedListener(
+                            new AccountsUpdateListener(), null, true);
+                }
+                break;
             default:
                 Log.d(TAG, "Received wrong request to save message");
         }
@@ -520,6 +535,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
 
         @Override
         public void onAccountsUpdated(@NonNull Account[] accounts) {
+            Log.d(TAG, "onAccountsUpdated");
             List<String> newList;
             //Integer newListSize = 0;
             //invoked when the AccountManager starts up and whenever the account set changes
@@ -529,7 +545,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     newAccounts.add(account);
                 }
             }
-            if (newAccounts.size() > 0) {
+            // Hack! accountManager.addOnAccountsUpdatedListener
+            if ((newAccounts.size() > 0) & (EnableAccountsUpdate)) {
                 Account[] imapNotes2Accounts = new Account[newAccounts.size()];
                 int i = 0;
                 for (final Account account : newAccounts) {
@@ -571,18 +588,24 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 if (equalLists) return;
                 updateAccountSpinner();
             } else {
-                File filesDir = ImapNotes2.ConfigurationDir(getApplicationContext());
-                try {
-                    FileUtils.cleanDirectory(filesDir);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                // Hack! accountManager.addOnAccountsUpdatedListener
+                if (EnableAccountsUpdate) {
+                    File filesDir = ImapNotes2.ConfigurationDir(getApplicationContext());
+                    EnableAccountsUpdate = false;
+                    Listactivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
+                    try {
+                        FileUtils.cleanDirectory(filesDir);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    Intent res = new Intent();
+                    String mPackage = "com.Pau.ImapNotes2";
+                    String mClass = ".AccountConfigurationActivity";
+                    res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+                    // Hack! accountManager.addOnAccountsUpdatedListener
+                    startActivityForResult(res, Listactivity.ADD_ACCOUNT);
                 }
-                Intent res = new Intent();
-                String mPackage = "com.Pau.ImapNotes2";
-                String mClass = ".AccountConfigurationActivity";
-                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-                startActivity(res);
             }
         }
     }
