@@ -96,9 +96,14 @@ public class NoteDetailActivity extends Activity {
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    // Fixme
+                    ShowToast(getString(R.string.Waiting_for_sync), 1);
                     finish();
                 }
+            } else {
+                // Entry can not opened..
+                ShowToast(getString(R.string.Invalid_Message), 1);
+                finish();
+                return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
             color = Colors.YELLOW;
@@ -129,6 +134,21 @@ public class NoteDetailActivity extends Activity {
         */
         ResetColors();
         //invalidateOptionsMenu();
+    }
+
+    void ShowToast(String message,
+                   int durationSeconds) {
+        final Toast tag = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+        tag.show();
+        new CountDownTimer(durationSeconds * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                tag.show();
+            }
+
+            public void onFinish() {
+                tag.show();
+            }
+        }.start();
     }
 
 
