@@ -41,6 +41,10 @@ public class NotesDb {
 
     public void InsertANoteInDb(@NonNull OneNote noteElement,
                                 @NonNull String accountname) {
+        // delete DS with TempNumber
+        db.notesDb.execSQL("delete from notesTable where number = '" + noteElement.GetUid() +
+                "' and accountname = '" + accountname + "' and title = 'tmp'");
+
         ContentValues tableRow = new ContentValues();
         tableRow.put(COL_TITLE, noteElement.GetTitle());
         tableRow.put(COL_DATE, noteElement.GetDate());
@@ -80,13 +84,21 @@ public class NotesDb {
     }
 
     public String GetTempNumber(@NonNull String accountname) {
+        String RetValue = "-1";
         String selectQuery = "select case when cast(max(abs(number)+1) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number > '0' and accountname='" + accountname + "'";
         try (Cursor c = db.notesDb.rawQuery(selectQuery, null)) {
             if (c.moveToFirst()) {
-                return c.getString(0);
+                RetValue = c.getString(0);
             }
         }
-        return "-1";
+        // Create DS with TempNumber, so it can not be given two times
+        ContentValues tableRow = new ContentValues();
+        tableRow.put(COL_TITLE, "tmp");
+        tableRow.put(COL_DATE, "");
+        tableRow.put(COL_NUMBER, RetValue);
+        tableRow.put(COL_ACCOUNT_NAME, accountname);
+        db.insert(TABLE_NAME, null, tableRow);
+        return (RetValue);
     }
 
     public void GetStoredNotes(@NonNull ArrayList<OneNote> noteList,
