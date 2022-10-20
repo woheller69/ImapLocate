@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 //import android.support.v4.BuildConfig;
 import androidx.core.app.NavUtils;
 
+import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
@@ -83,21 +85,22 @@ public class NoteDetailActivity extends Activity {
 
                 Log.d(TAG, "rootDir: " + rootDir);
                 if (message != null) {
-                    sticky = GetInfoFromMessage(message);
-                    stringres = sticky.text;
-                    //String position = sticky.position;
-                    color = sticky.color;
-                    //Spanned plainText = Html.fromHtml(stringres);
-                    //EditText editText = ((EditText) findViewById(R.id.bodyView));
-
+                    if (usesticky) {
+                        sticky = GetStickyFromMessage(message);
+                        stringres = sticky.text;
+                        //String position = sticky.position;
+                        color = sticky.color;
+                    } else {
+                        stringres = GetHtmlFromMessage(message);
+                    }
                     editText = findViewById(R.id.bodyView);
-                    //editText.setText(plainText);
                     SetupRichEditor(editText);
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
                     ShowToast(getString(R.string.Waiting_for_sync), 1);
                     finish();
+                    return;
                 }
             } else {
                 // Entry can not opened..
@@ -477,7 +480,46 @@ public class NoteDetailActivity extends Activity {
     }
 
     @Nullable
-    private Sticky GetInfoFromMessage(@NonNull Message message) {
+    private String GetHtmlFromMessage(@NonNull Message message) {
+        ContentType contentType = null;
+        String stringres = null;
+        try {
+            Log.d(TAG, "message :" + message.toString());
+            contentType = new ContentType(message.getContentType());
+            String charset = contentType.getParameter("charset");
+            InputStream iis = (InputStream) message.getContent();
+            stringres = IOUtils.toString(iis, charset);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "Exception GetHtmlFromMessage:");
+            Log.d(TAG, e.toString());
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "contentType:" + contentType);
+        if (contentType.match("text/x-stickynote")) {
+            stringres = stringres;
+        } else if (contentType.match("TEXT/HTML")) {
+            stringres = stringres;
+        } else if (contentType.match("TEXT/PLAIN")) {
+            stringres = stringres;
+        } else if (contentType.match("multipart/related")) {
+// All next is a workaround
+// All function need to be rewritten to handle correctly multipart and images
+            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
+                stringres = stringres;
+            } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
+                stringres = stringres;
+            }
+        } else if (contentType.getParameter("BOUNDARY") != null) {
+            stringres = stringres;
+        }
+        return stringres;
+    }
+
+
+    @Nullable
+    private Sticky GetStickyFromMessage(@NonNull Message message) {
         ContentType contentType = null;
         String stringres = null;
         //InputStream iis = null;
@@ -492,7 +534,7 @@ public class NoteDetailActivity extends Activity {
             stringres = IOUtils.toString(iis, charset);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            Log.d(TAG, "Exception GetInfoFromMessage:");
+            Log.d(TAG, "Exception GetStickyFromMessage:");
             Log.d(TAG, e.toString());
             e.printStackTrace();
         }
@@ -596,6 +638,8 @@ public class NoteDetailActivity extends Activity {
             }
             throw new IllegalArgumentException("id not found in Colors: " + id);
         }
+
+
     }
 
 // --Commented out by Inspection START (12/2/16 8:50 PM):
