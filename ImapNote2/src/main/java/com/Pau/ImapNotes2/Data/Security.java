@@ -81,6 +81,9 @@ public enum Security {
             }
         }
         // Wasn't recognized, try using the ordinal instead, backwards compatibility.
+        if (name == null) {
+            name = "0";
+        }
         int i = Integer.parseInt(name);
         return from(i);
     }
