@@ -181,7 +181,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     /**
      * Called when the activity is first created.
      */
-    @SuppressLint("MissingPermission")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
