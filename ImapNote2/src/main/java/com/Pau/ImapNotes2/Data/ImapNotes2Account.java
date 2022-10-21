@@ -98,7 +98,7 @@ public class ImapNotes2Account {
      */
     String EnsureNonEmptyDeviceId(String deviceId) {
         final String id = deviceId == null ? "" : deviceId.trim();
-        return id != "" ? id : GenerateDeviceId();
+        return id.isEmpty() ? GenerateDeviceId() : id;
     }
 
 
@@ -126,19 +126,19 @@ public class ImapNotes2Account {
     private String HumanReadable(int id) {
         final String digits = "0123456789abcdefghjkmnpqrstuvwxyz";
         final int base = digits.length();
-        Log.d(TAG, "base: " + Integer.toString(base));
+        Log.d(TAG, "base: " + base);
         int remainingId = id;
         String result = "";
-        Log.d(TAG, "id: " + Integer.toString(id));
+        Log.d(TAG, "id: " + id);
         while (true) {
             Log.d(TAG, "result: /" + result + "/");
-            Log.d(TAG, "remainingId : " + Integer.toString(remainingId));
+            Log.d(TAG, "remainingId : " + remainingId);
             if (remainingId < base) {
                 result += digits.charAt((int) remainingId);
                 return result;
             }
             final int remainder = id % base;
-            Log.d(TAG, "remainder: " + Integer.toString(remainder));
+            Log.d(TAG, "remainder: " + remainder);
             result += digits.charAt(remainder);
             remainingId /= base;
         }
