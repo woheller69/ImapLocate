@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.Pau.ImapNotes2.Miscs.Utilities;
+
 public class NotesDb {
 
     private static final String TAG = "IN_NotesDb";

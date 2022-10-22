@@ -42,6 +42,7 @@ import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Miscs.SyncThread;
 import com.Pau.ImapNotes2.Miscs.UpdateThread;
+import com.Pau.ImapNotes2.Miscs.Utilities;
 import com.Pau.ImapNotes2.Sync.SyncService;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
 
@@ -92,7 +93,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     private ArrayList<OneNote> noteList;
     private NotesListAdapter listToView;
     private ArrayAdapter<String> spinnerList;
-    private static final String AUTHORITY = "com.Pau.ImapNotes2.provider";
+    private static final String AUTHORITY = Utilities.PackageName + ".provider";
     private Spinner accountSpinner;
     public static ImapNotes2Account imapNotes2Account;
     private static AccountManager accountManager;
@@ -110,7 +111,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     private static String OldStatus;
     private final OnClickListener clickListenerEditAccount = v -> {
         Intent res = new Intent();
-        String mPackage = "com.Pau.ImapNotes2";
+        String mPackage = Utilities.PackageName;
         String mClass = ".AccountConfigurationActivity";
         res.setComponent(new ComponentName(mPackage, mPackage + mClass));
         res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
@@ -322,7 +323,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         switch (item.getItemId()) {
             case R.id.login:
                 Intent res = new Intent();
-                String mPackage = "com.Pau.ImapNotes2";
+                String mPackage = Utilities.PackageName;
                 String mClass = ".AccountConfigurationActivity";
                 res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
@@ -513,7 +514,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             //invoked when the AccountManager starts up and whenever the account set changes
             ArrayList<Account> newAccounts = new ArrayList<>();
             for (final Account account : accounts) {
-                if (account.type.equals("com.Pau.ImapNotes2")) {
+                if (account.type.equals(Utilities.PackageName)) {
                     newAccounts.add(account);
                 }
             }
@@ -572,7 +573,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                         e.printStackTrace();
                     }
                     Intent res = new Intent();
-                    String mPackage = "com.Pau.ImapNotes2";
+                    String mPackage = Utilities.PackageName;
                     String mClass = ".AccountConfigurationActivity";
                     res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                     // Hack! accountManager.addOnAccountsUpdatedListener

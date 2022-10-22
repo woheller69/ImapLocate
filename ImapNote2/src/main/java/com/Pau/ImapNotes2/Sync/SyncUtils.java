@@ -12,7 +12,6 @@ import android.util.Log;
 import com.Pau.ImapNotes2.Data.Db;
 import com.Pau.ImapNotes2.Data.OneNote;
 import com.Pau.ImapNotes2.Data.Security;
-import com.Pau.ImapNotes2.Data.Utilities;
 import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Sticky;
@@ -45,8 +44,8 @@ import javax.mail.UIDFolder;
 import javax.mail.internet.MimeMessage;
 
 import static com.Pau.ImapNotes2.NoteDetailActivity.Colors;
+import com.Pau.ImapNotes2.Miscs.Utilities;
 
-//import com.Pau.ImapNotes2.Data.NotesDb;
 
 public class SyncUtils {
 

@@ -34,6 +34,7 @@ import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Result;
 import com.Pau.ImapNotes2.Miscs.Notifier;
+import com.Pau.ImapNotes2.Miscs.Utilities;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     public static final String ACTION = "ACTION";
     public static final String ACCOUNTNAME = "ACCOUNTNAME";
     private static final int TO_REFRESH = 999;
-    private static final String AUTHORITY = "com.Pau.ImapNotes2.provider";
+    private static final String AUTHORITY = Utilities.PackageName + ".provider";
     private static final String TAG = "IN_AccountConfActivity";
     @Nullable
     private static Account myAccount = null;
@@ -187,7 +188,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
         LinearLayout layout = findViewById(R.id.buttonsLayout);
         accountManager = AccountManager.get(getApplicationContext());
-        Account[] accounts = accountManager.getAccountsByType("com.Pau.ImapNotes2");
+        Account[] accounts = accountManager.getAccountsByType(Utilities.PackageName);
         for (Account account : accounts) {
             if (account.name.equals(accountname)) {
                 myAccount = account;
@@ -374,7 +375,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     return new Result<>("IMAP operation failed: " + res.errorMessage, false);
                 }
                 // TODO: Find out if "com.Pau.ImapNotes2" is the same as getApplicationContext().getPackageName(). -YES
-                final Account account = new Account(imapNotes2Account.accountName, "com.Pau.ImapNotes2");
+                final Account account = new Account(imapNotes2Account.accountName, Utilities.PackageName);
                 final AccountManager am = AccountManager.get(accountConfigurationActivity);
                 accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);
                 if (action == Actions.EDIT_ACCOUNT) {
