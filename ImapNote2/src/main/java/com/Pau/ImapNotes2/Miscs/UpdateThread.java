@@ -108,15 +108,12 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 //Log.d(TAG,"Color:"+color);
                 String oldSuid = suid;
                 Log.d(TAG, "Received request to add new message: " + noteBody + "===");
-                //String noteTxt = Html.fromHtml(noteBody).toString();
-                String noteTxt = noteBody;
-                Log.d(TAG, "noteTxt: " + noteTxt + "===");
                 // Use the first line as the tile
-                String[] tok = Html.fromHtml(noteBody).toString().split("\n", 2);
+                String[] tok = Html.fromHtml(noteBody, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
                 String title = tok[0];
                 //String position = "0 0 0 0";
                 String body = (imapNotes2Account.usesticky) ?
-                        noteTxt.replaceAll("\n", "\\\\n") :
+                        noteBody.replaceAll("\n", "\\\\n") :
                         "<html><head></head><body>" + noteBody + "</body></html>";
 
                 String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -156,8 +153,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             Log.d(TAG, "Action: " + action);
             e.printStackTrace();
             return false;
-        } finally {
-
         }
         return bool_to_return;
     }
@@ -276,7 +271,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         File accountDirectory = new File(applicationContext.getFilesDir(),
                 Listactivity.imapNotes2Account.accountName);
         File directory = new File(accountDirectory, "new");
-        //message.setFrom(new InternetAddress("ImapNotes2", Listactivity.imapNotes2Account.accountName));
         message.setFrom(Listactivity.imapNotes2Account.accountName);
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);

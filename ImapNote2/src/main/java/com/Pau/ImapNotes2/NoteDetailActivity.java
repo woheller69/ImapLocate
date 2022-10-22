@@ -79,9 +79,8 @@ public class NoteDetailActivity extends Activity {
                         Listactivity.imapNotes2Account.accountName);
                 Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
                 //Log.d(TAG, "rootDir is null: " + (rootDir == null));
-
                 Log.d(TAG, "rootDir: " + rootDir);
-                if (message != null) {
+                if ((message != null) && (Integer.parseInt(suid) > 0)) {
                     if (usesticky) {
                         sticky = GetStickyFromMessage(message);
                         stringres = sticky.text;
@@ -317,9 +316,6 @@ public class NoteDetailActivity extends Activity {
         Log.d(TAG, "Save");
         Intent intent = new Intent();
         intent.putExtra(Listactivity.EDIT_ITEM_NUM_IMAP, suid);
-        /*intent.putExtra(Listactivity.EDIT_ITEM_TXT,
-                Html.toHtml(((EditText) findViewById(R.id.bodyView)).getText()));
-        */
         Log.d(TAG, "Save html: " + ((RichEditor) findViewById(R.id.bodyView)).getHtml());
         intent.putExtra(Listactivity.EDIT_ITEM_TXT,
                 ((RichEditor) findViewById(R.id.bodyView)).getHtml());
@@ -335,8 +331,8 @@ public class NoteDetailActivity extends Activity {
 
     @Nullable
     private String GetHtmlFromMessage(@NonNull Message message) {
-        ContentType contentType;
-        String stringres = null;
+        ContentType contentType = null;
+        String stringres = "";
         try {
             Log.d(TAG, "message :" + message);
             contentType = new ContentType(message.getContentType());
@@ -349,41 +345,34 @@ public class NoteDetailActivity extends Activity {
             Log.d(TAG, e.toString());
             e.printStackTrace();
         }
-/*
-        Log.d(TAG, "contentType:" + contentType);
         if (contentType.match("text/x-stickynote")) {
-            stringres = stringres;
-        } else if (contentType.match("TEXT/HTML")) {
-            stringres = stringres;
+            stringres = SyncUtils.ReadStickyNote(stringres).toString();
+//        } else if (contentType.match("TEXT/HTML")) {
         } else if (contentType.match("TEXT/PLAIN")) {
-            stringres = stringres;
+            Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
+            stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
         } else if (contentType.match("multipart/related")) {
 // All next is a workaround
 // All function need to be rewritten to handle correctly multipart and images
-            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
-                stringres = stringres;
-            } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
-                stringres = stringres;
+            // if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {          } else
+            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
+                Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
+                stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
             }
-        } else if (contentType.getParameter("BOUNDARY") != null) {
-            stringres = stringres;
+            //} else if (contentType.getParameter("BOUNDARY") != null) {
         }
-
- */
         return stringres;
     }
-
 
     @Nullable
     private Sticky GetStickyFromMessage(@NonNull Message message) {
         ContentType contentType = null;
-        String stringres = null;
+        String stringres = "";
         //InputStream iis = null;
         //Colors color = NONE;
         //String charset;
         try {
             Log.d(TAG, "message :" + message);
-
             contentType = new ContentType(message.getContentType());
             String charset = contentType.getParameter("charset");
             InputStream iis = (InputStream) message.getContent();
@@ -400,19 +389,19 @@ public class NoteDetailActivity extends Activity {
         if (contentType.match("text/x-stickynote")) {
             sticky = SyncUtils.ReadStickyNote(stringres);
         } else if (contentType.match("TEXT/HTML")) {
-            sticky = ReadHtmlnote(stringres);
+            sticky = ReadHtmlNote(stringres);
         } else if (contentType.match("TEXT/PLAIN")) {
-            sticky = ReadPlainnote(stringres);
+            sticky = ReadPlainNote(stringres);
         } else if (contentType.match("multipart/related")) {
 // All next is a workaround
 // All function need to be rewritten to handle correctly multipart and images
             if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
-                sticky = ReadHtmlnote(stringres);
+                sticky = ReadHtmlNote(stringres);
             } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
-                sticky = ReadPlainnote(stringres);
+                sticky = ReadPlainNote(stringres);
             }
         } else if (contentType.getParameter("BOUNDARY") != null) {
-            sticky = ReadHtmlnote(stringres);
+            sticky = ReadHtmlNote(stringres);
         }
         return sticky;
     }
@@ -444,10 +433,10 @@ public class NoteDetailActivity extends Activity {
     }
 */
     @NonNull
-    private Sticky ReadHtmlnote(String stringres) {
+    private Sticky ReadHtmlNote(String stringres) {
 //        Log.d(TAG,"From server (html):"+stringres);
-        Spanned spanres = Html.fromHtml(stringres);
-        stringres = Html.toHtml(spanres);
+        Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
+        stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
         stringres = stringres.replaceFirst("<p dir=ltr>", "");
         stringres = stringres.replaceFirst("<p dir=\"ltr\">", "");
         stringres = stringres.replaceAll("<p dir=ltr>", "<br>");
@@ -458,7 +447,7 @@ public class NoteDetailActivity extends Activity {
     }
 
     @NonNull
-    private Sticky ReadPlainnote(String stringres) {
+    private Sticky ReadPlainNote(String stringres) {
 //        Log.d(TAG,"From server (plain):"+stringres);
         stringres = stringres.replaceAll("\n", "<br>");
 
