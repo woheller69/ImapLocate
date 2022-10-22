@@ -9,10 +9,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-//import android.support.v4.BuildConfig;
 import androidx.core.app.NavUtils;
 
-import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -20,9 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+
 
 import com.Pau.ImapNotes2.Miscs.Sticky;
+import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -30,7 +29,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Objects;
+
 
 import javax.mail.Message;
 import javax.mail.internet.ContentType;
@@ -70,7 +69,7 @@ public class NoteDetailActivity extends Activity {
 
         Bundle extras = getIntent().getExtras();
         Sticky sticky;
-        String stringres = "";
+        String stringres;
         String ChangeNote = extras.getString(ActivityType);
         if (ChangeNote.equals(ActivityTypeEdit)) {
             HashMap hm = (HashMap) extras.getSerializable(selectedNote);
@@ -98,13 +97,13 @@ public class NoteDetailActivity extends Activity {
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    ShowToast(getString(R.string.Waiting_for_sync), 1);
+                    Notifier.Show(R.string.Waiting_for_sync, getApplicationContext(), 1);
                     finish();
                     return;
                 }
             } else {
                 // Entry can not opened..
-                ShowToast(getString(R.string.Invalid_Message), 1);
+                Notifier.Show(R.string.Invalid_Message, getApplicationContext(), 1);
                 finish();
                 return;
             }
@@ -138,22 +137,6 @@ public class NoteDetailActivity extends Activity {
         ResetColors();
         //invalidateOptionsMenu();
     }
-
-    void ShowToast(String message,
-                   int durationSeconds) {
-        final Toast tag = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-        tag.show();
-        new CountDownTimer(durationSeconds * 1000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                tag.show();
-            }
-
-            public void onFinish() {
-                tag.show();
-            }
-        }.start();
-    }
-
 
     private void SetupRichEditor(@NonNull final RichEditor mEditor) {
         //mEditor = (RichEditor) findViewById(R.id.editor);
@@ -526,7 +509,7 @@ public class NoteDetailActivity extends Activity {
         //Colors color = NONE;
         //String charset;
         try {
-            Log.d(TAG, "message :" + message.toString());
+            Log.d(TAG, "message :" + message);
 
             contentType = new ContentType(message.getContentType());
             String charset = contentType.getParameter("charset");

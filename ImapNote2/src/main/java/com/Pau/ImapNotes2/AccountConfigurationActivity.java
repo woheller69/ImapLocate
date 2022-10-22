@@ -3,11 +3,9 @@ package com.Pau.ImapNotes2;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.Pau.ImapNotes2.Data.ConfigurationFieldNames;
 import com.Pau.ImapNotes2.Data.ImapNotes2Account;
@@ -36,6 +33,7 @@ import com.Pau.ImapNotes2.Data.Security;
 import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Result;
+import com.Pau.ImapNotes2.Miscs.Notifier;
 
 import java.util.List;
 
@@ -60,10 +58,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         @Override
         public void onClick(View v) {
             // Click on Remove Button
-            accountManager.removeAccount(myAccount, null, null);
-//            Toast.makeText(getApplicationContext(), R.string.account_removed,
-            //                  Toast.LENGTH_LONG).show();
-            Toast(R.string.account_removed);
+            accountManager.removeAccount(myAccount, null, null, null);
+            Notifier.Show(R.string.account_removed, getApplicationContext(), 3);
             finish();//finishing activity
         }
     };
@@ -116,18 +112,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     @Nullable
     private String accountname;
 
-    private void Toast(int message) {
-        Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_LONG).show();
-
-    }
-
     private void CheckNameAndLogIn() {
         if (accountnameTextView.getText().toString().contains("'")) {
-            // Single quotation marks are not allowed in accountname
-            //Toast.makeText(getApplicationContext(), R.string.quotation_marks_not_allowed,
-            // Toast.LENGTH_LONG).show();
-            Toast(R.string.quotation_marks_not_allowed);
+            Notifier.Show(R.string.quotation_marks_not_allowed, getApplicationContext(), 3);
         } else {
             DoLogin();
         }
@@ -312,22 +299,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
-/*
-
-    Result<Integer> GetSynchronizationInterval() {
-        final String syncInterval = GetTextViewText(syncintervalTextView).trim();
-        if (TextUtils.isDigitsOnly(syncInterval)){
-            Log.d(TAG, "GetSynchronizationInterval: " + syncInterval);
-            final int  syncIntervalInt = Integer.parseInt(GetTextViewText(syncintervalTextView), 10) * 60;
-            if (syncIntervalInt > 0) {
-                return new Result(syncIntervalInt, true);
-            }
-            Toast.makeText(this, "Synchronization interval must be greater than zero: <" + syncInterval + ">.", Toast.LENGTH_LONG).show();
-        }
-        Toast.makeText(this, "Synchronization interval is invalid: <" + syncInterval + ">.", Toast.LENGTH_LONG).show();
-        return new Result(0, false);
-    }
-*/
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -374,8 +345,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     class LoginThread extends AsyncTask<Void, Void, Result<String>> {
 
         private final ImapNotes2Account imapNotes2Account;
-        private final ProgressDialog progressDialog;
-        //private final int synchronizationInterval;
 
         private final AccountConfigurationActivity accountConfigurationActivity;
 
@@ -385,15 +354,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     AccountConfigurationActivity accountConfigurationActivity,
                     Actions action) {
             this.imapNotes2Account = imapNotes2Account;
-            //this.progressDialog = loadingDialog;
             this.accountConfigurationActivity = accountConfigurationActivity;
             this.action = action;
+            Notifier.Show(R.string.logging_in, accountConfigurationActivity, 1);
             //this.synchronizationInterval = synchronizationInterval;
-            this.progressDialog = ProgressDialog.show(accountConfigurationActivity,
-                    getString(R.string.app_name),
-                    getString(R.string.logging_in),
-                    true);
-
         }
 
         /*
@@ -462,7 +426,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 return new Result<>("Unexpected exception: " + e.getMessage(), false);
             } finally {
                 Log.d(TAG, "doInBackground Finally");
-                progressDialog.dismiss();
             }
         }
 
@@ -483,30 +446,16 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             if (result.succeeded) {
                 accountConfigurationActivity.Clear();
                 // Hack! accountManager.addOnAccountsUpdatedListener
-                setResult(RESULT_OK);
+                setResult(Listactivity.ResultCodeSuccess);
             } else {
                 // Hack! accountManager.addOnAccountsUpdatedListener
-                setResult(RESULT_CANCELED);
+                setResult(Listactivity.ResultCodeError);
             }
-            ShowToast(result.result, 3);
+            Notifier.Show(result.result, getApplicationContext(), 3);
             if (action == Actions.EDIT_ACCOUNT) {
                 finish();
             }
         }
 
-        void ShowToast(String message,
-                       int durationSeconds) {
-            final Toast tag = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-            tag.show();
-            new CountDownTimer(durationSeconds * 1000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                    tag.show();
-                }
-
-                public void onFinish() {
-                    tag.show();
-                }
-            }.start();
-        }
     }
 }

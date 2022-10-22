@@ -1,10 +1,10 @@
 package com.Pau.ImapNotes2.Miscs;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 import android.text.Html;
 import android.util.Log;
@@ -45,7 +45,8 @@ import static com.Pau.ImapNotes2.NoteDetailActivity.Colors;
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private static final String TAG = "IN_UpdateThread";
     private final ImapNotes2Account imapNotes2Account;
-    private final ProgressDialog progressDialog;
+    private final @StringRes
+    int resId;
     private final NotesListAdapter adapter;
     private final ArrayList<OneNote> notesList;
     private final String noteBody;
@@ -63,7 +64,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     public UpdateThread(ImapNotes2Account imapNotes2Account,
                         ArrayList<OneNote> noteList,
                         NotesListAdapter listToView,
-                        ProgressDialog loadingDialog,
+                        @StringRes int resId,
                         String suid,
                         String noteBody,
                         Colors color,
@@ -74,14 +75,14 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.imapNotes2Account = imapNotes2Account;
         this.notesList = noteList;
         this.adapter = listToView;
-        this.progressDialog = loadingDialog;
+        this.resId = resId;
         this.suid = suid;
         this.noteBody = noteBody;
         this.color = color;
         this.applicationContext = applicationContext;
         this.action = action;
         this.storedNotes = storedNotes;
-
+        //Notifier.Show(resId, applicationContext, 1);
     }
 
     @Override
@@ -149,7 +150,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             e.printStackTrace();
             return false;
         } finally {
-            progressDialog.dismiss();
+
         }
         return bool_to_return;
     }

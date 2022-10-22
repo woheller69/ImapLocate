@@ -3,10 +3,8 @@ package com.Pau.ImapNotes2;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -38,12 +36,12 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.Pau.ImapNotes2.Data.Db;
 import com.Pau.ImapNotes2.Data.ImapNotes2Account;
 import com.Pau.ImapNotes2.Data.OneNote;
 import com.Pau.ImapNotes2.Miscs.Imaper;
+import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Miscs.SyncThread;
 import com.Pau.ImapNotes2.Miscs.UpdateThread;
 import com.Pau.ImapNotes2.Sync.SyncService;
@@ -75,6 +73,9 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     private static final int SAVE_BUTTON = 5;
     private static final int EDIT_BUTTON = 6;
     private static final int ADD_ACCOUNT = 7;
+
+    public static final int ResultCodeSuccess = 0;
+    public static final int ResultCodeError = -1;
 
 
     //region Intent item names
@@ -274,7 +275,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         new SyncThread(
                 noteList,
                 listToView,
-                ShowProgress(R.string.refreshing_notes_list),
+                R.string.refreshing_notes_list,
                 storedNotes,
                 this.getApplicationContext()).execute();
         //TextView status = (TextView) findViewById(R.id.status);
@@ -289,7 +290,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             new UpdateThread(Listactivity.imapNotes2Account,
                     noteList,
                     listToView,
-                    ShowProgress(R.string.updating_notes_list),
+                    R.string.updating_notes_list,
                     suid,
                     noteBody,
                     color,
@@ -300,7 +301,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             new UpdateThread(Listactivity.imapNotes2Account,
                     noteList,
                     listToView,
-                    ShowProgress(R.string.updating_notes_list),
+                    R.string.updating_notes_list,
                     suid,
                     noteBody,
                     color,
@@ -308,11 +309,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     action,
                     storedNotes).execute();
         }
-    }
-
-    private ProgressDialog ShowProgress(int detailId) {
-        return ProgressDialog.show(this, getString(R.string.app_name),
-                getString(detailId), true);
     }
 
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
@@ -427,7 +423,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             case Listactivity.ADD_ACCOUNT:
                 Log.d(TAG, "onActivityResult AccountsUpdateListener");
                 // Hack! accountManager.addOnAccountsUpdatedListener
-                if (resultCode == RESULT_OK) {
+                if (resultCode == ResultCodeSuccess) {
                     EnableAccountsUpdate = true;
                     Listactivity.accountManager.addOnAccountsUpdatedListener(
                             new AccountsUpdateListener(), null, true);
@@ -452,8 +448,9 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                 ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
                 ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), 60);
-                Toast.makeText(getApplicationContext(), "Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime",
-                        Toast.LENGTH_LONG).show();
+                Notifier.Show("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime",
+                        getApplicationContext(),
+                        2);
             }
         }
 

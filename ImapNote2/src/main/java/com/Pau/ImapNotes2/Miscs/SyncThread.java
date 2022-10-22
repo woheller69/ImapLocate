@@ -1,11 +1,11 @@
 package com.Pau.ImapNotes2.Miscs;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.Pau.ImapNotes2.Data.Db;
 import com.Pau.ImapNotes2.Data.OneNote;
@@ -22,9 +22,9 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
 //    @NonNull
 //    ImapNotes2Result res = new ImapNotes2Result();
 // --Commented out by Inspection STOP (11/26/16 11:48 PM)
-    @SuppressWarnings("unused")
     private static final String TAG = "SyncThread";
-    private final ProgressDialog progressDialog;
+    private final @StringRes
+    int resId;
     private final NotesListAdapter adapter;
     private final ArrayList<OneNote> notesList;
     /**
@@ -37,15 +37,15 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     // TODO: remove unused arguments.
     public SyncThread(ArrayList<OneNote> noteList,
                       NotesListAdapter listToView,
-                      ProgressDialog loadingDialog,
+                      @StringRes int resId,
                       @Nullable Db storedNotes,
                       Context applicationContext) {
         //this.imapFolder = imapFolder;
         //this.imapNotes2Account = imapNotes2Account;
         this.notesList = noteList;
         this.adapter = listToView;
-        this.progressDialog = loadingDialog;
-        //this.storedNotes = storedNotes;
+        this.resId = resId;
+        //Notifier.Show(resId, applicationContext, 1);
         this.storedNotes = (storedNotes == null) ? new Db(applicationContext) : storedNotes;
 
     }
@@ -78,7 +78,6 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
         storedNotes.OpenDb();
         storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.imapNotes2Account.accountName);
         storedNotes.CloseDb();
-        progressDialog.dismiss();
         return true;
     }
 
