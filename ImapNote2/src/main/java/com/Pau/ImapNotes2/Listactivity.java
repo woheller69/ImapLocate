@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.PeriodicSync;
@@ -26,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -110,17 +108,14 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     @NonNull
     private static Account[] accounts = new Account[0];
     private static String OldStatus;
-    private final OnClickListener clickListenerEditAccount = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent res = new Intent();
-            String mPackage = "com.Pau.ImapNotes2";
-            String mClass = ".AccountConfigurationActivity";
-            res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-            res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
-            res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, Listactivity.imapNotes2Account.accountName);
-            startActivity(res);
-        }
+    private final OnClickListener clickListenerEditAccount = v -> {
+        Intent res = new Intent();
+        String mPackage = "com.Pau.ImapNotes2";
+        String mClass = ".AccountConfigurationActivity";
+        res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+        res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
+        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, Listactivity.imapNotes2Account.accountName);
+        startActivity(res);
     };
     private static final String TAG = "IN_Listactivity";
     //@Nullable
@@ -231,21 +226,16 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             storedNotes = new Db(getApplicationContext());
 
         // When item is clicked, we go to NoteDetailActivity
-        listview.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(@NonNull AdapterView<?> parent,
-                                    @NonNull View widget,
-                                    int selectedNote,
-                                    long rowId) {
-                Log.d(TAG, "onItemClick");
-                Intent toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
-                toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
-                toDetail.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
-                toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
-                startActivityForResult(toDetail, SEE_DETAIL);
-                Log.d(TAG, "onItemClick, back from detail.");
+        listview.setOnItemClickListener((parent, widget, selectedNote, rowId) -> {
+            Log.d(TAG, "onItemClick");
+            Intent toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
+            toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
+            toDetail.putExtra(NoteDetailActivity.useSticky, Listactivity.imapNotes2Account.usesticky);
+            toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
+            startActivityForResult(toDetail, SEE_DETAIL);
+            Log.d(TAG, "onItemClick, back from detail.");
 
-                //TriggerSync(status);
-            }
+            //TriggerSync(status);
         });
 
         Button editAccountButton = findViewById(R.id.editAccountButton);
@@ -359,10 +349,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     new AlertDialog.Builder(this)
                             .setTitle("About ImapNotes2")
                             .setMessage(versionName + "\n" + versionCode)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Do nothing
-                                }
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                // Do nothing
                             })
                             .show();
                 } catch (android.content.pm.PackageManager.NameNotFoundException e) {

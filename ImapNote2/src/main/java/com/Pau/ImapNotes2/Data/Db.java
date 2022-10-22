@@ -18,7 +18,6 @@ public class Db {
     public final NotesDb notes;
     @NonNull
     private final NotesDbHelper defaultHelper;
-    @NonNull
     SQLiteDatabase notesDb;
 
     public Db(@NonNull Context applicationContext) {
@@ -50,7 +49,7 @@ public class Db {
     /**
      * Database helper that creates and maintains the SQLite database.
      */
-    private class NotesDbHelper extends SQLiteOpenHelper {
+    private static class NotesDbHelper extends SQLiteOpenHelper {
 
         private static final int NOTES_VERSION = 3;
 
@@ -97,7 +96,7 @@ public class Db {
             }
         }
 
-        private class Patch {
+        private static class Patch {
             public void apply(SQLiteDatabase _db) {
             }
         }

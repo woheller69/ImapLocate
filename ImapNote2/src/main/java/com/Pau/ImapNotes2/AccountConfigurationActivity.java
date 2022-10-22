@@ -81,21 +81,15 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     //    public static final String EDIT_ACCOUNT = "EDIT_ACCOUNT";
 //    public static final String CREATE_ACCOUNT = "CREATE_ACCOUNT";
     //endregion
-    private final OnClickListener clickListenerLogin = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            // Click on Login Button
-            Log.d(TAG, "clickListenerLogin  onClick");
-            CheckNameAndLogIn();
-        }
+    private final OnClickListener clickListenerLogin = v -> {
+        // Click on Login Button
+        Log.d(TAG, "clickListenerLogin  onClick");
+        CheckNameAndLogIn();
     };
-    private final OnClickListener clickListenerEdit = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            // Click on Edit Button
-            Log.d(TAG, "clickListenerEdit onClick");
-            CheckNameAndLogIn();
-        }
+    private final OnClickListener clickListenerEdit = v -> {
+        // Click on Edit Button
+        Log.d(TAG, "clickListenerEdit onClick");
+        CheckNameAndLogIn();
     };
     /*
         private final TextWatcher textWatcher = new TextWatcher(){

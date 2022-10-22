@@ -8,5 +8,4 @@ public final class ConfigurationFieldNames {
     public static final String PortNumber = "portnum";
     public static final String SyncInterval = "syncinterval";
     public static final String Security = "security";
-    static final String Password = "password";
 }

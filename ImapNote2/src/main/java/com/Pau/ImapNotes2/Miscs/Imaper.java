@@ -56,7 +56,7 @@ public class Imaper {
         props.setProperty("mail.store.protocol", proto);
 
         if (security.acceptcrt) {
-            sf.setTrustedHosts(new String[]{server});
+            sf.setTrustedHosts(server);
             if (proto.equals("imap")) {
                 props.put("mail.imap.ssl.socketFactory", sf);
                 props.put("mail.imap.starttls.enable", "true");
@@ -73,21 +73,16 @@ public class Imaper {
         }
 
         props.setProperty("mail.imap.connectiontimeout", "1000");
-        Boolean useProxy = false;
-        //noinspection ConstantConditions
-        // TODO: implement proxy handling properly.
+
+        /* TODO: implement proxy handling properly.
+        boolean useProxy = false;
         //noinspection ConstantConditions,ConstantConditions
         if (useProxy) {
             props.put("mail.imap.socks.host", "10.0.2.2");
             props.put("mail.imap.socks.port", "1080");
-/*
-        props.put("proxySet","true");
-        props.put("socksProxyHost","10.0.2.2");
-        props.put("socksProxyPort","1080");
-        props.put("sun.net.spi.nameservice.provider.1", "dns,sun");
-        props.put("sun.net.spi.nameservice.nameservers", "192.168.0.99");
-*/
         }
+
+         */
         Session session = Session.getInstance(props, null);
 //session.setDebug(true);
         store = session.getStore(proto);

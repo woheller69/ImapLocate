@@ -2,7 +2,6 @@ package com.Pau.ImapNotes2;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -60,7 +59,6 @@ public class NoteDetailActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail);
-        //noinspection ConstantConditions
         getActionBar().setDisplayHomeAsUpEnabled(true);
         // Don't display keyboard when on note detail, only if user touches the screen
         getWindow().setSoftInputMode(
@@ -159,103 +157,33 @@ public class NoteDetailActivity extends Activity {
         });
 
 */
-        findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.undo();
-            }
-        });
+        findViewById(R.id.action_undo).setOnClickListener(v -> mEditor.undo());
 
-        findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.redo();
-            }
-        });
+        findViewById(R.id.action_redo).setOnClickListener(v -> mEditor.redo());
 
-        findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setBold();
-            }
-        });
+        findViewById(R.id.action_bold).setOnClickListener(v -> mEditor.setBold());
 
-        findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setItalic();
-            }
-        });
+        findViewById(R.id.action_italic).setOnClickListener(v -> mEditor.setItalic());
 
-        findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setSubscript();
-            }
-        });
+        findViewById(R.id.action_subscript).setOnClickListener(v -> mEditor.setSubscript());
 
-        findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setSuperscript();
-            }
-        });
+        findViewById(R.id.action_superscript).setOnClickListener(v -> mEditor.setSuperscript());
 
-        findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setStrikeThrough();
-            }
-        });
+        findViewById(R.id.action_strikethrough).setOnClickListener(v -> mEditor.setStrikeThrough());
 
-        findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setUnderline();
-            }
-        });
+        findViewById(R.id.action_underline).setOnClickListener(v -> mEditor.setUnderline());
 
-        findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(1);
-            }
-        });
+        findViewById(R.id.action_heading1).setOnClickListener(v -> mEditor.setHeading(1));
 
-        findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(2);
-            }
-        });
+        findViewById(R.id.action_heading2).setOnClickListener(v -> mEditor.setHeading(2));
 
-        findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(3);
-            }
-        });
+        findViewById(R.id.action_heading3).setOnClickListener(v -> mEditor.setHeading(3));
 
-        findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(4);
-            }
-        });
+        findViewById(R.id.action_heading4).setOnClickListener(v -> mEditor.setHeading(4));
 
-        findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(5);
-            }
-        });
+        findViewById(R.id.action_heading5).setOnClickListener(v -> mEditor.setHeading(5));
 
-        findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setHeading(6);
-            }
-        });
+        findViewById(R.id.action_heading6).setOnClickListener(v -> mEditor.setHeading(6));
 
         findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
             private boolean isChanged;
@@ -277,82 +205,27 @@ public class NoteDetailActivity extends Activity {
             }
         });
 
-        findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setIndent();
-            }
-        });
+        findViewById(R.id.action_indent).setOnClickListener(v -> mEditor.setIndent());
 
-        findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setOutdent();
-            }
-        });
+        findViewById(R.id.action_outdent).setOnClickListener(v -> mEditor.setOutdent());
 
-        findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setAlignLeft();
-            }
-        });
+        findViewById(R.id.action_align_left).setOnClickListener(v -> mEditor.setAlignLeft());
 
-        findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setAlignCenter();
-            }
-        });
+        findViewById(R.id.action_align_center).setOnClickListener(v -> mEditor.setAlignCenter());
 
-        findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setAlignRight();
-            }
-        });
+        findViewById(R.id.action_align_right).setOnClickListener(v -> mEditor.setAlignRight());
 
-        findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setBlockquote();
-            }
-        });
+        findViewById(R.id.action_blockquote).setOnClickListener(v -> mEditor.setBlockquote());
 
-        findViewById(R.id.action_insert_bullets).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setBullets();
-            }
-        });
+        findViewById(R.id.action_insert_bullets).setOnClickListener(v -> mEditor.setBullets());
 
-        findViewById(R.id.action_insert_numbers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.setNumbers();
-            }
-        });
+        findViewById(R.id.action_insert_numbers).setOnClickListener(v -> mEditor.setNumbers());
 
-        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                        "dachshund");
-            }
-        });
+        findViewById(R.id.action_insert_image).setOnClickListener(v -> mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
+                "dachshund"));
 
-        findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
-            }
-        });
-        findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.insertTodo();
-            }
-        });
+        findViewById(R.id.action_insert_link).setOnClickListener(v -> mEditor.insertLink("https://github.com/wasabeef", "wasabeef"));
+        findViewById(R.id.action_insert_checkbox).setOnClickListener(v -> mEditor.insertTodo());
     }
 
 /*
@@ -407,13 +280,11 @@ public class NoteDetailActivity extends Activity {
                         .setTitle("Delete note")
                         .setMessage("Are you sure you wish to delete the note?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //Log.d(TAG,"We ask to delete Message #"+this.currentNote.get("number"));
-                                intent.putExtra("DELETE_ITEM_NUM_IMAP", suid);
-                                setResult(Listactivity.DELETE_BUTTON, intent);
-                                finish();//finishing activity
-                            }
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            //Log.d(TAG,"We ask to delete Message #"+this.currentNote.get("number"));
+                            intent.putExtra("DELETE_ITEM_NUM_IMAP", suid);
+                            setResult(Listactivity.DELETE_BUTTON, intent);
+                            finish();//finishing activity
                         })
                         .setNegativeButton(android.R.string.no, null).show();
                 return true;
@@ -464,10 +335,10 @@ public class NoteDetailActivity extends Activity {
 
     @Nullable
     private String GetHtmlFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
+        ContentType contentType;
         String stringres = null;
         try {
-            Log.d(TAG, "message :" + message.toString());
+            Log.d(TAG, "message :" + message);
             contentType = new ContentType(message.getContentType());
             String charset = contentType.getParameter("charset");
             InputStream iis = (InputStream) message.getContent();
@@ -478,7 +349,7 @@ public class NoteDetailActivity extends Activity {
             Log.d(TAG, e.toString());
             e.printStackTrace();
         }
-
+/*
         Log.d(TAG, "contentType:" + contentType);
         if (contentType.match("text/x-stickynote")) {
             stringres = stringres;
@@ -497,6 +368,8 @@ public class NoteDetailActivity extends Activity {
         } else if (contentType.getParameter("BOUNDARY") != null) {
             stringres = stringres;
         }
+
+ */
         return stringres;
     }
 

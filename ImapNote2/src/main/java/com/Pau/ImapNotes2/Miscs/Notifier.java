@@ -22,7 +22,7 @@ public class Notifier {
         final Toast tag = Toast.makeText(context, message, Toast.LENGTH_LONG);
 
         tag.show();
-        new CountDownTimer(durationSeconds * 1000, 1000) {
+        new CountDownTimer((long) durationSeconds * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 tag.show();
             }

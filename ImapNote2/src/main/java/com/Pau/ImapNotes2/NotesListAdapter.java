@@ -166,18 +166,14 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         }
 
         //final ViewBinder binder = mViewBinder;
-        final String[] from = mFrom;
         final int[] to = mTo;
         final int count = to.length;
 
         for (int i = 0; i < count; i++) {
             final View v = view.findViewById(to[i]);
             if (v != null) {
-                final Object data = dataSet.get(from[i]);
+                final Object data = dataSet.get(mFrom[i]);
                 String text = data == null ? "" : data.toString();
-                if (text == null) {
-                    text = "";
-                }
 
                 boolean bound = false;
                 //if (binder != null) {

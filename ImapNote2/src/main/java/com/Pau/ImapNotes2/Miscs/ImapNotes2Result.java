@@ -11,7 +11,6 @@ public class ImapNotes2Result {
     @NonNull
     public final String errorMessage;
     public final Long UIDValidity;
-    // --Commented out by Inspection (11/26/16 11:45 PM):public boolean hasUIDPLUS;
     @Nullable
     public final Folder notesFolder;
 
