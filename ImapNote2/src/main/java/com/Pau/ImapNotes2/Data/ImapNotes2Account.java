@@ -29,8 +29,6 @@ public class ImapNotes2Account {
     @NonNull
     public final String portnum;
     @NonNull
-    public final String deviceId;
-    @NonNull
     public final Security security;
     public final boolean usesticky;
     public final int syncInterval;
@@ -38,7 +36,6 @@ public class ImapNotes2Account {
     public final String imapfolder;
     @Nullable
     private final Account account;
-    public boolean usesAutomaticMerge = false;
     private File dirForNewFiles;
     private File dirForDeletedFiles;
     private File rootDir;
@@ -48,10 +45,8 @@ public class ImapNotes2Account {
                              @NonNull String password,
                              @NonNull String server,
                              @NonNull String portNumber,
-                             @NonNull String deviceId,
                              @NonNull Security security,
                              boolean useSticky,
-                             boolean usesAutomaticMerge,
                              int syncInterval,
                              @NonNull String folderName) {
         account = null;
@@ -61,9 +56,7 @@ public class ImapNotes2Account {
         this.server = server;
         this.security = security;
         this.portnum = portNumber;
-        this.deviceId = deviceId;
         this.usesticky = useSticky;
-        this.usesAutomaticMerge = usesAutomaticMerge;
         this.imapfolder = folderName;
         this.syncInterval = syncInterval;
     }
@@ -82,67 +75,11 @@ public class ImapNotes2Account {
         password = am.getPassword(account);
         server = am.getUserData(account, ConfigurationFieldNames.Server);
         portnum = am.getUserData(account, ConfigurationFieldNames.PortNumber);
-        deviceId = EnsureNonEmptyDeviceId(am.getUserData(account, ConfigurationFieldNames.DeviceId));
         security = Security.from(am.getUserData(account, ConfigurationFieldNames.Security));
         usesticky = "true".equals(am.getUserData(account, ConfigurationFieldNames.UseSticky));
         imapfolder = am.getUserData(account, ConfigurationFieldNames.ImapFolder);
     }
 
-
-    /**
-     * If the given id is null or empty then generate a new one based on the current time, otherwise
-     * return the incoming value stripped of leading and trailing whitespace.
-     * * @param deviceId
-     *
-     * @return
-     */
-    String EnsureNonEmptyDeviceId(String deviceId) {
-        final String id = deviceId == null ? "" : deviceId.trim();
-        return id.isEmpty() ? GenerateDeviceId() : id;
-    }
-
-
-    /**
-     * Generate a human readable id from the current time:
-     *
-     * @return
-     */
-    private String GenerateDeviceId() {
-        final int now = (int) (new Date().getTime() / 1000);
-        final int jan_1_2017 = 1483228800;
-        int id = now - jan_1_2017;
-        return HumanReadable(id);
-
-    }
-
-
-    /**
-     * Create a human readable string from the given number.  Use an alphabet that avoids hard to
-     * distinguish characters.
-     *
-     * @param id
-     * @return
-     */
-    private String HumanReadable(int id) {
-        final String digits = "0123456789abcdefghjkmnpqrstuvwxyz";
-        final int base = digits.length();
-        Log.d(TAG, "base: " + base);
-        int remainingId = id;
-        String result = "";
-        Log.d(TAG, "id: " + id);
-        while (true) {
-            Log.d(TAG, "result: /" + result + "/");
-            Log.d(TAG, "remainingId : " + remainingId);
-            if (remainingId < base) {
-                result += digits.charAt((int) remainingId);
-                return result;
-            }
-            final int remainder = id % base;
-            Log.d(TAG, "remainder: " + remainder);
-            result += digits.charAt(remainder);
-            remainingId /= base;
-        }
-    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void CreateLocalDirectories() {
@@ -279,12 +216,6 @@ public class ImapNotes2Account {
         this.imapfolder = folder;
     }
 
-    public boolean GetUsesAutomaticMerge() {
-    return this.usesAutomaticMerge;
-    }
-    public void SetUsesAutomaticMerge(boolean usesAutomaticMerge) {
-        this.usesAutomaticMerge = usesAutomaticMerge;
-    }
 */
 
 /*

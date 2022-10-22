@@ -286,7 +286,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                             String noteBody,
                             Colors color,
                             UpdateThread.Action action) {
-        if (Listactivity.imapNotes2Account.usesAutomaticMerge) {
             new UpdateThread(Listactivity.imapNotes2Account,
                     noteList,
                     listToView,
@@ -297,18 +296,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     getApplicationContext(),
                     action,
                     storedNotes).execute();
-        } else {
-            new UpdateThread(Listactivity.imapNotes2Account,
-                    noteList,
-                    listToView,
-                    R.string.updating_notes_list,
-                    suid,
-                    noteBody,
-                    color,
-                    getApplicationContext(),
-                    action,
-                    storedNotes).execute();
-        }
     }
 
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {

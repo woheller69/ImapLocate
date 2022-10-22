@@ -17,8 +17,6 @@ public class Db {
     @NonNull
     public final NotesDb notes;
     @NonNull
-    public final VectorDb vectors;
-    @NonNull
     private final NotesDbHelper defaultHelper;
     @NonNull
     SQLiteDatabase notesDb;
@@ -26,7 +24,6 @@ public class Db {
     public Db(@NonNull Context applicationContext) {
         this.defaultHelper = new NotesDbHelper(applicationContext);
         notes = new NotesDb(this);
-        vectors = new VectorDb(this);
     }
 
 
@@ -53,7 +50,6 @@ public class Db {
     /**
      * Database helper that creates and maintains the SQLite database.
      */
-
     private class NotesDbHelper extends SQLiteOpenHelper {
 
         private static final int NOTES_VERSION = 3;
@@ -89,7 +85,6 @@ public class Db {
 
         private void CreateNotesDb(@NonNull SQLiteDatabase _db) {
             _db.execSQL(NotesDb.CREATE_NOTES_DB);
-            vectors.CreateTables(_db);
         }
 
         @Override

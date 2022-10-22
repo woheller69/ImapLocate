@@ -36,7 +36,4 @@
     <string name="pink">Pink</string>
     <string name="green">Grün</string>
     <string name="syncing">Sychronisieren...</string>
-    <string name="device_name">Gerätename</string>
-    <string name="editAccount">Konte bearbeiten</string>
-    <string name="choose_a_name_for_this_device">Gerätename wählen</string>
 </resources>

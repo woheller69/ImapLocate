@@ -90,7 +90,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
         try {
             // Do we have a note to remove?
-            if ((action == Action.Delete) || (action == Action.Update)) {
+            if (action == Action.Delete) {
                 //Log.d(TAG,"Received request to delete message #"+suid);
                 // Here we delete the note from the local notes list
                 //Log.d(TAG,"Delete note in Listview");
@@ -106,6 +106,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             if ((action == Action.Insert) || (action == Action.Update)) {
 //Log.d(TAG,"Sticky ? "+((ImapNotes2Account)stuffs[1]).GetUsesticky());
 //Log.d(TAG,"Color:"+color);
+                String oldSuid = suid;
                 Log.d(TAG, "Received request to add new message: " + noteBody + "===");
                 //String noteTxt = Html.fromHtml(noteBody).toString();
                 String noteTxt = noteBody;
@@ -133,20 +134,26 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 Log.d(TAG, "doInBackground body: " + body);
                 WriteMailToNew(currentNote,
                         imapNotes2Account.usesticky,
-                        imapNotes2Account.usesAutomaticMerge,
                         body);
+                if (action == Action.Update) {
+                    MoveMailToDeleted(oldSuid);
+                    storedNotes.notes.DeleteANote(oldSuid, Listactivity.imapNotes2Account.accountName);
+                }
                 storedNotes.notes.InsertANoteInDb(currentNote, Listactivity.imapNotes2Account.accountName);
                 storedNotes.CloseDb();
                 // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
+                if (action == Action.Update) {
+                    notesList.remove(getIndexByNumber(oldSuid));
+                }
                 notesList.add(0, currentNote);
                 return true;
             }
 
         } catch (Exception e) {
-            Log.d(TAG, "Action: " + action.toString());
+            Log.d(TAG, "Action: " + action);
             e.printStackTrace();
             return false;
         } finally {
@@ -229,7 +236,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
     private void WriteMailToNew(@NonNull OneNote note,
                                 boolean usesticky,
-                                boolean usesAutomaticMerge,
                                 String noteBody) throws MessagingException, IOException {
         Log.d(TAG, "WriteMailToNew: " + noteBody);
         //String body = null;

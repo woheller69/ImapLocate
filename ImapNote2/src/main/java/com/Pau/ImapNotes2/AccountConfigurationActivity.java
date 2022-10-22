@@ -65,7 +65,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     };
     private Imaper imapFolder;
     private TextView accountnameTextView;
-    private TextView devicenameTextView;
     private TextView usernameTextView;
     private TextView passwordTextView;
     private TextView serverTextView;
@@ -73,7 +72,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private NumberPicker syncIntervalNumberPicker;
     private TextView folderTextView;
     private CheckBox stickyCheckBox;
-    private CheckBox automaticMergeCheckBox;
     private Spinner securitySpinner;
     @NonNull
     private Security security = Security.None;
@@ -125,27 +123,24 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         super.onCreate(savedInstanceState);
         //settings = new ConfigurationFile(getApplicationContext());
         setContentView(R.layout.account_selection);
-        //noinspection ConstantConditions
         getActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
-        devicenameTextView = findTextViewById(R.id.devicenameEdit);
         usernameTextView = findTextViewById(R.id.usernameEdit);
         passwordTextView = findTextViewById(R.id.passwordEdit);
         serverTextView = findTextViewById(R.id.serverEdit);
         portnumTextView = findTextViewById(R.id.portnumEdit);
         //syncintervalTextView = findTextViewById(R.id.syncintervalEdit);
         //syncintervalTextView.addTextChangedListener(textWatcher);
-        syncIntervalNumberPicker = (NumberPicker) findViewById(R.id.syncintervalMinutes);
+        syncIntervalNumberPicker = findViewById(R.id.syncintervalMinutes);
         syncIntervalNumberPicker.setMaxValue(24 * 60);
         syncIntervalNumberPicker.setMinValue(1);
         syncIntervalNumberPicker.setValue(15);
 
         folderTextView = findTextViewById(R.id.folderEdit);
-        stickyCheckBox = (CheckBox) findViewById(R.id.stickyCheckBox);
-        automaticMergeCheckBox = (CheckBox) findViewById(R.id.automaticMergeCheckBox);
+        stickyCheckBox = findViewById(R.id.stickyCheckBox);
 
-        securitySpinner = (Spinner) findViewById(R.id.securitySpinner);
+        securitySpinner = findViewById(R.id.securitySpinner);
         /*List<String> list = new ArrayList<String>();
         list.add("None");
         list.add("SSL/TLS");
@@ -191,13 +186,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         //int security_i = security.ordinal();
         securitySpinner.setSelection(security.ordinal());
         stickyCheckBox.setChecked(settings.GetUsesticky());
-        automaticMergeCheckBox.setChecked(settings.GetUseAutomaticMerge());
         folderTextView.setText(settings.GetFoldername());
 */
         //syncintervalTextView.setText(R.string.default_sync_interval);
         //}
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.buttonsLayout);
+        LinearLayout layout = findViewById(R.id.buttonsLayout);
         accountManager = AccountManager.get(getApplicationContext());
         Account[] accounts = accountManager.getAccountsByType("com.Pau.ImapNotes2");
         for (Account account : accounts) {
@@ -216,7 +210,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             // Here we have to edit an existing account
             headingTextView.setText(R.string.editAccount);
             accountnameTextView.setText(accountname);
-            devicenameTextView.setText(GetConfigValue(ConfigurationFieldNames.DeviceId));
             usernameTextView.setText(GetConfigValue(ConfigurationFieldNames.UserName));
             passwordTextView.setText(accountManager.getPassword(myAccount));
             serverTextView.setText(GetConfigValue(ConfigurationFieldNames.Server));
@@ -224,7 +217,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             Log.d(TAG, "Security: " + GetConfigValue(ConfigurationFieldNames.Security));
             security = Security.from(GetConfigValue(ConfigurationFieldNames.Security));
             stickyCheckBox.setChecked(Boolean.parseBoolean(GetConfigValue(ConfigurationFieldNames.UseSticky)));
-            automaticMergeCheckBox.setChecked(Boolean.parseBoolean(GetConfigValue(ConfigurationFieldNames.UseAutomaticMerge)));
             //syncintervalTextView.setText(GetConfigValue(ConfigurationFieldNames.SyncInterval));
             syncIntervalNumberPicker.setValue(Integer.parseInt(GetConfigValue(ConfigurationFieldNames.SyncInterval)));
             folderTextView.setText(GetConfigValue(ConfigurationFieldNames.ImapFolder));
@@ -256,7 +248,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     }
 
     private TextView findTextViewById(int id) {
-        return (TextView) (findViewById(id));
+        return findViewById(id);
     }
 
     private String GetConfigValue(@NonNull String name) {
@@ -276,10 +268,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 GetTextViewText(passwordTextView),
                 GetTextViewText(serverTextView),
                 GetTextViewText(portnumTextView),
-                GetTextViewText(devicenameTextView),
                 security,
                 stickyCheckBox.isChecked(),
-                automaticMergeCheckBox.isChecked(),
                 syncIntervalNumberPicker.getValue(),
                 GetTextViewText(folderTextView));
         // No need to check for valid numbers because the field only allows digits.  But it is
@@ -433,7 +423,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         private void setUserData(@NonNull AccountManager am,
                                  @NonNull Account account) {
             am.setUserData(account, ConfigurationFieldNames.UserName, imapNotes2Account.username);
-            am.setUserData(account, ConfigurationFieldNames.DeviceId, imapNotes2Account.deviceId);
             am.setUserData(account, ConfigurationFieldNames.Server, imapNotes2Account.server);
             am.setUserData(account, ConfigurationFieldNames.PortNumber, imapNotes2Account.portnum);
             am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(imapNotes2Account.syncInterval));
