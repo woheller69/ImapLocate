@@ -1,10 +1,6 @@
 imapnote2k
 ==========
 
-Notes
-------------------
-Added travis. Don't really know how it works yet.
-
 Notes on this fork
 ------------------
 
@@ -20,10 +16,8 @@ men that it is harder to cause errors by mistyping.
 The effort to rid the code of magic numbers and literal strings will continue.
 
 From now on I will start making breaking changes because I want to be able to create rich text or
-html notes with embedded grapics and for notes to be automatically merged when two or more devices
+html notes with embedded graphics and for notes to be automatically merged when two or more devices
 make simultaneous edits.
-
-
 
 Original README from nbenm
 --------------------------
@@ -52,7 +46,7 @@ Main changes V5
 - sdk version 33
 - load libs during compile time
 - switch no maven
-- notes from posteo.de are working again
+- notes from posteo.de and gmail.com are working again
 
 Main changes are:
 
