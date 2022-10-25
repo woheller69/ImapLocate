@@ -2,9 +2,9 @@ imapnote2k
 ==========
 
 This project is cherry picked from the following projects:
-https://github.com/nbenm/ImapNote2
-https://github.com/N0ury/ImapNote2
-and maybe others...
+* https://github.com/nbenm/ImapNote2
+* https://github.com/N0ury/ImapNote2
+* and maybe others...
 
 Sync your notes between Android, iOs devices and different accounts like Gmail, iCloud and others
 
