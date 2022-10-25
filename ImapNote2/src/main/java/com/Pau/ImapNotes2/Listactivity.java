@@ -100,6 +100,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     @Nullable
     private static Db storedNotes = null;
     private static List<String> currentList;
+    public static String sortOrder = OneNote.DATE + " DESC";
+    private static boolean sortingChanged = false;
     // FIXME
     // Hack! accountManager.addOnAccountsUpdatedListener
     // OnAccountsUpdatedListener is called to early - so not all
@@ -146,12 +148,12 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 //TextView status = (TextView) findViewById(R.id.status);
                 status.setText(statusText);
 
-                if (isChanged) {
+                if (isChanged | sortingChanged) {
                     if (storedNotes == null) {
                         storedNotes = new Db(getApplicationContext());
                     }
                     storedNotes.OpenDb();
-                    storedNotes.notes.GetStoredNotes(noteList, accountName);
+                    storedNotes.notes.GetStoredNotes(noteList, accountName, sortOrder);
                     listToView.notifyDataSetChanged();
                     storedNotes.CloseDb();
                 }
@@ -340,6 +342,24 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
                 startActivityForResult(toNew, Listactivity.NEW_BUTTON);
                 return true;
+            case R.id.sort_date: {
+                Listactivity.sortOrder = OneNote.DATE + " DESC";
+                sortingChanged = true;
+                item.setChecked(true);
+                TriggerSync(status);
+                return true;
+            }
+            case R.id.sort_title: {
+                Listactivity.sortOrder = OneNote.TITLE + " ASC";
+                item.setChecked(true);
+                sortingChanged = true;
+                TriggerSync(status);
+/*                noteList.sort((t1, t2) -> t1.GetTitle().toLowerCase().compareTo(t2.GetTitle().toLowerCase()));
+                ListView listview = findViewById(R.id.notesList);
+                listview.postInvalidate();
+ */
+                return true;
+            }
             case R.id.about:
                 try {
                     ComponentName comp = new ComponentName(this.getApplicationContext(), Listactivity.class);

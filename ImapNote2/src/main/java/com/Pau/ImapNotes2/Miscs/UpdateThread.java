@@ -116,7 +116,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         noteBody.replaceAll("\n", "\\\\n") :
                         "<html><head></head><body>" + noteBody + "</body></html>";
 
-                String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+                String DATE_FORMAT = Utilities.internalDateFormatString;
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
                 String stringDate = sdf.format(date);

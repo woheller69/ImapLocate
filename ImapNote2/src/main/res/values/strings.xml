@@ -46,4 +46,7 @@
     <string name="editAccount">Edit Account</string>
     <string name="Waiting_for_sync">Waiting for synchronizing</string>
     <string name="Invalid_Message">Invalid Message Data</string>
+    <string name="sort_date">Sort by Date</string>
+    <string name="sort_title">Sort by Title</string>
+    <string name="sort">Sort</string>
 </resources>

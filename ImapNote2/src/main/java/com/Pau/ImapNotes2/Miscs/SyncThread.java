@@ -76,7 +76,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
 
 
         storedNotes.OpenDb();
-        storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.imapNotes2Account.accountName);
+        storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.imapNotes2Account.accountName, Listactivity.sortOrder);
         storedNotes.CloseDb();
         return true;
     }

@@ -104,11 +104,12 @@ public class NotesDb {
     }
 
     public void GetStoredNotes(@NonNull ArrayList<OneNote> noteList,
-                               @NonNull String accountName) {
+                               @NonNull String accountName,
+                               @NonNull String sortOrder) {
         noteList.clear();
         Date date = null;
         try (Cursor resultPointer = db.notesDb.query(TABLE_NAME, null, "accountname = ?",
-                new String[]{accountName}, null, null, "date DESC")) {
+                new String[]{accountName}, null, null, sortOrder)) {
 
             if (resultPointer.moveToFirst()) {
                 int titleIndex = resultPointer.getColumnIndex(COL_TITLE);
