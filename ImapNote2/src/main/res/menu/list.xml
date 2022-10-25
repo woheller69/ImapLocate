@@ -24,37 +24,34 @@
         android:icon="@drawable/ic_action_search"
         android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/search" />
-
     <group
         android:id="@+id/sort"
         android:actionViewClass="android.widget.CheckBox"
         android:checkableBehavior="single"
-        android:enabled="true"
         android:icon="@drawable/ic_action_sort"
-        android:menuCategory="system"
-        android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/sort"
         android:visible="true">
         <item
             android:id="@+id/sort_date"
             android:checked="true"
-            android:enabled="true"
             android:icon="@drawable/ic_action_sort_date"
             android:title="@string/sort_date"
+            android:showAsAction="ifRoom|collapseActionView"
             android:visible="true" />
 
         <item
             android:id="@+id/sort_title"
             android:checked="false"
-            android:enabled="true"
             android:icon="@drawable/ic_action_sort_title"
             android:title="@string/sort_title"
+            android:showAsAction="ifRoom|collapseActionView"
             android:visible="true" />
-        <item
-            android:id="@+id/about"
-            android:icon="@drawable/ic_action_about"
-            android:showAsAction="ifRoom"
-            android:title="@string/about" />
     </group>
-
+    <item
+        android:id="@+id/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_action_about"
+        android:showAsAction="ifRoom"
+        android:title="@string/about" />
 </menu>
