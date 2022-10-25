@@ -47,3 +47,4 @@ Main changes are:
 - works offline and sync is done in the background. Sync interval can be different for each account
 
 This app is available at Google Play under the name "ImapNote2". But for people who don't have access to this market, it will be possible to compile source code. Furthermore, an apk is available in bin directory.
+
