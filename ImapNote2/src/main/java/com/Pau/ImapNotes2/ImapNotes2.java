@@ -23,7 +23,7 @@ public class ImapNotes2 extends Application {
     public void onCreate() {
         super.onCreate();
         // Save the context in a static so that it is easy to access everywhere.
-        //ImapNotes2k.context = getApplicationContext();
+        //ImapNotes2.context = getApplicationContext();
     }*/
 
     @NonNull

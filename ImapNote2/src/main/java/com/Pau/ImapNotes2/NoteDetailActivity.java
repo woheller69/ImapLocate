@@ -17,8 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 
+import com.Pau.ImapNotes2.Miscs.EditorMenuAdapter;
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
@@ -36,7 +39,7 @@ import javax.mail.internet.ContentType;
 import jp.wasabeef.richeditor.RichEditor;
 
 
-public class NoteDetailActivity extends Activity {
+public class NoteDetailActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
     //region Intent item names
     public static final String useSticky = "useSticky";
@@ -139,7 +142,8 @@ public class NoteDetailActivity extends Activity {
         //mEditor = (RichEditor) findViewById(R.id.editor);
         //mEditor.setEditorHeight(200);
         //mEditor.setEditorFontSize(22);
-        mEditor.setEditorFontColor(Color.RED);
+        //mEditor.setEditorFontColor(Color.RED);
+
         //mEditor.setEditorBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundResource(R.drawable.bg);
@@ -156,75 +160,35 @@ public class NoteDetailActivity extends Activity {
         });
 
 */
-        findViewById(R.id.action_undo).setOnClickListener(v -> mEditor.undo());
 
+        String[] mObjects = new String[6];
+        Spinner formatSpinner = findViewById(R.id.action_format);
+        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_format));
+        formatSpinner.setOnItemSelectedListener(this);
+
+        Spinner insertSpinner = findViewById(R.id.action_insert);
+        insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[7], R.id.action_insert));
+        insertSpinner.setOnItemSelectedListener(this);
+
+        Spinner headingSpinner = findViewById(R.id.action_heading);
+        headingSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_heading));
+        headingSpinner.setOnItemSelectedListener(this);
+
+        Spinner txtColorSpinner = findViewById(R.id.action_txt_color);
+        txtColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_txt_color));
+        txtColorSpinner.setOnItemSelectedListener(this);
+
+        Spinner bgColorSpinner = findViewById(R.id.action_bg_color);
+        bgColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_bg_color));
+        bgColorSpinner.setOnItemSelectedListener(this);
+
+        Spinner alignmentSpinner = findViewById(R.id.action_alignment);
+        alignmentSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_alignment));
+        alignmentSpinner.setOnItemSelectedListener(this);
+
+        findViewById(R.id.action_undo).setOnClickListener(v -> mEditor.undo());
         findViewById(R.id.action_redo).setOnClickListener(v -> mEditor.redo());
 
-        findViewById(R.id.action_bold).setOnClickListener(v -> mEditor.setBold());
-
-        findViewById(R.id.action_italic).setOnClickListener(v -> mEditor.setItalic());
-
-        findViewById(R.id.action_subscript).setOnClickListener(v -> mEditor.setSubscript());
-
-        findViewById(R.id.action_superscript).setOnClickListener(v -> mEditor.setSuperscript());
-
-        findViewById(R.id.action_strikethrough).setOnClickListener(v -> mEditor.setStrikeThrough());
-
-        findViewById(R.id.action_underline).setOnClickListener(v -> mEditor.setUnderline());
-
-        findViewById(R.id.action_heading1).setOnClickListener(v -> mEditor.setHeading(1));
-
-        findViewById(R.id.action_heading2).setOnClickListener(v -> mEditor.setHeading(2));
-
-        findViewById(R.id.action_heading3).setOnClickListener(v -> mEditor.setHeading(3));
-
-        findViewById(R.id.action_heading4).setOnClickListener(v -> mEditor.setHeading(4));
-
-        findViewById(R.id.action_heading5).setOnClickListener(v -> mEditor.setHeading(5));
-
-        findViewById(R.id.action_heading6).setOnClickListener(v -> mEditor.setHeading(6));
-
-        findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
-            private boolean isChanged;
-
-            @Override
-            public void onClick(View v) {
-                mEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
-                isChanged = !isChanged;
-            }
-        });
-
-        findViewById(R.id.action_bg_color).setOnClickListener(new View.OnClickListener() {
-            private boolean isChanged;
-
-            @Override
-            public void onClick(View v) {
-                mEditor.setTextBackgroundColor(isChanged ? Color.TRANSPARENT : Color.YELLOW);
-                isChanged = !isChanged;
-            }
-        });
-
-        findViewById(R.id.action_indent).setOnClickListener(v -> mEditor.setIndent());
-
-        findViewById(R.id.action_outdent).setOnClickListener(v -> mEditor.setOutdent());
-
-        findViewById(R.id.action_align_left).setOnClickListener(v -> mEditor.setAlignLeft());
-
-        findViewById(R.id.action_align_center).setOnClickListener(v -> mEditor.setAlignCenter());
-
-        findViewById(R.id.action_align_right).setOnClickListener(v -> mEditor.setAlignRight());
-
-        findViewById(R.id.action_blockquote).setOnClickListener(v -> mEditor.setBlockquote());
-
-        findViewById(R.id.action_insert_bullets).setOnClickListener(v -> mEditor.setBullets());
-
-        findViewById(R.id.action_insert_numbers).setOnClickListener(v -> mEditor.setNumbers());
-
-        findViewById(R.id.action_insert_image).setOnClickListener(v -> mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                "dachshund"));
-
-        findViewById(R.id.action_insert_link).setOnClickListener(v -> mEditor.insertLink("https://github.com/wasabeef", "wasabeef"));
-        findViewById(R.id.action_insert_checkbox).setOnClickListener(v -> mEditor.insertTodo());
     }
 
 /*
@@ -235,6 +199,154 @@ public class NoteDetailActivity extends Activity {
     }
 */
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+        switch (view.getId()) {
+            case R.id.action_bold:
+                editText.setBold();
+                break;
+            case R.id.action_italic:
+                editText.setItalic();
+                break;
+            case R.id.action_subscript:
+                editText.setSubscript();
+                break;
+            case R.id.action_superscript:
+                editText.setSuperscript();
+                break;
+            case R.id.action_strikethrough:
+                editText.setStrikeThrough();
+                break;
+            case R.id.action_underline:
+                editText.setUnderline();
+                break;
+            case R.id.action_heading1:
+                editText.setHeading(1);
+                break;
+            case R.id.action_heading2:
+                editText.setHeading(2);
+                break;
+            case R.id.action_heading3:
+                editText.setHeading(3);
+                break;
+            case R.id.action_heading4:
+                editText.setHeading(4);
+                break;
+            case R.id.action_heading5:
+                editText.setHeading(5);
+                break;
+            case R.id.action_heading6:
+                editText.setHeading(6);
+                break;
+            case R.id.action_txt_color_white:
+                editText.setTextColor(Color.WHITE);
+                break;
+            case R.id.action_txt_color_grey:
+                editText.setTextColor(Color.GRAY);
+                break;
+            case R.id.action_txt_color_black:
+                editText.setTextColor(Color.BLACK);
+                break;
+            case R.id.action_txt_color_red:
+                editText.setTextColor(Color.RED);
+                break;
+            case R.id.action_txt_color_green:
+                editText.setTextColor(Color.GREEN);
+                break;
+            case R.id.action_txt_color_yellow:
+                editText.setTextColor(Color.YELLOW);
+                break;
+            case R.id.action_txt_color_brown:
+                editText.setTextColor(Color.MAGENTA);
+                break;
+            case R.id.action_txt_color_blue:
+                editText.setTextColor(Color.BLUE);
+                break;
+            case R.id.action_bg_color_white:
+                editText.setTextBackgroundColor(Color.WHITE);
+                break;
+            case R.id.action_bg_color_grey:
+                editText.setTextBackgroundColor(Color.GRAY);
+                break;
+            case R.id.action_bg_color_black:
+                editText.setTextBackgroundColor(Color.BLACK);
+                break;
+            case R.id.action_bg_color_red:
+                editText.setTextBackgroundColor(Color.RED);
+                break;
+            case R.id.action_bg_color_green:
+                editText.setTextBackgroundColor(Color.GREEN);
+                break;
+            case R.id.action_bg_color_yellow:
+                editText.setTextBackgroundColor(Color.YELLOW);
+                break;
+            case R.id.action_bg_color_brown:
+                editText.setTextBackgroundColor(Color.MAGENTA);
+                break;
+            case R.id.action_bg_color_blue:
+                editText.setTextBackgroundColor(Color.BLUE);
+                break;
+            case R.id.action_indent:
+                editText.setIndent();
+                break;
+            case R.id.action_outdent:
+                editText.setOutdent();
+                break;
+            case R.id.action_align_left:
+                editText.setAlignLeft();
+                break;
+            case R.id.action_align_center:
+                editText.setAlignCenter();
+                break;
+            case R.id.action_align_right:
+                editText.setAlignRight();
+                break;
+            case R.id.action_blockquote:
+                editText.setBlockquote();
+                break;
+            case R.id.action_insert_bullets:
+                editText.setBullets();
+                break;
+            case R.id.action_insert_numbers:
+                editText.setNumbers();
+                break;
+            case R.id.action_insert_image:
+                editText.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
+                        "dachshund");
+                break;
+            case R.id.action_insert_link:
+                editText.insertLink("https://github.com/wasabeef", "wasabeef");
+                break;
+            case R.id.action_insert_checkbox:
+                editText.insertTodo();
+                break;
+            case R.id.action_insert_star:
+                editText.loadUrl("javascript:RE.prepareInsert();");
+                editText.loadUrl("javascript:RE.insertHTML('&#11088;');");
+                break;
+            case R.id.action_insert_question:
+                editText.loadUrl("javascript:RE.prepareInsert();");
+                editText.loadUrl("javascript:RE.insertHTML('&#10067;');");
+                break;
+            case R.id.action_insert_exclamation:
+                editText.loadUrl("javascript:RE.prepareInsert();");
+                editText.loadUrl("javascript:RE.insertHTML('&#10071;');");
+                break;
+            case R.id.action_insert_hline:
+                editText.loadUrl("javascript:RE.prepareInsert();");
+                editText.loadUrl("javascript:RE.insertHTML('<hr>');");
+                break;
+
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
@@ -300,7 +412,7 @@ public class NoteDetailActivity extends Activity {
             case R.id.green:
                 item.setChecked(true);
                 color = Colors.fromId(itemId);
-                (findViewById(R.id.scrollView)).setBackgroundColor(color.colorCode);
+                ResetColors();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

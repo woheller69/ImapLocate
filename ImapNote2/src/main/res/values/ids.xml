@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="action_bold" type="id" />
+    <item name="action_italic" type="id" />
+    <item name="action_subscript" type="id" />
+    <item name="action_superscript" type="id" />
+    <item name="action_strikethrough" type="id" />
+    <item name="action_underline" type="id" />
+    <item name="action_heading1" type="id" />
+    <item name="action_heading2" type="id" />
+    <item name="action_heading3" type="id" />
+    <item name="action_heading4" type="id" />
+    <item name="action_heading5" type="id" />
+    <item name="action_heading6" type="id" />
+    <item name="action_txt_color_white" type="id" />
+    <item name="action_txt_color_grey" type="id" />
+    <item name="action_txt_color_black" type="id" />
+    <item name="action_txt_color_red" type="id" />
+    <item name="action_txt_color_green" type="id" />
+    <item name="action_txt_color_yellow" type="id" />
+    <item name="action_txt_color_blue" type="id" />
+    <item name="action_txt_color_brown" type="id" />
+    <item name="action_bg_color_white" type="id" />
+    <item name="action_bg_color_grey" type="id" />
+    <item name="action_bg_color_black" type="id" />
+    <item name="action_bg_color_red" type="id" />
+    <item name="action_bg_color_green" type="id" />
+    <item name="action_bg_color_yellow" type="id" />
+    <item name="action_bg_color_blue" type="id" />
+    <item name="action_bg_color_brown" type="id" />
+    <item name="action_indent" type="id" />
+    <item name="action_outdent" type="id" />
+    <item name="action_align_left" type="id" />
+    <item name="action_align_center" type="id" />
+    <item name="action_align_right" type="id" />
+    <item name="action_blockquote" type="id" />
+    <item name="action_insert_bullets" type="id" />
+    <item name="action_insert_numbers" type="id" />
+    <item name="action_insert_image" type="id" />
+    <item name="action_insert_link" type="id" />
+    <item name="action_insert_checkbox" type="id" />
+    <item name="action_insert_star" type="id" />
+    <item name="action_insert_exclamation" type="id" />
+    <item name="action_insert_question" type="id" />
+    <item name="action_insert_hline" type="id" />
+</resources>

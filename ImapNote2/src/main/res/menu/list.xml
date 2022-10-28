@@ -25,7 +25,6 @@
         android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/search" />
     <group
-        android:id="@+id/sort"
         android:actionViewClass="android.widget.CheckBox"
         android:checkableBehavior="single"
         android:icon="@drawable/ic_action_sort"

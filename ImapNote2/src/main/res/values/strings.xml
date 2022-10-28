@@ -25,13 +25,11 @@
     <string name="imap_notes_server">IMAP notes server</string>
     <string name="server_port_number_to_use">Server port number to use</string>
     <string name="sync_interval_minutes">Sync Interval (minutes)</string>
-    <string name="sync_interval_for_this_account_in_minutes">sync interval for this account (in minutes)</string>
     <string name="notes_folder_optional">Notes Folder (optional)</string>
     <string name="manually_set_full_imap_path_to_notes_folder">Manually set full IMAP path to notes folder</string>
     <string name="use_sticky_notes">Use Sticky Notes</string>
     <string name="welcome">Welcome</string>
     <string name="select_account">Select account to view or edit</string>
-    <string name="note_title">Note Title</string>
     <string name="delete">Delete</string>
     <string name="color">Color</string>
     <string name="blue">Blue</string>
@@ -42,11 +40,19 @@
     <string name="syncing">Syncing...</string>
     <string name="refreshing_notes_list">Refreshing notes list…</string>
     <string name="updating_notes_list">Updating notes list…</string>
-    <string name="default_sync_interval">15</string>
     <string name="editAccount">Edit Account</string>
     <string name="Waiting_for_sync">Waiting for synchronizing</string>
     <string name="Invalid_Message">Invalid Message Data</string>
     <string name="sort_date">Sort by Date</string>
     <string name="sort_title">Sort by Title</string>
     <string name="sort">Sort</string>
+    <string name="undo">UnDo</string>
+    <string name="redo">ReDo</string>
+    <string name="format">Format</string>
+    <string name="heading">Heading</string>
+    <string name="txt_color">Text Color</string>
+    <string name="bg_color">Background Color</string>
+    <string name="alignment">Text For</string>
+    <string name="insert">insert</string>
+
 </resources>

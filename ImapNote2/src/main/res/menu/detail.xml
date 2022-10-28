@@ -22,9 +22,7 @@
         android:showAsAction="ifRoom"
         android:title="@string/color">
         <menu>
-            <group
-                android:id="@+id/color_group"
-                android:checkableBehavior="single">
+            <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/blue"
                     android:title="@string/blue" />

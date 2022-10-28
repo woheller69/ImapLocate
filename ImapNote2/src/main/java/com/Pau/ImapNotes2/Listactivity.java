@@ -211,7 +211,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         this.accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
-        //((ImapNotes2k) this.getApplicationContext()).SetNotesList(this.noteList);
+        //((ImapNotes2) this.getApplicationContext()).SetNotesList(this.noteList);
         this.listToView = new NotesListAdapter(
                 getApplicationContext(),
                 this.noteList,
