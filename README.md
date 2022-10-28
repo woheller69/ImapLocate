@@ -1,5 +1,5 @@
-imapnote2k
-==========
+imapnote2
+=========
 
 This project is cherry picked from the following projects:
 * https://github.com/nbenm/ImapNote2
