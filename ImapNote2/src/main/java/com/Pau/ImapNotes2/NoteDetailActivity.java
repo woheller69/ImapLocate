@@ -18,10 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Spinner;
 
 
 import com.Pau.ImapNotes2.Miscs.EditorMenuAdapter;
+import com.Pau.ImapNotes2.Miscs.NDSpinner;
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
@@ -166,27 +166,27 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
 */
 
-        Spinner formatSpinner = findViewById(R.id.action_format);
+        NDSpinner formatSpinner = findViewById(R.id.action_format);
         formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_format));
         formatSpinner.setOnItemSelectedListener(this);
 
-        Spinner insertSpinner = findViewById(R.id.action_insert);
+        NDSpinner insertSpinner = findViewById(R.id.action_insert);
         insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[7], R.id.action_insert));
         insertSpinner.setOnItemSelectedListener(this);
 
-        Spinner headingSpinner = findViewById(R.id.action_heading);
+        NDSpinner headingSpinner = findViewById(R.id.action_heading);
         headingSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_heading));
         headingSpinner.setOnItemSelectedListener(this);
 
-        Spinner txtColorSpinner = findViewById(R.id.action_txt_color);
+        NDSpinner txtColorSpinner = findViewById(R.id.action_txt_color);
         txtColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_txt_color));
         txtColorSpinner.setOnItemSelectedListener(this);
 
-        Spinner bgColorSpinner = findViewById(R.id.action_bg_color);
+        NDSpinner bgColorSpinner = findViewById(R.id.action_bg_color);
         bgColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_bg_color));
         bgColorSpinner.setOnItemSelectedListener(this);
 
-        Spinner alignmentSpinner = findViewById(R.id.action_alignment);
+        NDSpinner alignmentSpinner = findViewById(R.id.action_alignment);
         alignmentSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_alignment));
         alignmentSpinner.setOnItemSelectedListener(this);
 

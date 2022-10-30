@@ -38,7 +38,7 @@
                     android:contentDescription="@string/redo"
                     android:src="@drawable/redo" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_format"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                     android:minHeight="48dp"
                     android:title="@string/format" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_insert"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                     android:minHeight="48dp"
                     android:title="@string/insert" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_heading"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                     android:minHeight="48dp"
                     android:title="@string/heading" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_txt_color"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                     android:minHeight="48dp"
                     android:title="@string/txt_color" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_bg_color"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     android:minHeight="48dp"
                     android:title="@string/bg_color" />
 
-                <Spinner
+                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_alignment"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
