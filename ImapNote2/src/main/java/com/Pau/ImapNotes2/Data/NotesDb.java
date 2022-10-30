@@ -62,12 +62,12 @@ public class NotesDb {
                 "' and accountname = '" + accountname + "'");
     }
 
-    public void UpdateANote(@NonNull String olduid,
+    public void UpdateANote(@NonNull String tmpuid,
                             @NonNull String newuid,
                             @NonNull String accountname) {
         /* TODO: use sql template and placeholders instead of string concatenation.
          */
-        String req = "update notesTable set number='" + newuid + "' where number='-" + olduid + "' and accountname='" + accountname + "'";
+        String req = "update notesTable set number='" + newuid + "' where number='-" + tmpuid + "' and accountname='" + accountname + "'";
         db.notesDb.execSQL(req);
     }
 
@@ -87,7 +87,7 @@ public class NotesDb {
 
     public String GetTempNumber(@NonNull String accountname) {
         String RetValue = "-1";
-        String selectQuery = "select case when cast(max(abs(number)+1) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number > '0' and accountname='" + accountname + "'";
+        String selectQuery = "select case when cast(max(abs(number)+2) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number < '0' and accountname='" + accountname + "'";
         try (Cursor c = db.notesDb.rawQuery(selectQuery, null)) {
             if (c.moveToFirst()) {
                 RetValue = c.getString(0);

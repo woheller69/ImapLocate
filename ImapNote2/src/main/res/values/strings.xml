@@ -37,7 +37,7 @@
     <string name="yellow">Yellow</string>
     <string name="pink">Pink</string>
     <string name="green">Green</string>
-    <string name="syncing">Syncing...</string>
+    <string name="syncing">Syncing…</string>
     <string name="refreshing_notes_list">Refreshing notes list…</string>
     <string name="updating_notes_list">Updating notes list…</string>
     <string name="editAccount">Edit Account</string>
@@ -54,5 +54,8 @@
     <string name="bg_color">Background Color</string>
     <string name="alignment">Text For</string>
     <string name="insert">insert</string>
+    <string name="editAccountButton">edit Account Button</string>
+    <string name="note_information">Note Information</string>
+    <string name="Sync_necessary">Synchronisation necessary</string>
 
 </resources>

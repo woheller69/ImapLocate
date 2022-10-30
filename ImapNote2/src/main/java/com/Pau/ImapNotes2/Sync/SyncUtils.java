@@ -127,10 +127,12 @@ public class SyncUtils {
         // TODO: use user defined proxy.
         Boolean useProxy = false;
         //noinspection ConstantConditions
+        /*
         if (useProxy) {
             props.put("mail.imap.socks.host", "10.0.2.2");
             props.put("mail.imap.socks.port", "1080");
         }
+         */
         try {
             Session session = Session.getInstance(props, null);
 //this.session.setDebug(true);
@@ -415,7 +417,6 @@ public class SyncUtils {
         //File mailFile;
         //Message message = null;
         //mailFile = new File(nameDir, uid);
-
         return ReadMailFromFile(newFilesDir, uid);
     }
 
@@ -472,12 +473,17 @@ public class SyncUtils {
             try {
                 Properties props = new Properties();
                 Session session = Session.getDefaultInstance(props, null);
+                Message message = new MimeMessage(session, mailFileInputStream);
                 Log.d(TAG, "ReadMailFromFile return new MimeMessage.");
-                return new MimeMessage(session, mailFileInputStream);
+                return message;
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
                 Log.d(TAG, "Exception getting MimeMessage.");
                 e.printStackTrace();
+            } catch (Exception e2) {
+                //TODO: handle this properly
+                Log.d(TAG, "exception opening mailFile: ");
+                e2.printStackTrace();
             }
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block

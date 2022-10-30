@@ -78,31 +78,37 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
             if (hm != null) {
                 suid = hm.get("uid").toString();
-                File rootDir = new File(getApplicationContext().getFilesDir(),
-                        Listactivity.imapNotes2Account.accountName);
-                Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
-                //Log.d(TAG, "rootDir is null: " + (rootDir == null));
-                Log.d(TAG, "rootDir: " + rootDir);
-                if ((message != null) && (Integer.parseInt(suid) > 0)) {
-                    if (usesticky) {
-                        sticky = GetStickyFromMessage(message);
-                        stringres = sticky.text;
-                        //String position = sticky.position;
-                        color = sticky.color;
+                if (Integer.parseInt(suid) > 0) {
+                    File rootDir = new File(getApplicationContext().getFilesDir(),
+                            Listactivity.imapNotes2Account.accountName);
+                    Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
+                    //Log.d(TAG, "rootDir is null: " + (rootDir == null));
+                    Log.d(TAG, "rootDir: " + rootDir);
+                    if (message != null) {
+                        if (usesticky) {
+                            sticky = GetStickyFromMessage(message);
+                            stringres = sticky.text;
+                            //String position = sticky.position;
+                            color = sticky.color;
+                        } else {
+                            stringres = GetHtmlFromMessage(message);
+                        }
+                        editText = findViewById(R.id.bodyView);
+                        SetupRichEditor(editText);
+                        editText.setHtml(stringres);
                     } else {
-                        stringres = GetHtmlFromMessage(message);
+                        // Entry can not opened..
+                        Notifier.Show(R.string.Sync_necessary, getApplicationContext(), 1);
+                        finish();
+                        return;
                     }
-                    editText = findViewById(R.id.bodyView);
-                    SetupRichEditor(editText);
-                    editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
                     Notifier.Show(R.string.Waiting_for_sync, getApplicationContext(), 1);
                     finish();
                     return;
                 }
-            } else {
-                // Entry can not opened..
+            } else { // Entry can not opened..
                 Notifier.Show(R.string.Invalid_Message, getApplicationContext(), 1);
                 finish();
                 return;
@@ -135,7 +141,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         });
         */
         ResetColors();
-        //invalidateOptionsMenu();
     }
 
     private void SetupRichEditor(@NonNull final RichEditor mEditor) {
@@ -161,7 +166,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
 */
 
-        String[] mObjects = new String[6];
         Spinner formatSpinner = findViewById(R.id.action_format);
         formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_format));
         formatSpinner.setOnItemSelectedListener(this);
@@ -201,8 +205,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
         switch (view.getId()) {
             case R.id.action_bold:
                 editText.setBold();
@@ -338,14 +340,11 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 editText.loadUrl("javascript:RE.prepareInsert();");
                 editText.loadUrl("javascript:RE.insertHTML('<hr>');");
                 break;
-
-
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
