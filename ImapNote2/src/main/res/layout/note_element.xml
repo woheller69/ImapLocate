@@ -14,9 +14,9 @@
         android:maxLines="1"
         android:scrollHorizontally="false"
         android:layout_height="wrap_content"
-        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/ElementTxtColor"></TextView>
+        android:textColor="@color/ElementTxtColor" />
 
     <!-- This text view is used to display the date and time of the most recent edit. -->
     <TextView
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Note Information"
+        android:text="@string/note_information"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/ListTxtColor" />
 

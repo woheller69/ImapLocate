@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/format"
+                    android:minHeight="48dp"
                     android:title="@string/format" />
 
                 <Spinner
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/insert"
+                    android:minHeight="48dp"
                     android:title="@string/insert" />
 
                 <Spinner
@@ -60,6 +62,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/heading"
+                    android:minHeight="48dp"
                     android:title="@string/heading" />
 
                 <Spinner
@@ -68,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/txt_color"
+                    android:minHeight="48dp"
                     android:title="@string/txt_color" />
 
                 <Spinner
@@ -76,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/bg_color"
+                    android:minHeight="48dp"
                     android:title="@string/bg_color" />
 
                 <Spinner
@@ -84,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/black"
                     android:contentDescription="@string/alignment"
+                    android:minHeight="48dp"
                     android:title="@string/alignment" />
 
             </LinearLayout>
