@@ -24,6 +24,7 @@
     <string name="server">Server</string>
     <string name="imap_notes_server">IMAP notes server</string>
     <string name="server_port_number_to_use">Server port number to use</string>
+    <string name="port_number">Port Number</string>
     <string name="sync_interval_minutes">Sync Interval (minutes)</string>
     <string name="notes_folder_optional">Notes Folder (optional)</string>
     <string name="manually_set_full_imap_path_to_notes_folder">Manually set full IMAP path to notes folder</string>
@@ -56,6 +57,6 @@
     <string name="insert">insert</string>
     <string name="editAccountButton">edit Account Button</string>
     <string name="note_information">Note Information</string>
-    <string name="Sync_necessary">Synchronisation necessary</string>
-
+    <string name="sync_necessary">Synchronisation necessary</string>
+    <string name="security">Security</string>
 </resources>

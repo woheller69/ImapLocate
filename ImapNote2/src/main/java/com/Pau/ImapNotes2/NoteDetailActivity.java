@@ -98,7 +98,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                         editText.setHtml(stringres);
                     } else {
                         // Entry can not opened..
-                        Notifier.Show(R.string.Sync_necessary, getApplicationContext(), 1);
+                        Notifier.Show(R.string.sync_necessary, getApplicationContext(), 1);
                         finish();
                         return;
                     }
