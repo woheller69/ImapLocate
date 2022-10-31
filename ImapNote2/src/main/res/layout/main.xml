@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/editAccountButton"
+            android:contentDescription="@string/editAccount"
             android:background="@drawable/ic_action_user_edit" />
 
     </LinearLayout>

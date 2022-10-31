@@ -38,11 +38,11 @@
     <string name="yellow">Yellow</string>
     <string name="pink">Pink</string>
     <string name="green">Green</string>
-    <string name="syncing">Syncing…</string>
+    <string name="syncing">Synchronising…</string>
     <string name="refreshing_notes_list">Refreshing notes list…</string>
     <string name="updating_notes_list">Updating notes list…</string>
     <string name="editAccount">Edit Account</string>
-    <string name="Waiting_for_sync">Waiting for synchronizing</string>
+    <string name="Waiting_for_sync">Waiting for synchronizing finish</string>
     <string name="Invalid_Message">Invalid Message Data</string>
     <string name="sort_date">Sort by Date</string>
     <string name="sort_title">Sort by Title</string>
@@ -53,10 +53,10 @@
     <string name="heading">Heading</string>
     <string name="txt_color">Text Color</string>
     <string name="bg_color">Background Color</string>
-    <string name="alignment">Text For</string>
+    <string name="alignment">Alignment</string>
     <string name="insert">insert</string>
-    <string name="editAccountButton">edit Account Button</string>
     <string name="note_information">Note Information</string>
     <string name="sync_necessary">Synchronisation necessary</string>
     <string name="security">Security</string>
+    <string name="note_title">Note Title</string>
 </resources>
