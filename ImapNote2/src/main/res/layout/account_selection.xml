@@ -17,14 +17,14 @@
             android:layout_marginBottom="10dip"
             android:text="@string/add_account"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_name"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/accountnameEdit"
@@ -32,8 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:hint="@string/choose_a_name_for_this_account"
+            android:autofillHints="yes"
             android:inputType="textEmailAddress">
-
             <requestFocus />
         </EditText>
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/username"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/usernameEdit"
@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:hint="@string/your_login_name"
+            android:autofillHints="yes"
             android:inputType="textEmailAddress" />
 
         <TextView
@@ -57,13 +58,14 @@
             android:layout_height="wrap_content"
             android:text="@string/password"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/passwordEdit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/your_password"
+            android:autofillHints="yes"
             android:inputType="textPassword" />
 
         <TextView
@@ -71,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="@string/server"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/serverEdit"
@@ -79,14 +81,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:hint="@string/imap_notes_server"
+            android:autofillHints="yes"
             android:inputType="textNoSuggestions|text|textVisiblePassword" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Security"
+            android:text="@string/security"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <Spinner
             android:id="@+id/securitySpinner"
@@ -96,9 +99,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Port Number"
+            android:text="@string/port_number"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/portnumEdit"
@@ -108,14 +111,15 @@
             android:ems="10"
             android:hint="@string/server_port_number_to_use"
             android:inputType="number"
-            android:textColor="#000000" />
+            android:autofillHints="yes"
+            android:textColor="@color/AccountTxtColor" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sync_interval_minutes"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <NumberPicker
             android:id="@+id/syncintervalMinutes"
@@ -128,15 +132,17 @@
             android:layout_height="wrap_content"
             android:text="@string/notes_folder_optional"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <EditText
             android:id="@+id/folderEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
+            android:autofillHints="yes"
+            android:inputType="text"
             android:hint="@string/manually_set_full_imap_path_to_notes_folder"
-            android:textColor="#000000" />
+            android:textColor="@color/AccountTxtColor" />
 
         <CheckBox
             android:id="@+id/stickyCheckBox"

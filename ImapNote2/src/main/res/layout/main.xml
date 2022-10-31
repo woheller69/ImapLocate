@@ -8,23 +8,21 @@
         android:id="@+id/status"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#000000"
+        android:background="@color/StatusBgColor"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center|center_horizontal"
         android:maxLines="1"
         android:text="@string/welcome"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/StatusTxtColor" />
 
     <TextView
         android:id="@+id/accountlabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ListColor"
-        android:text="@string/select_account"
+        android:background="@color/AccountBgColor"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000">
-
-    </TextView>
+        android:text="@string/select_account"
+        android:textColor="@color/AccountTxtColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
