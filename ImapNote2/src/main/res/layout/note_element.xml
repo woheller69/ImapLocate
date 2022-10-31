@@ -3,7 +3,7 @@
 <!--This layout displays the title and time stamp of a single note. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="60dip"
+    android:layout_height="55dip"
     android:orientation="vertical"
     android:padding="5dip">
 
@@ -11,12 +11,16 @@
     <TextView
         android:id="@+id/noteTitle"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/ListBgColor"
+        android:elevation="0dp"
         android:maxLines="1"
         android:scrollHorizontally="false"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:text="@string/note_title"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:background="@color/ListBgColor"
         android:textColor="@color/ListTxtColor" />
 
     <!-- This text view is used to display the date and time of the most recent edit. -->
@@ -25,9 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-5dp"
+        android:background="@color/ListBgColor"
+        android:elevation="-1dp"
         android:text="@string/note_information"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@color/ListBgColor"
         android:textColor="@color/ListInfoTxtColor" />
 
 </RelativeLayout>
