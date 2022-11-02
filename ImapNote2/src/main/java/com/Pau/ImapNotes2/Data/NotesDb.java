@@ -23,6 +23,7 @@ public class NotesDb {
     private static final String COL_DATE = "date";
     private static final String COL_NUMBER = "number";
     private static final String COL_ACCOUNT_NAME = "accountname";
+    private static final String COL_BGCOLOR = "bgcolor";
     private static final String TABLE_NAME = "notesTable";
 
     public static final String CREATE_NOTES_DB = "CREATE TABLE IF NOT EXISTS "
@@ -31,6 +32,7 @@ public class NotesDb {
             + COL_TITLE + " text not null, "
             + COL_DATE + " text not null, "
             + COL_NUMBER + " text not null, "
+            + COL_BGCOLOR + " text not null, "
             + COL_ACCOUNT_NAME + " text not null);";
 
 
@@ -51,6 +53,7 @@ public class NotesDb {
         tableRow.put(COL_TITLE, noteElement.GetTitle());
         tableRow.put(COL_DATE, noteElement.GetDate());
         tableRow.put(COL_NUMBER, noteElement.GetUid());
+        tableRow.put(COL_BGCOLOR, noteElement.GetBgColor());
         tableRow.put(COL_ACCOUNT_NAME, accountname);
         db.insert(TABLE_NAME, null, tableRow);
         //Log.d(TAG, "note inserted");
@@ -99,6 +102,7 @@ public class NotesDb {
         tableRow.put(COL_DATE, "");
         tableRow.put(COL_NUMBER, RetValue);
         tableRow.put(COL_ACCOUNT_NAME, accountname);
+        tableRow.put(COL_BGCOLOR, "");
         db.insert(TABLE_NAME, null, tableRow);
         return (RetValue);
     }
@@ -116,6 +120,7 @@ public class NotesDb {
                 //int bodyIndex = resultPointer.getColumnIndex("body");
                 int dateIndex = resultPointer.getColumnIndex(COL_DATE);
                 int numberIndex = resultPointer.getColumnIndex(COL_NUMBER);
+                int bgColorIndex = resultPointer.getColumnIndex(COL_BGCOLOR);
                 //int positionIndex = resultPointer.getColumnIndex("position");
                 //int colorIndex = resultPointer.getColumnIndex("color");
                 do {
@@ -132,7 +137,9 @@ public class NotesDb {
 
                     noteList.add(new OneNote(resultPointer.getString(titleIndex),
                             sdate,
-                            resultPointer.getString(numberIndex)));
+                            resultPointer.getString(numberIndex),
+                            resultPointer.getString(bgColorIndex)));
+
                 } while (resultPointer.moveToNext());
             }
         }

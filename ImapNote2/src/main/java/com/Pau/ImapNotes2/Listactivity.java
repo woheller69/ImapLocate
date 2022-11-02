@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static com.Pau.ImapNotes2.AccountConfigurationActivity.ACTION;
-import static com.Pau.ImapNotes2.NoteDetailActivity.Colors;
 
 //import com.Pau.ImapNotes2.Data.NotesDb;
 
@@ -216,7 +215,9 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 getApplicationContext(),
                 this.noteList,
                 new String[]{OneNote.TITLE, OneNote.DATE},
-                new int[]{R.id.noteTitle, R.id.noteInformation});
+                new int[]{R.id.noteTitle, R.id.noteInformation},
+                OneNote.BGCOLOR);
+
         ListView listview = findViewById(R.id.notesList);
         listview.setAdapter(this.listToView);
 
@@ -277,7 +278,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
 
     private void UpdateList(String suid,
                             String noteBody,
-                            Colors color,
+                            String bgColor,
                             UpdateThread.Action action) {
             new UpdateThread(Listactivity.imapNotes2Account,
                     noteList,
@@ -285,7 +286,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     R.string.updating_notes_list,
                     suid,
                     noteBody,
-                    color,
+                    bgColor,
                     getApplicationContext(),
                     action,
                     storedNotes).execute();
@@ -397,10 +398,10 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 if (resultCode == Listactivity.EDIT_BUTTON) {
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
-                    Colors color = (Colors) data.getSerializableExtra(EDIT_ITEM_COLOR);
+                    String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     //Log.d(TAG,"Received request to edit message:"+suid);
                     //Log.d(TAG,"Received request to replace message with:"+txt);
-                    this.UpdateList(suid, txt, color, UpdateThread.Action.Update);
+                    this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Update);
                     //TextView status = (TextView) findViewById(R.id.status);
                     TriggerSync(status);
                 }
@@ -411,8 +412,8 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                     //String res = data.getStringExtra(SAVE_ITEM);
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
-                    Colors color = (Colors) data.getSerializableExtra(EDIT_ITEM_COLOR);
-                    this.UpdateList(null, txt, color, UpdateThread.Action.Insert);
+                    String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
+                    this.UpdateList(null, txt, bgcolor, UpdateThread.Action.Insert);
                     TriggerSync(status);
                 }
                 break;

@@ -19,6 +19,7 @@ package com.Pau.ImapNotes2;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -30,8 +31,12 @@ import android.widget.Checkable;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.Pau.ImapNotes2.Data.OneNote;
+import com.Pau.ImapNotes2.Miscs.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +64,10 @@ import java.util.Map;
  * If no appropriate binding can be found, an {@link IllegalStateException} is thrown.
  */
 public class NotesListAdapter extends BaseAdapter implements Filterable {
+    private final Context mContext;
     private final int[] mTo;
     private final String[] mFrom;
+    private final String mBgColor;
     // --Commented out by Inspection (12/3/16 11:31 PM):private ViewBinder mViewBinder;
 
     private List<? extends Map<String, ?>> mData;
@@ -86,11 +93,13 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
      *                TextViews. The first N views in this list are given the values of the first N columns
      */
     NotesListAdapter(@NonNull Context context, List<? extends Map<String, ?>> data,
-                     String[] from, int[] to) {
+                     String[] from, int[] to, String bgColor) {
+        mContext = context;
         mData = data;
         mResource = mDropDownResource = R.layout.note_element;
         mFrom = from;
         mTo = to;
+        mBgColor = bgColor;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -169,11 +178,14 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         final int[] to = mTo;
         final int count = to.length;
 
+
         for (int i = 0; i < count; i++) {
             final View v = view.findViewById(to[i]);
             if (v != null) {
                 final Object data = dataSet.get(mFrom[i]);
                 String text = data == null ? "" : data.toString();
+                String bgColor = dataSet.get(mBgColor).toString();
+                int bgColorNr = Utilities.getColorByName(bgColor, mContext);
 
                 boolean bound = false;
                 //if (binder != null) {
@@ -197,6 +209,9 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                         // Note: keep the instanceof TextView check at the bottom of these
                         // ifs since a lot of views are TextViews (e.g. CheckBoxes).
                         setViewText((TextView) v, text);
+                        setBgColor((TextView) v, bgColorNr);
+                        setBgColor((RelativeLayout) view, bgColorNr);
+
                     } else if (v instanceof ImageView) {
                         if (data instanceof Integer) {
                             setViewImage((ImageView) v, (Integer) data);
@@ -288,6 +303,15 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
     private void setViewText(@NonNull TextView v, String text) {
         v.setText(text);
     }
+
+    private void setBgColor(@NonNull RelativeLayout v, @ColorInt int bgColor) {
+        v.setBackgroundColor(bgColor);
+    }
+
+    private void setBgColor(@NonNull TextView v, @ColorInt int bgColor) {
+        v.setBackgroundColor(bgColor);
+    }
+
 
     public Filter getFilter() {
         if (mFilter == null) {

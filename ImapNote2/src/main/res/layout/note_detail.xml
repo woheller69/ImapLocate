@@ -7,12 +7,17 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/EditorMenuBgColor">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/EditorMenuBgColor">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -87,13 +92,13 @@
                     android:minHeight="48dp"
                     android:title="@string/alignment" />
 
-        </LinearLayout>
-    </HorizontalScrollView>
+            </LinearLayout>
+        </HorizontalScrollView>
 
 
-    <jp.wasabeef.richeditor.RichEditor
-        android:id="@+id/bodyView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/bodyView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

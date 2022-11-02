@@ -41,18 +41,15 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeMessage;
 
-import static com.Pau.ImapNotes2.NoteDetailActivity.Colors;
 import com.Pau.ImapNotes2.Miscs.Utilities;
 
 
 public class SyncUtils {
 
     private static final String TAG = "IN_SyncUtils";
-    private static final Pattern patternColor = Pattern.compile("^COLOR:(.*?)$", Pattern.MULTILINE);
-    // --Commented out by Inspection (12/2/16 8:50 PM):private static final Pattern patternPosition = Pattern.compile("^POSITION:(.*?)$", Pattern.MULTILINE);
-    private static final Pattern patternText = Pattern.compile("TEXT:(.*?)(END:|POSITION:)", Pattern.DOTALL);
     private static Store store;
     // TODO: Why do we have two folder fields and why are they both nullable?
     @NonNull
@@ -184,7 +181,8 @@ public class SyncUtils {
     static void GetNotes(@NonNull Account account,
                          @NonNull Folder imapNotesFolder,
                          @NonNull Context applicationContext,
-                         @NonNull Db storedNotes) throws MessagingException, IOException {
+                         @NonNull Db storedNotes,
+                         @NonNull boolean useSticky) throws MessagingException, IOException {
         Log.d(TAG, "GetNotes: " + account.name);
         //Long UIDM;
         //Message notesMessage;
@@ -210,84 +208,17 @@ public class SyncUtils {
             // filename is the original message uid
             Long UIDM = ((IMAPFolder) imapNotesFolder).getUID(notesMessage);
             String suid = UIDM.toString();
+            String bgColor = "BgNone";
+            if (useSticky) {
+                Sticky sticky = Sticky.GetStickyFromMessage(notesMessage);
+                bgColor = sticky.color;
+            }
+
             File outfile = new File(directory, suid);
-            SaveNoteAndUpdatDatabase(outfile, notesMessage, storedNotes, account.name, suid);
+            SaveNoteAndUpdateDatabase(outfile, notesMessage, storedNotes, account.name, suid, bgColor);
         }
     }
 
-    @NonNull
-    public static Sticky ReadStickyNote(@NonNull String stringres) {
-        Log.d(TAG, "ReadStickyNote");
-/*
-        Matcher matcherColor = patternColor.matcher(stringres);
-        Colors color = Colors.NONE;
-        if (matcherColor.find()) {
-            String colorName = matcherColor.group(1);
-            color = ((colorName == null) || colorName.equals("null")) ?
-                    Colors.NONE :
-                    Colors.valueOf(colorName);
-        } else {
-            color = Colors.NONE;
-        }*/
-/*
-
-        Matcher matcherPosition = patternPosition.matcher(stringres);
-        String position = matcherPosition.find() ?
-                matcherPosition.group(1) :
-                "";
-*/
-
-        /*Matcher matcherText = patternText.matcher(stringres);
-        String text = "";
-        if (matcherText.find()) {
-            text = matcherText.group(1);
-            // Kerio Connect puts CR+LF+space every 78 characters from line 2
-            // first line seem to be smaller. We remove these characters
-            text = text.replaceAll("\r\n ", "");
-            // newline in Kerio is the string (not the character) "\n"
-            text = text.replaceAll("\\\\n", "<br>");
-        }
-        */
-        return new Sticky(
-                getText(stringres),
-                getColor(stringres));
-    }
-/*
-    private static String getPosition(String stringres) {
-
-        Matcher matcherPosition = patternPosition.matcher(stringres);
-        return matcherPosition.find() ?
-                matcherPosition.group(1) :
-                "";
-    }*/
-
-    private static String getText(@NonNull String stringres) {
-        Matcher matcherText = patternText.matcher(stringres);
-        String text = "";
-        if (matcherText.find()) {
-            text = matcherText.group(1);
-            // Kerio Connect puts CR+LF+space every 78 characters from line 2
-            // first line seem to be smaller. We remove these characters
-            text = text.replaceAll("\r\n ", "");
-            // newline in Kerio is the string (not the character) "\n"
-            text = text.replaceAll("\\\\n", "<br>");
-        }
-        return text;
-    }
-
-    @NonNull
-    private static Colors getColor(@NonNull String stringres) {
-        Matcher matcherColor = patternColor.matcher(stringres);
-        if (matcherColor.find()) {
-            String colorName = matcherColor.group(1);
-            return ((colorName == null) || colorName.equals("null")) ?
-                    Colors.NONE :
-                    Colors.valueOf(colorName);
-        } else {
-            return Colors.NONE;
-        }
-
-    }
 
     private static boolean IsConnected() {
         return store != null && store.isConnected();
@@ -563,12 +494,13 @@ public class SyncUtils {
 
     }
 
-    private static void SaveNoteAndUpdatDatabase(@NonNull File outfile,
-                                                 @NonNull Message notesMessage,
-                                                 @NonNull Db storedNotes,
-                                                 @NonNull String accountName,
-                                                 @NonNull String suid) throws IOException, MessagingException {
-        Log.d(TAG, "SaveNoteAndUpdatDatabase: " + outfile.getCanonicalPath() + " " + accountName);
+    private static void SaveNoteAndUpdateDatabase(@NonNull File outfile,
+                                                  @NonNull Message notesMessage,
+                                                  @NonNull Db storedNotes,
+                                                  @NonNull String accountName,
+                                                  @NonNull String suid,
+                                                  @NonNull String bgColor) throws IOException, MessagingException {
+        Log.d(TAG, "SaveNoteAndUpdateDatabase: " + outfile.getCanonicalPath() + " " + accountName);
 
         SaveNote(outfile, notesMessage);
 
@@ -623,7 +555,8 @@ public class SyncUtils {
         OneNote aNote = new OneNote(
                 title,
                 internaldate,
-                suid);
+                suid,
+                bgColor);
         storedNotes.notes.InsertANoteInDb(aNote, accountName);
     }
 
@@ -631,9 +564,9 @@ public class SyncUtils {
                                      @NonNull javax.mail.Folder remoteIMAPNotesFolder,
                                      @NonNull Db storedNotes,
                                      @NonNull String accountName,
-                                     @NonNull String usesticky)
+                                     @NonNull Boolean useSticky)
             throws MessagingException, IOException {
-        Log.d(TAG, "handleRemoteNotes: " + remoteIMAPNotesFolder.getFullName() + " " + accountName + " " + usesticky);
+        Log.d(TAG, "handleRemoteNotes: " + remoteIMAPNotesFolder.getFullName() + " " + accountName + " " + useSticky);
 
         Message notesMessage;
         boolean result = false;
@@ -675,9 +608,14 @@ public class SyncUtils {
             String suid = uid.toString();
             if (!(localListOfNotes.contains(suid))) {
                 File outfile = new File(rootDir, suid);
-                SaveNoteAndUpdatDatabase(outfile, notesMessage, storedNotes, accountName, suid);
+                String bgColor = "BgNone";
+                if (useSticky) {
+                    Sticky sticky = Sticky.GetStickyFromMessage(notesMessage);
+                    bgColor = sticky.color;
+                }
+                SaveNoteAndUpdateDatabase(outfile, notesMessage, storedNotes, accountName, suid, bgColor);
                 result = true;
-            } else if (usesticky.equals("true")) {
+            } else if (useSticky) {
                 //Log.d (TAG,"MANAGE STICKY");
                 remoteInternaldate = DateFormat.getDateInstance().format(notesMessage.getSentDate());
                 localInternaldate = storedNotes.notes.GetDate(suid, accountName);

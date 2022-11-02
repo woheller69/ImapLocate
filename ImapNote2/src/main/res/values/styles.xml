@@ -8,14 +8,22 @@
     <color name="StatusTxtColor">@android:color/white</color>
 
 
-    <color name="ListBgColor">#e8d731</color>
+    <color name="EditorMenuBgColor">@android:color/black</color>
+
+    <color name="BgBlue">#FFA6CAFD</color>
+    <color name="BgWhite">#FFFFFFFF</color>
+    <color name="BgYellow">#FFFFFFCC</color>
+    <color name="BgPink">#FFFFCCCC</color>
+    <color name="BgGreen">#FFCCFFCC</color>
+
+
+    <color name="ListBgColor">@color/BgYellow</color>
     <color name="ListTxtColor">@android:color/black</color>
     <color name="ListInfoTxtColor">#838383</color>
+    <color name="BgNone">@color/ListBgColor</color>
 
-    <color name="AccountBgColor">#e8d731</color>
+    <color name="AccountBgColor">@color/BgBlue</color>
     <color name="AccountTxtColor">@android:color/black</color>
-
-    <color name="EditorMenuBgColor">@android:color/black</color>
 
 
     <style name="ImapNotesTheme" parent="@android:style/Theme.Holo.Light">

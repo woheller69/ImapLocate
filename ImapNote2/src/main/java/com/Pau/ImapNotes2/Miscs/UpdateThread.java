@@ -37,10 +37,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import static com.Pau.ImapNotes2.NoteDetailActivity.Colors;
-
-//import com.Pau.ImapNotes2.Data.NotesDb;
-
 // TODO: move arguments from execute to constructor.
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private static final String TAG = "IN_UpdateThread";
@@ -50,7 +46,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private final NotesListAdapter adapter;
     private final ArrayList<OneNote> notesList;
     private final String noteBody;
-    private final Colors color;
+    private final String bgColor;
     private final Context applicationContext;
     private final Action action;
     private String suid;
@@ -67,7 +63,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         @StringRes int resId,
                         String suid,
                         String noteBody,
-                        Colors color,
+                        String bgColor,
                         Context applicationContext,
                         Action action,
                         Db storedNotes) {
@@ -78,7 +74,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.resId = resId;
         this.suid = suid;
         this.noteBody = noteBody;
-        this.color = color;
+        this.bgColor = bgColor;
         this.applicationContext = applicationContext;
         this.action = action;
         this.storedNotes = storedNotes;
@@ -113,14 +109,15 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String title = tok[0];
                 //String position = "0 0 0 0";
                 String body = (imapNotes2Account.usesticky) ?
-                        noteBody.replaceAll("\n", "\\\\n") :
-                        "<html><head></head><body>" + noteBody + "</body></html>";
+                        noteBody.replaceAll("\n", "\\\\n") : noteBody;
+
+                //"<html><head></head><body>" + noteBody + "</body></html>";
 
                 String DATE_FORMAT = Utilities.internalDateFormatString;
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
                 String stringDate = sdf.format(date);
-                OneNote currentNote = new OneNote(title, stringDate, "");
+                OneNote currentNote = new OneNote(title, stringDate, "", bgColor);
                 // Add note to database
                 if (storedNotes == null) storedNotes = new Db(applicationContext);
                 storedNotes.OpenDb();
@@ -242,7 +239,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         MimeMessage message = new MimeMessage(session);
 
         if (usesticky) {
-            String body = "BEGIN:STICKYNOTE\nCOLOR:" + color.name() + "\nTEXT:" + noteBody +
+            String body = "BEGIN:STICKYNOTE\nCOLOR:" + bgColor + "\nTEXT:" + noteBody +
                     "\nPOSITION:0 0 0 0\nEND:STICKYNOTE";
             message.setText(body);
             message.setHeader("Content-Transfer-Encoding", "8bit");

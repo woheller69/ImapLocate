@@ -24,6 +24,7 @@ import com.Pau.ImapNotes2.Miscs.EditorMenuAdapter;
 import com.Pau.ImapNotes2.Miscs.NDSpinner;
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.Pau.ImapNotes2.Miscs.Notifier;
+import com.Pau.ImapNotes2.Miscs.Utilities;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -53,7 +54,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
     private static final String TAG = "IN_NoteDetailActivity";
     private boolean usesticky;
     @NonNull
-    private Colors color = Colors.YELLOW;
+    private String bgColor = "BgNone";
     //private int realColor = R.id.yellow;
     private String suid; // uid as string
     private RichEditor editText;
@@ -89,7 +90,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                             sticky = GetStickyFromMessage(message);
                             stringres = sticky.text;
                             //String position = sticky.position;
-                            color = sticky.color;
+                            bgColor = sticky.color;
                         } else {
                             stringres = GetHtmlFromMessage(message);
                         }
@@ -114,7 +115,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
-            color = Colors.YELLOW;
+            //bgColor = "BgYellow";
             editText = findViewById(R.id.bodyView);
             SetupRichEditor(editText);
         }
@@ -350,14 +351,14 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
     private void ResetColors() {
-/*
-        EditText bodyView = (EditText) findViewById(R.id.bodyView);
-        bodyView.setBackgroundColor(Color.TRANSPARENT);
-        bodyView.setTextColor(Color.BLACK);
-*/
-        (findViewById(R.id.scrollView)).setBackgroundColor(color.colorCode);
-        //realColor = color.id;
-        invalidateOptionsMenu();
+        RichEditor bodyView = findViewById(R.id.bodyView);
+        bodyView.setEditorBackgroundColor(Utilities.getColorIdByName(bgColor));
+        bodyView.setBackgroundColor(Utilities.getColorIdByName(bgColor));
+
+        bodyView.setTextColor(getColor(R.color.ListTxtColor));
+
+        (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
+        //invalidateOptionsMenu();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -370,14 +371,8 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         MenuItem item = menu.findItem(R.id.color);
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
-        item.setVisible(usesticky);
-        Log.d(TAG, "color.id: " + color.id);
-        Log.d(TAG, "mfi: " + (menu.findItem(color.id) == null));
-        if (BuildConfig.DEBUG && (color == null)) {
-            throw new AssertionError("color is null");
-        }
-
-        menu.findItem(color.id).setChecked(true);
+        //item.setVisible(usesticky);
+        //menu.findItem(color.id).setChecked(true);
         return true;
     }
 
@@ -405,12 +400,28 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.blue:
+                item.setChecked(true);
+                bgColor = "BgBlue";
+                ResetColors();
+                return true;
             case R.id.white:
+                item.setChecked(true);
+                bgColor = "BgWhite";
+                ResetColors();
+                return true;
             case R.id.yellow:
+                item.setChecked(true);
+                bgColor = "BgYellow";
+                ResetColors();
+                return true;
             case R.id.pink:
+                item.setChecked(true);
+                bgColor = "BgPink";
+                ResetColors();
+                return true;
             case R.id.green:
                 item.setChecked(true);
-                color = Colors.fromId(itemId);
+                bgColor = "BgGreen";
                 ResetColors();
                 return true;
             default:
@@ -432,9 +443,9 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 ((RichEditor) findViewById(R.id.bodyView)).getHtml());
         if (!usesticky) {
             Log.d(TAG, "not sticky so set color to none");
-            color = Colors.NONE;
+            //bgColor = "bgYellow";
         }
-        intent.putExtra(Listactivity.EDIT_ITEM_COLOR, color);
+        intent.putExtra(Listactivity.EDIT_ITEM_COLOR, bgColor);
         setResult(NoteDetailActivity.EDIT_BUTTON, intent);
         finish();//finishing activity
 
@@ -457,7 +468,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
             e.printStackTrace();
         }
         if (contentType.match("text/x-stickynote")) {
-            stringres = SyncUtils.ReadStickyNote(stringres).toString();
+            stringres = Sticky.ReadStickyNote(stringres).toString();
 //        } else if (contentType.match("TEXT/HTML")) {
         } else if (contentType.match("TEXT/PLAIN")) {
             Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
@@ -498,7 +509,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         Log.d(TAG, "contentType:" + contentType);
         Sticky sticky = null;
         if (contentType.match("text/x-stickynote")) {
-            sticky = SyncUtils.ReadStickyNote(stringres);
+            sticky = Sticky.ReadStickyNote(stringres);
         } else if (contentType.match("TEXT/HTML")) {
             sticky = ReadHtmlNote(stringres);
         } else if (contentType.match("TEXT/PLAIN")) {
@@ -554,7 +565,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         stringres = stringres.replaceAll("<p dir=\"ltr\">", "<br>");
         stringres = stringres.replaceAll("</p>", "");
 
-        return new Sticky(stringres, Colors.NONE);
+        return new Sticky(stringres, "BgNone");
     }
 
     @NonNull
@@ -562,41 +573,12 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 //        Log.d(TAG,"From server (plain):"+stringres);
         stringres = stringres.replaceAll("\n", "<br>");
 
-        return new Sticky(stringres, Colors.NONE);
+        return new Sticky(stringres, "BgNone");
     }
 
     // List the colours together with the ids of the option widgets used to select them and the
     // RGB values used as the actual colours.  Doing this means that we do not need so much code
     // in switch statements, etc.
-    public enum Colors {
-        BLUE(R.id.blue, 0xFFA6CAFD),
-        WHITE(R.id.white, 0xFFFFFFFF),
-        YELLOW(R.id.yellow, 0xFFFFFFCC),
-        PINK(R.id.pink, 0xFFFFCCCC),
-        GREEN(R.id.green, 0xFFCCFFCC),
-        NONE(R.id.white, 0xFFFFFFFF);
-
-        public final int id;
-        public final int colorCode;
-
-        Colors(int id,
-               int colorCode) {
-            this.id = id;
-            this.colorCode = colorCode;
-        }
-
-        @NonNull
-        public static Colors fromId(int id) {
-
-            for (Colors color : Colors.values()) {
-                if (color.id == id)
-                    return color;
-            }
-            throw new IllegalArgumentException("id not found in Colors: " + id);
-        }
-
-
-    }
 
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {
