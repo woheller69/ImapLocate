@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 
 
 import com.Pau.ImapNotes2.Miscs.EditorMenuAdapter;
+import com.Pau.ImapNotes2.Miscs.HtmlNote;
 import com.Pau.ImapNotes2.Miscs.NDSpinner;
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.Pau.ImapNotes2.Miscs.Notifier;
@@ -70,7 +71,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         );
 
         Bundle extras = getIntent().getExtras();
-        Sticky sticky;
+
         String stringres;
         String ChangeNote = extras.getString(ActivityType);
         if (ChangeNote.equals(ActivityTypeEdit)) {
@@ -87,12 +88,14 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                     Log.d(TAG, "rootDir: " + rootDir);
                     if (message != null) {
                         if (usesticky) {
-                            sticky = GetStickyFromMessage(message);
+                            Sticky sticky = Sticky.GetStickyFromMessage(message);
                             stringres = sticky.text;
                             //String position = sticky.position;
                             bgColor = sticky.color;
                         } else {
-                            stringres = GetHtmlFromMessage(message);
+                            HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
+                            stringres = htmlNote.text;
+                            bgColor = htmlNote.color;
                         }
                         editText = findViewById(R.id.bodyView);
                         SetupRichEditor(editText);
@@ -451,82 +454,8 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
     }
 
-    @Nullable
-    private String GetHtmlFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
-        String stringres = "";
-        try {
-            Log.d(TAG, "message :" + message);
-            contentType = new ContentType(message.getContentType());
-            String charset = contentType.getParameter("charset");
-            InputStream iis = (InputStream) message.getContent();
-            stringres = IOUtils.toString(iis, charset);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "Exception GetHtmlFromMessage:");
-            Log.d(TAG, e.toString());
-            e.printStackTrace();
-        }
-        if (contentType.match("text/x-stickynote")) {
-            stringres = Sticky.ReadStickyNote(stringres).toString();
-//        } else if (contentType.match("TEXT/HTML")) {
-        } else if (contentType.match("TEXT/PLAIN")) {
-            Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
-            stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
-        } else if (contentType.match("multipart/related")) {
-// All next is a workaround
-// All function need to be rewritten to handle correctly multipart and images
-            // if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {          } else
-            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
-                Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
-                stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
-            }
-            //} else if (contentType.getParameter("BOUNDARY") != null) {
-        }
-        return stringres;
-    }
 
-    @Nullable
-    private Sticky GetStickyFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
-        String stringres = "";
-        //InputStream iis = null;
-        //Colors color = NONE;
-        //String charset;
-        try {
-            Log.d(TAG, "message :" + message);
-            contentType = new ContentType(message.getContentType());
-            String charset = contentType.getParameter("charset");
-            InputStream iis = (InputStream) message.getContent();
-            stringres = IOUtils.toString(iis, charset);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "Exception GetStickyFromMessage:");
-            Log.d(TAG, e.toString());
-            e.printStackTrace();
-        }
 
-        Log.d(TAG, "contentType:" + contentType);
-        Sticky sticky = null;
-        if (contentType.match("text/x-stickynote")) {
-            sticky = Sticky.ReadStickyNote(stringres);
-        } else if (contentType.match("TEXT/HTML")) {
-            sticky = ReadHtmlNote(stringres);
-        } else if (contentType.match("TEXT/PLAIN")) {
-            sticky = ReadPlainNote(stringres);
-        } else if (contentType.match("multipart/related")) {
-// All next is a workaround
-// All function need to be rewritten to handle correctly multipart and images
-            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
-                sticky = ReadHtmlNote(stringres);
-            } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
-                sticky = ReadPlainNote(stringres);
-            }
-        } else if (contentType.getParameter("BOUNDARY") != null) {
-            sticky = ReadHtmlNote(stringres);
-        }
-        return sticky;
-    }
 
     /*  private void GetPart(@NonNull Part message) throws Exception {
           if (message.isMimeType("text/plain")) {
@@ -554,31 +483,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         }
     }
 */
-    @NonNull
-    private Sticky ReadHtmlNote(String stringres) {
-//        Log.d(TAG,"From server (html):"+stringres);
-        Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
-        stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
-        stringres = stringres.replaceFirst("<p dir=ltr>", "");
-        stringres = stringres.replaceFirst("<p dir=\"ltr\">", "");
-        stringres = stringres.replaceAll("<p dir=ltr>", "<br>");
-        stringres = stringres.replaceAll("<p dir=\"ltr\">", "<br>");
-        stringres = stringres.replaceAll("</p>", "");
-
-        return new Sticky(stringres, "BgNone");
-    }
-
-    @NonNull
-    private Sticky ReadPlainNote(String stringres) {
-//        Log.d(TAG,"From server (plain):"+stringres);
-        stringres = stringres.replaceAll("\n", "<br>");
-
-        return new Sticky(stringres, "BgNone");
-    }
-
-    // List the colours together with the ids of the option widgets used to select them and the
-    // RGB values used as the actual colours.  Doing this means that we do not need so much code
-    // in switch statements, etc.
 
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {

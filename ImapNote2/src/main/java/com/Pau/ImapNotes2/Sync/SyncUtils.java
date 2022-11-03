@@ -12,6 +12,7 @@ import android.util.Log;
 import com.Pau.ImapNotes2.Data.Db;
 import com.Pau.ImapNotes2.Data.OneNote;
 import com.Pau.ImapNotes2.Data.Security;
+import com.Pau.ImapNotes2.Miscs.HtmlNote;
 import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Sticky;
@@ -208,10 +209,11 @@ public class SyncUtils {
             // filename is the original message uid
             Long UIDM = ((IMAPFolder) imapNotesFolder).getUID(notesMessage);
             String suid = UIDM.toString();
-            String bgColor = "BgNone";
+            String bgColor;
             if (useSticky) {
-                Sticky sticky = Sticky.GetStickyFromMessage(notesMessage);
-                bgColor = sticky.color;
+                bgColor = Sticky.GetStickyFromMessage(notesMessage).color;
+            } else {
+                bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
             }
 
             File outfile = new File(directory, suid);
@@ -608,10 +610,11 @@ public class SyncUtils {
             String suid = uid.toString();
             if (!(localListOfNotes.contains(suid))) {
                 File outfile = new File(rootDir, suid);
-                String bgColor = "BgNone";
+                String bgColor;
                 if (useSticky) {
-                    Sticky sticky = Sticky.GetStickyFromMessage(notesMessage);
-                    bgColor = sticky.color;
+                    bgColor = Sticky.GetStickyFromMessage(notesMessage).color;
+                } else {
+                    bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
                 }
                 SaveNoteAndUpdateDatabase(outfile, notesMessage, storedNotes, accountName, suid, bgColor);
                 result = true;

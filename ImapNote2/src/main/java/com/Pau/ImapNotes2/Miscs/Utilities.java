@@ -34,6 +34,10 @@ public final class Utilities {
     public static int getColorIdByName(String name) {
         int color = R.color.ListBgColor;
 
+        if (name == null || name.isEmpty()) {
+            name = "BgNone";
+        }
+
         try {
             Class res = R.color.class;
             Field field = res.getField(name);

@@ -46,7 +46,7 @@ public class OneNote extends HashMap<String, String> {
     }
 
     @NonNull
-    String GetBgColor() {
+    public String GetBgColor() {
         return this.get(BGCOLOR);
     }
 

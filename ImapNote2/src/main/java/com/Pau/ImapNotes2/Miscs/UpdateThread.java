@@ -227,7 +227,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     }
 
     private void WriteMailToNew(@NonNull OneNote note,
-                                boolean usesticky,
+                                boolean useSticky,
                                 String noteBody) throws MessagingException, IOException {
         Log.d(TAG, "WriteMailToNew: " + noteBody);
         //String body = null;
@@ -238,8 +238,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(session);
 
-        if (usesticky) {
-            String body = "BEGIN:STICKYNOTE\nCOLOR:" + bgColor + "\nTEXT:" + noteBody +
+        if (useSticky) {
+            String body = "BEGIN:STICKYNOTE\nCOLOR:" + note.GetBgColor().toUpperCase() + "\nTEXT:" + noteBody +
                     "\nPOSITION:0 0 0 0\nEND:STICKYNOTE";
             message.setText(body);
             message.setHeader("Content-Transfer-Encoding", "8bit");
@@ -249,12 +249,15 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             UUID uuid = UUID.randomUUID();
             message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
             String body = noteBody;
-            body = body.replaceFirst("<p dir=ltr>", "<div>");
+            message.setHeader(HtmlNote.ColorHeader[0], "bgcolor=" + note.GetBgColor() + ";fgcolor=black;");
+
+/*            body = body.replaceFirst("<p dir=ltr>", "<div>");
             body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
             body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
             body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
             body = body.replaceAll("</p>", "</div>");
             body = body.replaceAll("<br>\n", "</div><div>");
+ */
             message.setText(body, "utf-8", "html");
             message.setFlag(Flags.Flag.SEEN, true);
         }

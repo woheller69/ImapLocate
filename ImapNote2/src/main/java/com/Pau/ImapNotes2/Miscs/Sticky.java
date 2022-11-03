@@ -1,5 +1,7 @@
 package com.Pau.ImapNotes2.Miscs;
 
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,7 @@ public class Sticky {
         // this.position = position;
         this.color = color;
     }
-
+/*
     @Nullable
     public static Sticky GetStickyFromMessage(@NonNull Message message) {
         ContentType contentType = null;
@@ -54,14 +56,7 @@ public class Sticky {
         return ReadStickyNote(stringres);
     }
 
-    @NonNull
-    public static Sticky ReadStickyNote(@NonNull String stringres) {
-        Log.d(TAG, "ReadStickyNote");
-
-        return new Sticky(
-                getText(stringres),
-                getColor(stringres));
-    }
+*/
 /*
     private static String getPosition(String stringres) {
 
@@ -70,6 +65,83 @@ public class Sticky {
                 matcherPosition.group(1) :
                 "";
     }*/
+
+    @Nullable
+    public static Sticky GetStickyFromMessage(@NonNull Message message) {
+        ContentType contentType = null;
+        String stringres = "";
+        //InputStream iis = null;
+        //Colors color = NONE;
+        //String charset;
+        try {
+            Log.d(TAG, "message :" + message);
+            contentType = new ContentType(message.getContentType());
+            String charset = contentType.getParameter("charset");
+            InputStream iis = (InputStream) message.getContent();
+            stringres = IOUtils.toString(iis, charset);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "Exception GetStickyFromMessage:");
+            Log.d(TAG, e.toString());
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "contentType:" + contentType);
+        Sticky sticky = null;
+        if (contentType.match("text/x-stickynote")) {
+            sticky = Sticky.ReadStickyNote(stringres);
+        } else if (contentType.match("TEXT/HTML")) {
+            sticky = ReadHtmlNote(stringres);
+        } else if (contentType.match("TEXT/PLAIN")) {
+            sticky = ReadPlainNote(stringres);
+        } else if (contentType.match("multipart/related")) {
+// All next is a workaround
+// All function need to be rewritten to handle correctly multipart and images
+            if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
+                sticky = ReadHtmlNote(stringres);
+            } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
+                sticky = ReadPlainNote(stringres);
+            }
+        } else if (contentType.getParameter("BOUNDARY") != null) {
+            sticky = ReadHtmlNote(stringres);
+        }
+        return sticky;
+    }
+
+    @NonNull
+    private static Sticky ReadHtmlNote(String stringres) {
+//        Log.d(TAG,"From server (html):"+stringres);
+        Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
+        stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
+        stringres = stringres.replaceFirst("<p dir=ltr>", "");
+        stringres = stringres.replaceFirst("<p dir=\"ltr\">", "");
+        stringres = stringres.replaceAll("<p dir=ltr>", "<br>");
+        stringres = stringres.replaceAll("<p dir=\"ltr\">", "<br>");
+        stringres = stringres.replaceAll("</p>", "");
+
+        return new Sticky(stringres, "BgNone");
+    }
+
+    @NonNull
+    private static Sticky ReadPlainNote(String stringres) {
+//        Log.d(TAG,"From server (plain):"+stringres);
+        stringres = stringres.replaceAll("\n", "<br>");
+
+        return new Sticky(stringres, "BgNone");
+    }
+
+    // List the colours together with the ids of the option widgets used to select them and the
+    // RGB values used as the actual colours.  Doing this means that we do not need so much code
+    // in switch statements, etc.
+
+    @NonNull
+    public static Sticky ReadStickyNote(@NonNull String stringres) {
+        Log.d(TAG, "ReadStickyNote");
+
+        return new Sticky(
+                getText(stringres),
+                getColor(stringres));
+    }
 
     private static String getText(@NonNull String stringres) {
         Matcher matcherText = patternText.matcher(stringres);
@@ -95,7 +167,6 @@ public class Sticky {
             return "BgNone";
         }
     }
-
 
 
 /*
