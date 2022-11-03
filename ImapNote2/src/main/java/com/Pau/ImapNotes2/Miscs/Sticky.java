@@ -119,7 +119,7 @@ public class Sticky {
         stringres = stringres.replaceAll("<p dir=\"ltr\">", "<br>");
         stringres = stringres.replaceAll("</p>", "");
 
-        return new Sticky(stringres, "BgNone");
+        return new Sticky(stringres, "none");
     }
 
     @NonNull
@@ -127,7 +127,7 @@ public class Sticky {
 //        Log.d(TAG,"From server (plain):"+stringres);
         stringres = stringres.replaceAll("\n", "<br>");
 
-        return new Sticky(stringres, "BgNone");
+        return new Sticky(stringres, "none");
     }
 
     // List the colours together with the ids of the option widgets used to select them and the
@@ -161,10 +161,10 @@ public class Sticky {
     private static String getColor(@NonNull String stringres) {
         Matcher matcherColor = patternColor.matcher(stringres);
         if (matcherColor.find()) {
-            String colorName = matcherColor.group(1);
-            return ((colorName == null) || colorName.equals("null")) ? "BgNone" : colorName;
+            String colorName = matcherColor.group(1).toLowerCase();
+            return ((colorName == null) || colorName.equals("null")) ? "none" : colorName;
         } else {
-            return "BgNone";
+            return "none";
         }
     }
 

@@ -35,7 +35,7 @@ public final class Utilities {
         int color = R.color.ListBgColor;
 
         if (name == null || name.isEmpty()) {
-            name = "BgNone";
+            name = "none";
         }
 
         try {

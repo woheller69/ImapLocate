@@ -38,6 +38,9 @@
                 <item
                     android:id="@+id/green"
                     android:title="@string/green" />
+                <item
+                    android:id="@+id/brown"
+                    android:title="@string/brown" />
             </group>
         </menu>
     </item>

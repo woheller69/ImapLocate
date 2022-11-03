@@ -55,7 +55,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
     private static final String TAG = "IN_NoteDetailActivity";
     private boolean usesticky;
     @NonNull
-    private String bgColor = "BgNone";
+    private String bgColor = "none";
     //private int realColor = R.id.yellow;
     private String suid; // uid as string
     private RichEditor editText;
@@ -118,7 +118,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
-            //bgColor = "BgYellow";
+            //bgColor = "yellow";
             editText = findViewById(R.id.bodyView);
             SetupRichEditor(editText);
         }
@@ -247,52 +247,52 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 editText.setHeading(6);
                 break;
             case R.id.action_txt_color_white:
-                editText.setTextColor(Color.WHITE);
+                editText.setTextColor(Utilities.getColorByName("white", getApplicationContext()));
                 break;
             case R.id.action_txt_color_grey:
-                editText.setTextColor(Color.GRAY);
+                editText.setTextColor(Utilities.getColorByName("grey", getApplicationContext()));
                 break;
             case R.id.action_txt_color_black:
-                editText.setTextColor(Color.BLACK);
+                editText.setTextColor(Utilities.getColorByName("black", getApplicationContext()));
                 break;
             case R.id.action_txt_color_red:
-                editText.setTextColor(Color.RED);
+                editText.setTextColor(Utilities.getColorByName("red", getApplicationContext()));
                 break;
             case R.id.action_txt_color_green:
-                editText.setTextColor(Color.GREEN);
+                editText.setTextColor(Utilities.getColorByName("green", getApplicationContext()));
                 break;
             case R.id.action_txt_color_yellow:
-                editText.setTextColor(Color.YELLOW);
+                editText.setTextColor(Utilities.getColorByName("yellow", getApplicationContext()));
                 break;
             case R.id.action_txt_color_brown:
-                editText.setTextColor(Color.MAGENTA);
+                editText.setTextColor(Utilities.getColorByName("brown", getApplicationContext()));
                 break;
             case R.id.action_txt_color_blue:
-                editText.setTextColor(Color.BLUE);
+                editText.setTextColor(Utilities.getColorByName("blue", getApplicationContext()));
                 break;
             case R.id.action_bg_color_white:
-                editText.setTextBackgroundColor(Color.WHITE);
+                editText.setTextBackgroundColor(Utilities.getColorByName("white", getApplicationContext()));
                 break;
             case R.id.action_bg_color_grey:
-                editText.setTextBackgroundColor(Color.GRAY);
+                editText.setTextBackgroundColor(Utilities.getColorByName("grey", getApplicationContext()));
                 break;
             case R.id.action_bg_color_black:
-                editText.setTextBackgroundColor(Color.BLACK);
+                editText.setTextBackgroundColor(Utilities.getColorByName("black", getApplicationContext()));
                 break;
             case R.id.action_bg_color_red:
-                editText.setTextBackgroundColor(Color.RED);
+                editText.setTextBackgroundColor(Utilities.getColorByName("red", getApplicationContext()));
                 break;
             case R.id.action_bg_color_green:
-                editText.setTextBackgroundColor(Color.GREEN);
+                editText.setTextBackgroundColor(Utilities.getColorByName("green", getApplicationContext()));
                 break;
             case R.id.action_bg_color_yellow:
-                editText.setTextBackgroundColor(Color.YELLOW);
+                editText.setTextBackgroundColor(Utilities.getColorByName("yellow", getApplicationContext()));
                 break;
             case R.id.action_bg_color_brown:
-                editText.setTextBackgroundColor(Color.MAGENTA);
+                editText.setTextBackgroundColor(Utilities.getColorByName("brown", getApplicationContext()));
                 break;
             case R.id.action_bg_color_blue:
-                editText.setTextBackgroundColor(Color.BLUE);
+                editText.setTextBackgroundColor(Utilities.getColorByName("blue", getApplicationContext()));
                 break;
             case R.id.action_indent:
                 editText.setIndent();
@@ -404,29 +404,35 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 return true;
             case R.id.blue:
                 item.setChecked(true);
-                bgColor = "BgBlue";
+                bgColor = "blue";
                 ResetColors();
                 return true;
             case R.id.white:
                 item.setChecked(true);
-                bgColor = "BgWhite";
+                bgColor = "white";
                 ResetColors();
                 return true;
             case R.id.yellow:
                 item.setChecked(true);
-                bgColor = "BgYellow";
+                bgColor = "yellow";
                 ResetColors();
                 return true;
             case R.id.pink:
                 item.setChecked(true);
-                bgColor = "BgPink";
+                bgColor = "pink";
                 ResetColors();
                 return true;
             case R.id.green:
                 item.setChecked(true);
-                bgColor = "BgGreen";
+                bgColor = "green";
                 ResetColors();
                 return true;
+            case R.id.brown:
+                item.setChecked(true);
+                bgColor = "brown";
+                ResetColors();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -444,10 +450,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         Log.d(TAG, "Save html: " + ((RichEditor) findViewById(R.id.bodyView)).getHtml());
         intent.putExtra(Listactivity.EDIT_ITEM_TXT,
                 ((RichEditor) findViewById(R.id.bodyView)).getHtml());
-        if (!usesticky) {
-            Log.d(TAG, "not sticky so set color to none");
-            //bgColor = "bgYellow";
-        }
         intent.putExtra(Listactivity.EDIT_ITEM_COLOR, bgColor);
         setResult(NoteDetailActivity.EDIT_BUTTON, intent);
         finish();//finishing activity
@@ -456,33 +458,6 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
 
 
 
-
-    /*  private void GetPart(@NonNull Part message) throws Exception {
-          if (message.isMimeType("text/plain")) {
-              Log.d(TAG, "+++ isMimeType text/plain (contentType):" + message.getContentType());
-          } else if (message.isMimeType("multipart*//*")) {
-            Log.d(TAG, "+++ isMimeType multipart*//* (contentType):" + message.getContentType());
-            Object content = message.getContent();
-            Multipart mp = (Multipart) content;
-            int count = mp.getCount();
-            for (int i = 0; i < count; i++) GetPart(mp.getBodyPart(i));
-        } else if (message.isMimeType("message/rfc822")) {
-            Log.d(TAG, "+++ isMimeType message/rfc822*//* (contentType):" + message.getContentType());
-            GetPart((Part) message.getContent());
-        } else if (message.isMimeType("image/jpeg")) {
-            Log.d(TAG, "+++ isMimeType image/jpeg (contentType):" + message.getContentType());
-        } else if (message.getContentType().contains("image/")) {
-            Log.d(TAG, "+++ isMimeType image/jpeg (contentType):" + message.getContentType());
-        } else {
-            Object o = message.getContent();
-            if (o instanceof String) {
-                Log.d(TAG, "+++ instanceof String");
-            } else if (o instanceof InputStream) {
-                Log.d(TAG, "+++ instanceof InputStream");
-            } else Log.d(TAG, "+++ instanceof ???");
-        }
-    }
-*/
 
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {

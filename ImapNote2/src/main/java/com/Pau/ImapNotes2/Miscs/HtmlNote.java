@@ -38,7 +38,7 @@ public class HtmlNote {
         ContentType contentType = null;
         String stringres = "";
         //InputStream iis = null;
-        String colorHeader = "BgNone";
+        String colorHeader = "none";
         //String charset;
         try {
             Log.d(TAG, "message :" + message);
@@ -113,9 +113,9 @@ public class HtmlNote {
         Matcher matcherColor = patternColor.matcher(stringres);
         if (matcherColor.find()) {
             String colorName = matcherColor.group(1);
-            return ((colorName == null) || colorName.equals("null")) ? "BgNone" : colorName;
+            return ((colorName == null) || colorName.equals("null")) ? "none" : colorName;
         } else {
-            return "BgNone";
+            return "none";
         }
     }
 
@@ -144,4 +144,34 @@ public class HtmlNote {
     public void SetColor(Colors color) {
         HtmlNote.color = color;
     }*/
+
+
+
+    /*  private void GetPart(@NonNull Part message) throws Exception {
+          if (message.isMimeType("text/plain")) {
+              Log.d(TAG, "+++ isMimeType text/plain (contentType):" + message.getContentType());
+          } else if (message.isMimeType("multipart*//*")) {
+            Log.d(TAG, "+++ isMimeType multipart*//* (contentType):" + message.getContentType());
+            Object content = message.getContent();
+            Multipart mp = (Multipart) content;
+            int count = mp.getCount();
+            for (int i = 0; i < count; i++) GetPart(mp.getBodyPart(i));
+        } else if (message.isMimeType("message/rfc822")) {
+            Log.d(TAG, "+++ isMimeType message/rfc822*//* (contentType):" + message.getContentType());
+            GetPart((Part) message.getContent());
+        } else if (message.isMimeType("image/jpeg")) {
+            Log.d(TAG, "+++ isMimeType image/jpeg (contentType):" + message.getContentType());
+        } else if (message.getContentType().contains("image/")) {
+            Log.d(TAG, "+++ isMimeType image/jpeg (contentType):" + message.getContentType());
+        } else {
+            Object o = message.getContent();
+            if (o instanceof String) {
+                Log.d(TAG, "+++ instanceof String");
+            } else if (o instanceof InputStream) {
+                Log.d(TAG, "+++ instanceof InputStream");
+            } else Log.d(TAG, "+++ instanceof ???");
+        }
+    }
+*/
+
 }
