@@ -24,6 +24,10 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/none"
+                    android:checked="true"
+                    android:title="@string/none" />
+                <item
                     android:id="@+id/blue"
                     android:title="@string/blue" />
                 <item

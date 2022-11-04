@@ -215,7 +215,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 getApplicationContext(),
                 this.noteList,
                 new String[]{OneNote.TITLE, OneNote.DATE},
-                new int[]{R.id.noteTitle, R.id.noteInformation},
+                new int[]{R.id.noteTitle, R.id.noteLastChange},
                 OneNote.BGCOLOR);
 
         ListView listview = findViewById(R.id.notesList);

@@ -55,9 +55,10 @@
     <string name="bg_color">Background Color</string>
     <string name="alignment">Alignment</string>
     <string name="insert">insert</string>
-    <string name="note_information">Note Information</string>
+    <string name="note_last_change">Last Change</string>
     <string name="sync_necessary">Synchronisation necessary</string>
     <string name="security">Security</string>
     <string name="note_title">Note Title</string>
     <string name="brown">Brown</string>
+    <string name="none">None</string>
 </resources>

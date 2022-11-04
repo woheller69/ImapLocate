@@ -25,14 +25,14 @@
 
     <!-- This text view is used to display the date and time of the most recent edit. -->
     <TextView
-        android:id="@+id/noteInformation"
+        android:id="@+id/noteLastChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="-5dp"
         android:background="@color/ListBgColor"
         android:elevation="-1dp"
-        android:text="@string/note_information"
+        android:text="@string/note_last_change"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/ListInfoTxtColor" />
 

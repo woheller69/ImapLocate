@@ -55,9 +55,10 @@
     <string name="bg_color">Hintergrundfarbe</string>
     <string name="alignment">Ausrichtung</string>
     <string name="insert">Einfügen</string>
-    <string name="note_information">Information</string>
+    <string name="note_last_change">Letzte Änderung</string>
     <string name="sync_necessary">Ableich notwendig</string>
     <string name="security">Sicherheit</string>
     <string name="note_title">Notiz-Titel</string>
     <string name="brown">Braun</string>
+    <string name="none">Keine</string>
 </resources>

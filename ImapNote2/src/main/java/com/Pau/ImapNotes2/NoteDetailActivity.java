@@ -3,15 +3,11 @@ package com.Pau.ImapNotes2;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,15 +24,11 @@ import com.Pau.ImapNotes2.Miscs.Notifier;
 import com.Pau.ImapNotes2.Miscs.Utilities;
 import com.Pau.ImapNotes2.Sync.SyncUtils;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
 
 
 import javax.mail.Message;
-import javax.mail.internet.ContentType;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -175,7 +167,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         formatSpinner.setOnItemSelectedListener(this);
 
         NDSpinner insertSpinner = findViewById(R.id.action_insert);
-        insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[7], R.id.action_insert));
+        insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[4], R.id.action_insert));
         insertSpinner.setOnItemSelectedListener(this);
 
         NDSpinner headingSpinner = findViewById(R.id.action_heading);
@@ -401,6 +393,11 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.none:
+                item.setChecked(true);
+                bgColor = "none";
+                ResetColors();
                 return true;
             case R.id.blue:
                 item.setChecked(true);

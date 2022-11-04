@@ -235,7 +235,7 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                 break;
             case R.id.action_insert:
                 switch (position) {
-                    case 0:
+ /*                   case 0:
                         row.setId(R.id.action_insert_image);
                         icon.setImageResource(R.drawable.insert_image);
                         break;
@@ -247,19 +247,20 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                         row.setId(R.id.action_insert_checkbox);
                         icon.setImageResource(R.drawable.checkbox);
                         break;
-                    case 3:
+ */
+                    case 0:
                         row.setId(R.id.action_insert_star);
                         icon.setImageResource(R.drawable.star);
                         break;
-                    case 4:
+                    case 1:
                         row.setId(R.id.action_insert_exclamation);
                         icon.setImageResource(R.drawable.exclamation);
                         break;
-                    case 5:
+                    case 2:
                         row.setId(R.id.action_insert_question);
                         icon.setImageResource(R.drawable.question);
                         break;
-                    case 6:
+                    case 3:
                         row.setId(R.id.action_insert_hline);
                         icon.setImageResource(R.drawable.hline);
                         break;

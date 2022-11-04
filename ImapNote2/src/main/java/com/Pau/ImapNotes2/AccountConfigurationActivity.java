@@ -92,6 +92,18 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         Log.d(TAG, "clickListenerEdit onClick");
         CheckNameAndLogIn();
     };
+
+    private final View.OnFocusChangeListener FinishEmailEdit = (v, r) -> {
+        if (!v.hasFocus()) {
+            TextView tv = (TextView) v;
+            String[] mail = tv.getText().toString().split("@");
+            if ((mail.length == 2) && serverTextView.getText().toString().isEmpty()) {
+                serverTextView.setText("imap." + mail[1]);
+            }
+        }
+    };
+
+
     /*
         private final TextWatcher textWatcher = new TextWatcher(){
 
@@ -122,6 +134,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
         usernameTextView = findTextViewById(R.id.usernameEdit);
+        usernameTextView.setOnFocusChangeListener(FinishEmailEdit);
         passwordTextView = findTextViewById(R.id.passwordEdit);
         serverTextView = findTextViewById(R.id.serverEdit);
         portnumTextView = findTextViewById(R.id.portnumEdit);
@@ -151,7 +164,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         securitySpinner.setAdapter(dataAdapter);
         // Spinner item selection Listener
         securitySpinner.setOnItemSelectedListener(this);
-
+        securitySpinner.setSelection(Security.SSL_TLS.ordinal());
         //imapNotes2Account = new ImapNotes2Account();
         imapFolder = ((ImapNotes2) getApplicationContext()).GetImaper();
         //settings = new ConfigurationFile();
@@ -205,6 +218,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             // Here we have to edit an existing account
             headingTextView.setText(R.string.editAccount);
             accountnameTextView.setText(accountname);
+            accountnameTextView.setEnabled(false);
             usernameTextView.setText(GetConfigValue(ConfigurationFieldNames.UserName));
             passwordTextView.setText(accountManager.getPassword(myAccount));
             serverTextView.setText(GetConfigValue(ConfigurationFieldNames.Server));
