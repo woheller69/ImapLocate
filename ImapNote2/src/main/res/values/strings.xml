@@ -61,4 +61,8 @@
     <string name="note_title">Note Title</string>
     <string name="brown">Brown</string>
     <string name="none">None</string>
+    <string name="delete_note">Delete note</string>
+    <string name="are_you_sure_you_wish_to_delete_the_note">Are you sure you wish to delete the note?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

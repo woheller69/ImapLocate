@@ -403,6 +403,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected void publishResults(CharSequence constraint, @NonNull FilterResults results) {
             //noinspection unchecked
             mData = (List<Map<String, ?>>) results.values;

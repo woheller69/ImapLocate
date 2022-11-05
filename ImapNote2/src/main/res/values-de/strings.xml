@@ -61,4 +61,8 @@
     <string name="note_title">Notiz-Titel</string>
     <string name="brown">Braun</string>
     <string name="none">Keine</string>
+    <string name="delete_note">Delete note</string>
+    <string name="are_you_sure_you_wish_to_delete_the_note">Wollen Sie die Notiz wirklich löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

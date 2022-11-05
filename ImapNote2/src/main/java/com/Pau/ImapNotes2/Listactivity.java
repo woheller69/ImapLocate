@@ -362,22 +362,18 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                 return true;
             }
             case R.id.about:
-                try {
-                    ComponentName comp = new ComponentName(this.getApplicationContext(), Listactivity.class);
-                    PackageInfo pinfo = this.getApplicationContext().getPackageManager().getPackageInfo(comp.getPackageName(), 0);
-                    String versionName = "Version: " + pinfo.versionName;
-                    String versionCode = "Code: " + pinfo.versionCode;
+                String version = "Version: " + BuildConfig.VERSION_NAME + "\n";
+                version += "Code: " + BuildConfig.VERSION_CODE + "\n";
+                ;
+                version += "Build typ: " + BuildConfig.BUILD_TYPE + "\n";
 
-                    new AlertDialog.Builder(this)
-                            .setTitle("About ImapNotes2")
-                            .setMessage(versionName + "\n" + versionCode)
-                            .setPositiveButton("OK", (dialog, which) -> {
-                                // Do nothing
-                            })
-                            .show();
-                } catch (android.content.pm.PackageManager.NameNotFoundException e) {
-                    Log.d(TAG, "except");
-                }
+                new AlertDialog.Builder(this)
+                        .setTitle("About ImapNotes2")
+                        .setMessage(version)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            // Do nothing
+                        })
+                        .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

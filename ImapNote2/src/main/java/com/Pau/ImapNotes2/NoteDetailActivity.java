@@ -377,16 +377,16 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         switch (itemId) {
             case R.id.delete:
                 new AlertDialog.Builder(this)
-                        .setTitle("Delete note")
-                        .setMessage("Are you sure you wish to delete the note?")
+                        .setTitle(R.string.delete_note)
+                        .setMessage(R.string.are_you_sure_you_wish_to_delete_the_note)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                        .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
                             //Log.d(TAG,"We ask to delete Message #"+this.currentNote.get("number"));
                             intent.putExtra("DELETE_ITEM_NUM_IMAP", suid);
                             setResult(Listactivity.DELETE_BUTTON, intent);
                             finish();//finishing activity
                         })
-                        .setNegativeButton(android.R.string.no, null).show();
+                        .setNegativeButton(R.string.no, null).show();
                 return true;
             case R.id.save:
                 Save();
