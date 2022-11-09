@@ -45,6 +45,14 @@
             android:title="@string/sort_title"
             android:showAsAction="ifRoom|collapseActionView"
             android:visible="true" />
+
+        <item
+            android:id="@+id/sort_color"
+            android:checked="false"
+            android:icon="@drawable/ic_action_sort_color"
+            android:showAsAction="ifRoom|collapseActionView"
+            android:title="@string/sort_color"
+            android:visible="true" />
     </group>
     <item
         android:id="@+id/about"

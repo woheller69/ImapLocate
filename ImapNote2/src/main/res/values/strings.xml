@@ -65,4 +65,5 @@
     <string name="are_you_sure_you_wish_to_delete_the_note">Are you sure you wish to delete the note?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="sort_color">Sort by Color</string>
 </resources>

@@ -361,6 +361,14 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
  */
                 return true;
             }
+            case R.id.sort_color: {
+                Listactivity.sortOrder = OneNote.BGCOLOR + " ASC";
+                sortingChanged = true;
+                item.setChecked(true);
+                TriggerSync(status);
+                return true;
+            }
+
             case R.id.about:
                 String version = "Version: " + BuildConfig.VERSION_NAME + "\n";
                 version += "Code: " + BuildConfig.VERSION_CODE + "\n";
