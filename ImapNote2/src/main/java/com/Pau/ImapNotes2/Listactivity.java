@@ -372,8 +372,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             }
 
             case R.id.about:
-                final TextView textView = new TextView(this);
-
                 String about = getString(R.string.license) + "\n";
                 about += "Version: " + BuildConfig.VERSION_NAME + "\n";
                 about += "Code: " + BuildConfig.VERSION_CODE + "\n";
@@ -386,8 +384,6 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
                             // Do nothing
                         })
                         .show();
-                // Need to be called after show(), in order to generate hyperlinks
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
