@@ -19,6 +19,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -370,18 +372,22 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
             }
 
             case R.id.about:
-                String version = "Version: " + BuildConfig.VERSION_NAME + "\n";
-                version += "Code: " + BuildConfig.VERSION_CODE + "\n";
-                ;
-                version += "Build typ: " + BuildConfig.BUILD_TYPE + "\n";
+                final TextView textView = new TextView(this);
 
+                String about = getString(R.string.license) + "\n";
+                about += "Version: " + BuildConfig.VERSION_NAME + "\n";
+                about += "Code: " + BuildConfig.VERSION_CODE + "\n";
+                about += "Build typ: " + BuildConfig.BUILD_TYPE + "\n";
+                about += getString(R.string.internet) + "\n";
                 new AlertDialog.Builder(this)
-                        .setTitle("About ImapNotes2")
-                        .setMessage(version)
+                        .setTitle(getString(R.string.about) + " ImapNotes2")
+                        .setMessage(about)
                         .setPositiveButton("OK", (dialog, which) -> {
                             // Do nothing
                         })
                         .show();
+                // Need to be called after show(), in order to generate hyperlinks
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
