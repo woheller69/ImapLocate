@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -9,33 +10,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/StatusBgColor"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center|center_horizontal"
         android:maxLines="1"
         android:text="@string/welcome"
-        android:textColor="@color/StatusTxtColor" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="0px"
+        android:layout_marginBottom="0px"
+        android:textColor="@color/StatusTxtColor"
+        tools:ignore="TextContrastCheck" />
 
-    <TextView
-        android:id="@+id/accountlabel"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/AccountBgColor"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/select_account"
-        android:textColor="@color/AccountTxtColor" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/AccountBgColor"
+        android:orientation="horizontal"
         android:textColor="@color/AccountTxtColor">
 
         <Spinner
             android:id="@+id/accountSpinner"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="2" />
-
+            android:layout_weight="2"
+            android:contentDescription="@string/AccountList"
+            android:popupBackground="@color/AccountBgColor" />
         <Button
             android:id="@+id/editAccountButton"
             android:layout_width="wrap_content"

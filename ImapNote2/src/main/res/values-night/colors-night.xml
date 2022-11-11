@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="blue">#001040</color>
-    <color name="white">#FFFFFFCC</color>
-    <color name="yellow">#696506</color>
-    <color name="pink">#490669</color>
-    <color name="green">#044712</color>
-    <color name="brown">#3C1D02</color>
-    <color name="grey">#303030</color>
-    <color name="black">#000000</color>
-    <color name="red">#4B0000</color>
+    <color name="blue">#343D6C</color>
+    <color name="white">#000000</color>
+    <color name="yellow">#808037</color>
+    <color name="pink">#4C2540</color>
+    <color name="green">#5C653A</color>
+    <color name="brown">#6D4A2F</color>
+    <color name="grey">#363636</color>
+    <color name="black">#FFFFFFCC</color>
+    <color name="red">#713631</color>
     <color name="none">@color/yellow</color>
 
-    <color name="TopBgColor">@color/brown</color>
-    <color name="TopTxtColor">@color/white</color>
+    <color name="ActionBgColor">#5C653A</color>
+    <color name="ActionTxtColor">#AB9C69</color>
 
-    <color name="ListBgColor">@color/yellow</color>
-    <color name="ListTxtColor">@color/white</color>
-    <color name="ListInfoTxtColor">#E3E3F3</color>
+    <color name="ListBgColor">#756733</color>
+    <color name="ListTxtColor">#AB9C69</color>
+    <color name="ListInfoTxtColor">#707070</color>
 
-    <color name="StatusBgColor">@color/brown</color>
-    <color name="StatusTxtColor">@color/white</color>
+    <color name="StatusBgColor">#756733</color>
+    <color name="StatusTxtColor">#AB9C69</color>
 
-    <color name="AccountBgColor">@color/blue</color>
-    <color name="AccountTxtColor">@color/white</color>
+    <color name="AccountBgColor">#756733</color>
+    <color name="AccountTxtColor">#AB9C69</color>
 
-    <color name="EditorMenuBgColor">@color/black</color>
-    <color name="EditorTxtColor">@color/white</color>
-
+    <color name="EditorMenuBgColor">#000000</color>
+    <color name="EditorTxtColor">#AB9C69</color>
 
     <color name="transparent">#00000000</color>
 </resources>

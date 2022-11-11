@@ -66,4 +66,8 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="sort_color">Nach Farbe sortieren</string>
+    <string name="license">Lizenz: GPL v3.0</string>
+    <string name="internet">Internet: github.com/niendo1/ImapNote2/</string>
+    <string name="placeholder">Text hier einfügen…</string>
+    <string name="AccountList">Kontoliste</string>string>
 </resources>

@@ -2,6 +2,7 @@ package com.Pau.ImapNotes2;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0); // or other
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
         // Don't display keyboard when on note detail, only if user touches the screen
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
@@ -152,7 +154,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         //mEditor.setBackgroundResource(R.drawable.bg);
         mEditor.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("Insert text here...");
+        mEditor.setPlaceholder(getString(R.string.placeholder));
 
 /*
         mPreview = (TextView) findViewById(R.id.preview);
@@ -350,8 +352,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void ResetColors() {
         RichEditor bodyView = findViewById(R.id.bodyView);
         bodyView.setEditorBackgroundColor(Utilities.getColorIdByName(bgColor));
-        bodyView.setBackgroundColor(Utilities.getColorIdByName(bgColor));
-
         bodyView.setEditorFontColor(getColor(R.color.EditorTxtColor));
 
         (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));

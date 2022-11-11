@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue">#FFA6CAFD</color>
+    <color name="blue">#7D91F7</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="yellow">#FFFFFFCC</color>
-    <color name="pink">#FFFFCCCC</color>
-    <color name="green">#FFCCFFCC</color>
-    <color name="brown">#D1C3B7</color>
-    <color name="grey">#f0f0f0</color>
+    <color name="yellow">#FDE58B</color>
+    <color name="pink">#FABCE7</color>
+    <color name="green">#D4E88B</color>
+    <color name="brown">#FEAD6F</color>
+    <color name="grey">#D1D1D1</color>
     <color name="black">#000000</color>
-    <color name="red">#990000</color>
+    <color name="red">#FE877C</color>
     <color name="none">@color/yellow</color>
 
-    <color name="TopBgColor">@color/brown</color>
-    <color name="TopTxtColor">@color/white</color>
+    <color name="ActionBgColor">#C7C49E</color>
+    <color name="ActionTxtColor">#3C490D</color>
 
-    <color name="ListBgColor">@color/yellow</color>
-    <color name="ListTxtColor">@color/black</color>
-    <color name="ListInfoTxtColor">#838383</color>
+    <color name="ListBgColor">#FFFFAE</color>
+    <color name="ListTxtColor">#3C490D</color>
+    <color name="ListInfoTxtColor">#C7C49E</color>
 
-    <color name="StatusBgColor">@color/brown</color>
-    <color name="StatusTxtColor">@color/white</color>
+    <color name="StatusBgColor">#FFFFAE</color>
+    <color name="StatusTxtColor">#3C490D</color>
 
-    <color name="AccountBgColor">@color/blue</color>
-    <color name="AccountTxtColor">@color/black</color>
+    <color name="AccountBgColor">#FFFFAE</color>
+    <color name="AccountTxtColor">#3C490D</color>
 
     <color name="EditorMenuBgColor">@color/black</color>
-    <color name="EditorTxtColor">@color/black</color>
+    <color name="EditorTxtColor">#3C490D</color>
 
     <color name="transparent">#00000000</color>
 </resources>

@@ -3,7 +3,8 @@
 <!--This layout displays the title and time stamp of a single note. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="55dip"
+
+    android:layout_height="53dip"
     android:orientation="vertical"
     android:padding="5dip">
 
@@ -29,11 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-5dp"
+        android:layout_marginBottom="-4dp"
         android:background="@color/ListBgColor"
         android:elevation="-1dp"
         android:text="@string/note_last_change"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/ListInfoTxtColor" />
 
 </RelativeLayout>

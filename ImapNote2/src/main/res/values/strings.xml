@@ -68,4 +68,6 @@
     <string name="sort_color">Sort by Color</string>
     <string name="license">License: GPL v3.0</string>
     <string name="internet">Internet: github.com/niendo1/ImapNote2/</string>
+    <string name="placeholder">Insert text here…</string>
+    <string name="AccountList">AccountList</string>string>
 </resources>

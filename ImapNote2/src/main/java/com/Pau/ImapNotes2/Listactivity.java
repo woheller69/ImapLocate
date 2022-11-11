@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.PeriodicSync;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -187,7 +188,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0); // or other
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
 
         this.accountSpinner = findViewById(R.id.accountSpinner);
         Listactivity.currentList = new ArrayList<>();
@@ -437,7 +438,6 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
     // Spinner item selected listener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        (this.accountSpinner.getSelectedView()).setBackgroundColor(0xFFB6B6B6);
         Account account = Listactivity.accounts[pos];
         // Check periodic sync. If set to 86400 (once a day), set it to 900 (15 minutes)
         // this is due to bad upgrade to v4 which handles offline mode and syncing

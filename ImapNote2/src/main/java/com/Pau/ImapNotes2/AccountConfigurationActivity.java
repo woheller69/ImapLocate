@@ -5,6 +5,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -223,6 +224,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         super.onCreate(savedInstanceState);
         //settings = new ConfigurationFile(getApplicationContext());
         setContentView(R.layout.account_selection);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
