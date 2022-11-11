@@ -4,11 +4,16 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
 import android.util.Log;
@@ -16,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -64,6 +70,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             finish();//finishing activity
         }
     };
+    private AppCompatDelegate mDelegate;
     private Imaper imapFolder;
     private TextView accountnameTextView;
     private TextView usernameTextView;
@@ -77,6 +84,90 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     @NonNull
     private Security security = Security.None;
     //private int security_i;
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getDelegate().onPostCreate(savedInstanceState);
+    }
+
+    public ActionBar getSupportActionBar() {
+        return getDelegate().getSupportActionBar();
+    }
+
+    /* is this important?
+    @Override
+    @NonNull
+    public MenuInflater getMenuInflater() {
+        return getDelegate().getMenuInflater();
+    }
+  */
+
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        getDelegate().setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        getDelegate().setContentView(layoutResID);
+    }
+
+    @Override
+    public void setContentView(View view) {
+        getDelegate().setContentView(view);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().setContentView(view, params);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().addContentView(view, params);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getDelegate().onPostResume();
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+        getDelegate().setTitle(title);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getDelegate().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getDelegate().onDestroy();
+    }
+
+    public void invalidateOptionsMenu() {
+        getDelegate().invalidateOptionsMenu();
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
+
     @Nullable
     private Actions action;
     //    public static final String EDIT_ACCOUNT = "EDIT_ACCOUNT";
@@ -127,10 +218,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getDelegate().installViewFactory();
+        getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         //settings = new ConfigurationFile(getApplicationContext());
         setContentView(R.layout.account_selection);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
         usernameTextView = findTextViewById(R.id.usernameEdit);

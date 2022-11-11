@@ -1,6 +1,5 @@
 package com.Pau.ImapNotes2;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.Pau.ImapNotes2.Miscs.EditorMenuAdapter;
 import com.Pau.ImapNotes2.Miscs.HtmlNote;
@@ -33,7 +33,7 @@ import javax.mail.Message;
 import jp.wasabeef.richeditor.RichEditor;
 
 
-public class NoteDetailActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class NoteDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     //region Intent item names
     public static final String useSticky = "useSticky";
@@ -56,7 +56,9 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_detail);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setElevation(0); // or other
         // Don't display keyboard when on note detail, only if user touches the screen
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
@@ -143,7 +145,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         //mEditor = (RichEditor) findViewById(R.id.editor);
         //mEditor.setEditorHeight(200);
         //mEditor.setEditorFontSize(22);
-        //mEditor.setEditorFontColor(Color.RED);
+
 
         //mEditor.setEditorBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundColor(Color.BLUE);
@@ -350,7 +352,7 @@ public class NoteDetailActivity extends Activity implements AdapterView.OnItemSe
         bodyView.setEditorBackgroundColor(Utilities.getColorIdByName(bgColor));
         bodyView.setBackgroundColor(Utilities.getColorIdByName(bgColor));
 
-        bodyView.setTextColor(getColor(R.color.ListTxtColor));
+        bodyView.setEditorFontColor(getColor(R.color.EditorTxtColor));
 
         (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
         //invalidateOptionsMenu();

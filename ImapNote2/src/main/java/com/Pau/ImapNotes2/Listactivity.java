@@ -3,7 +3,6 @@ package com.Pau.ImapNotes2;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -13,14 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.PeriodicSync;
-import android.content.pm.PackageInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,13 +57,8 @@ import java.util.ListIterator;
 
 import static com.Pau.ImapNotes2.AccountConfigurationActivity.ACTION;
 
-//import com.Pau.ImapNotes2.Data.NotesDb;
 
-//import com.Pau.ImapNotes2.R;
-//import android.widget.SimpleAdapter;
-
-
-public class Listactivity extends Activity implements OnItemSelectedListener, Filterable {
+public class Listactivity extends AppCompatActivity implements OnItemSelectedListener, Filterable {
     private static final int SEE_DETAIL = 2;
     public static final int DELETE_BUTTON = 3;
     private static final int NEW_BUTTON = 4;
@@ -192,6 +184,10 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.main);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setElevation(0); // or other
+
 
         this.accountSpinner = findViewById(R.id.accountSpinner);
         Listactivity.currentList = new ArrayList<>();
@@ -391,6 +387,7 @@ public class Listactivity extends Activity implements OnItemSelectedListener, Fi
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode);
         switch (requestCode) {
             case Listactivity.SEE_DETAIL:

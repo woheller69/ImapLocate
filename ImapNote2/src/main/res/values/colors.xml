@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#FFA6CAFD</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFFFFFCC</color>
+    <color name="pink">#FFFFCCCC</color>
+    <color name="green">#FFCCFFCC</color>
+    <color name="brown">#D1C3B7</color>
+    <color name="grey">#f0f0f0</color>
+    <color name="black">#000000</color>
+    <color name="red">#990000</color>
+    <color name="none">@color/yellow</color>
+
+    <color name="TopBgColor">@color/brown</color>
+    <color name="TopTxtColor">@color/white</color>
+
+    <color name="ListBgColor">@color/yellow</color>
+    <color name="ListTxtColor">@color/black</color>
+    <color name="ListInfoTxtColor">#838383</color>
+
+    <color name="StatusBgColor">@color/brown</color>
+    <color name="StatusTxtColor">@color/white</color>
+
+    <color name="AccountBgColor">@color/blue</color>
+    <color name="AccountTxtColor">@color/black</color>
+
+    <color name="EditorMenuBgColor">@color/black</color>
+    <color name="EditorTxtColor">@color/black</color>
+
+    <color name="transparent">#00000000</color>
+</resources>

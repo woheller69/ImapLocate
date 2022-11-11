@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/save"
         android:icon="@drawable/ic_action_save"
-        android:showAsAction="ifRoom"
-        android:title="@string/save">
+        android:title="@string/save"
+        app:showAsAction="ifRoom">
 
     </item>
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_action_delete"
-        android:showAsAction="ifRoom"
-        android:title="@string/delete">
+        android:title="@string/delete"
+        app:showAsAction="ifRoom">
 
     </item>
 
     <item
         android:id="@+id/color"
         android:icon="@drawable/ic_action_color"
-        android:showAsAction="ifRoom"
-        android:title="@string/color">
+        android:title="@string/color"
+        app:showAsAction="ifRoom">
         <menu>
             <group android:checkableBehavior="single">
                 <item
