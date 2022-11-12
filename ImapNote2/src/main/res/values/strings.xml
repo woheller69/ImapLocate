@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ImapNotes2</string>
-    <string name="account">Account</string>
-    <string name="titleNew">New</string>
+    <string name="new_account">New Account</string>
+    <string name="new_note">New Note</string>
     <string name="refresh">Refresh</string>
     <string name="about">About</string>
     <string name="search">Search</string>
@@ -35,6 +35,7 @@
     <string name="color">Color</string>
     <string name="blue">Blue</string>
     <string name="white">White</string>
+    <string name="black">Black</string>
     <string name="yellow">Yellow</string>
     <string name="pink">Pink</string>
     <string name="green">Green</string>
@@ -69,5 +70,5 @@
     <string name="license">License: GPL v3.0</string>
     <string name="internet">Internet: github.com/niendo1/ImapNote2/</string>
     <string name="placeholder">Insert text here…</string>
-    <string name="AccountList">AccountList</string>string>
+    <string name="AccountList">AccountList</string>
 </resources>

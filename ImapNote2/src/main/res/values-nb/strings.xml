@@ -8,7 +8,7 @@
     <string name="save">Lagre</string>
     <string name="search">søḳ</string>
     <string name="select_account">Velg konto til aa se eller rediger</string>
-    <string name="titleNew">Ny</string>
+    <string name="new_note">Ny</string>
     <string name="syncing">Synkronisering..</string>
     <string name="username">Brukernavn</string>
     <string name="white">Hvit</string>
@@ -16,7 +16,7 @@
     <string name="your_login_name">Ditt innloggingsnavn</string>
     <string name="your_password">Passordet ditt</string>
     <string name="about">Om</string>
-    <string name="account">Konto</string>
+    <string name="new_account">Ny Konto</string>
     <string name="account_added">Kontoen er lagt</string>
     <string name="account_already_exists_or_is_null">Kontoen eksisterer eller er null</string>
     <string name="account_name">Konto navn</string>

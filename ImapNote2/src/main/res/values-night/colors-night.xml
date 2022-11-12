@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="blue">#343D6C</color>
-    <color name="white">#000000</color>
+    <color name="blue">#2E3E6B</color>
+    <color name="white">#FFFFFFCC</color>
     <color name="yellow">#808037</color>
     <color name="pink">#4C2540</color>
     <color name="green">#5C653A</color>
     <color name="brown">#6D4A2F</color>
     <color name="grey">#363636</color>
-    <color name="black">#FFFFFFCC</color>
+    <color name="black">#14150E</color>
     <color name="red">#713631</color>
-    <color name="none">@color/yellow</color>
+    <color name="none">@color/black</color>
 
-    <color name="ActionBgColor">#5C653A</color>
+    <color name="ActionBgColor">#2F2F2F</color>
     <color name="ActionTxtColor">#AB9C69</color>
 
-    <color name="ListBgColor">#756733</color>
+    <color name="ListBgColor">#191C12</color>
     <color name="ListTxtColor">#AB9C69</color>
-    <color name="ListInfoTxtColor">#707070</color>
+    <color name="ListInfoTxtColor">#AB9C69</color>
 
-    <color name="StatusBgColor">#756733</color>
+    <color name="StatusBgColor">#2F4F4F</color>
     <color name="StatusTxtColor">#AB9C69</color>
 
-    <color name="AccountBgColor">#756733</color>
+    <color name="AccountBgColor">#2F4F4F</color>
     <color name="AccountTxtColor">#AB9C69</color>
 
     <color name="EditorMenuBgColor">#000000</color>

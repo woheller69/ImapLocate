@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ImapNotes2</string>
-    <string name="account">Konto</string>
-    <string name="titleNew">Neu</string>
+    <string name="new_account">Neues Konto</string>
+    <string name="new_note">Neue Notiz</string>
     <string name="refresh">Abgleichen</string>
     <string name="about">Über</string>
     <string name="search">Suche</string>
     <string name="account_removed">Konto wurde entfernt</string>
     <string name="quotation_marks_not_allowed">Anführungszeichen nicht erlaubt</string>
-    <string name="remove">Entfernen</string>
+    <string name="remove">Löschen</string>
     <string name="save">Speichern</string>
     <string name="check_and_create_account"><![CDATA[Prüfen & Konto anlegen]]></string>
     <string name="logging_in">Anmelden</string>
@@ -18,25 +18,26 @@
     <string name="account_name">Name</string>
     <string name="choose_a_name_for_this_account">Namen wählen</string>
     <string name="username">Benutzer</string>
-    <string name="your_login_name">Login</string>
+    <string name="your_login_name">Login auf Mail-Server</string>
     <string name="password">Passwort</string>
-    <string name="your_password">Dein Passwort</string>
-    <string name="server">Servername</string>
+    <string name="your_password">Passwort für Login</string>
+    <string name="server">IMAP/Mail-Servername</string>
     <string name="delete">Löschen</string>
-    <string name="imap_notes_server">IMAP-Server</string>
+    <string name="imap_notes_server">Hostname Mail-Server</string>
     <string name="server_port_number_to_use">Portnummer des IMAP-Dienstes</string>
     <string name="sync_interval_minutes">Abgleich-Intervall (Minuten)</string>
     <string name="welcome">Willkommen</string>
     <string name="color">Farbe</string>
     <string name="blue">Blau</string>
     <string name="white">Weiß</string>
+    <string name="black">Schwarz</string>
     <string name="yellow">Gelb</string>
     <string name="pink">Pink</string>
     <string name="green">Grün</string>
     <string name="syncing">Abgleich läuft…</string>
     <string name="port_number">Portnummer</string>
     <string name="notes_folder_optional">Ordner für Notizen (optional)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">Pfad für Notizen auf dem IMAP-Server vorgeben</string>
+    <string name="manually_set_full_imap_path_to_notes_folder">Ordner für Notizen auf dem IMAP-Server</string>
     <string name="use_sticky_notes">Sticky-Notizen benutzen</string>
     <string name="select_account">Konto wählen</string>
     <string name="refreshing_notes_list">Abgleich der Notizenliste</string>
@@ -69,5 +70,5 @@
     <string name="license">Lizenz: GPL v3.0</string>
     <string name="internet">Internet: github.com/niendo1/ImapNote2/</string>
     <string name="placeholder">Text hier einfügen…</string>
-    <string name="AccountList">Kontoliste</string>string>
+    <string name="AccountList">Kontoliste</string>
 </resources>

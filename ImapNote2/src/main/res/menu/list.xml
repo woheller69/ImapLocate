@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/login"
+        android:id="@+id/newaccount"
         android:icon="@drawable/ic_action_login"
-        android:title="@string/account"
+        android:title="@string/new_account"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/newnote"
         android:icon="@drawable/ic_action_new"
-        android:title="@string/titleNew"
+        android:title="@string/new_note"
         app:showAsAction="ifRoom" />
 
     <item

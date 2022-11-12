@@ -6,22 +6,34 @@
         <item name="android:windowBackground">@color/ListBgColor</item>
         <item name="android:colorBackground">@color/ActionBgColor</item>
         <item name="android:colorForeground">@color/ActionTxtColor</item>
-        <!--item name="colorPrimary">@color/ActionBgColor</item>
+        <!--item name="android:colorPrimary">@color/ActionTxtColor</item>
+        <item name="android:textColorPrimary">@color/ActionTxtColor</item>
+        <item name="android:colorSecondary">@color/ActionTxtColor</item>
+        <item name="android:textColorTertiary">@color/ActionTxtColor</item>
+        <item name="android:textColorPrimaryInverse">@color/ActionTxtColor</item>
+        <item name="android:textColorSecondaryInverse">@color/ActionTxtColor</item>
+        <item name="android:textColorTertiaryInverse">@color/ActionTxtColor</item>
         <item name="colorPrimaryDark">@color/ActionBgColor</item>
         <item name="colorAccent">@color/ActionTxtColor</item>
         <item name="android:background">@color/ActionBgColor</item>
-        <item name="actionMenuTextColor">@color/ActionTxtColor</item>-->
+        <item name="actionMenuTextColor">@color/ActionTxtColor</item -->
+        <item name="android:spinnerDropDownItemStyle">@style/MySpinnerDropDownItemStyle</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="MyActionBar" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/ActionBgColor</item>
         <item name="android:titleTextStyle">@style/MyActionBar.TitleTextStyle</item>
     </style>
 
-    <style name="MyActionBar.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="MyActionBar.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/ActionTxtColor</item>
+    </style>
+
+    <style name="MySpinnerDropDownItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/AccountTxtColor</item>
+        <item name="android:colorBackground">@color/AccountBgColor</item>
     </style>
 
 </resources>

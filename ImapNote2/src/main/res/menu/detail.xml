@@ -35,6 +35,9 @@
                     android:id="@+id/white"
                     android:title="@string/white" />
                 <item
+                    android:id="@+id/black"
+                    android:title="@string/black" />
+                <item
                     android:id="@+id/yellow"
                     android:title="@string/yellow" />
                 <item

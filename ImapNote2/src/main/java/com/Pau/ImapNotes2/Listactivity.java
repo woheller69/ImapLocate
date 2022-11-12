@@ -185,8 +185,8 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.main);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
         getSupportActionBar().setElevation(0); // or other
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
 
@@ -202,11 +202,11 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
 
         status = findViewById(R.id.status);
 
-        this.spinnerList = new ArrayAdapter<>
+        spinnerList = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item, Listactivity.currentList);
         spinnerList.setDropDownViewResource
                 (android.R.layout.simple_spinner_dropdown_item);
-        this.accountSpinner.setAdapter(spinnerList);
+        accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
         //((ImapNotes2) this.getApplicationContext()).SetNotesList(this.noteList);
@@ -323,7 +323,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.login:
+            case R.id.newaccount:
                 Intent res = new Intent();
                 String mPackage = Utilities.PackageName;
                 String mClass = ".AccountConfigurationActivity";

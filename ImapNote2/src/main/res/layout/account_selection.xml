@@ -94,6 +94,7 @@
 
         <Spinner
             android:id="@+id/securitySpinner"
+            android:popupBackground="@color/AccountBgColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -149,6 +150,7 @@
             android:id="@+id/stickyCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/AccountTxtColor"
             android:text="@string/use_sticky_notes" />
 
         <!-- <Button
@@ -165,7 +167,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
         </LinearLayout>
 
     </LinearLayout>
