@@ -3,7 +3,6 @@ package com.Pau.ImapNotes2.Miscs;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.Pau.ImapNotes2.Data.OneNote;
 
@@ -160,7 +159,9 @@ public class HtmlNote {
 
     @NonNull
     private static String getColor(@NonNull String stringres) {
-        Matcher matcherColor = patternBodyBgColor.matcher(stringres);
+        Document doc = Jsoup.parse(stringres, "utf-8");
+        String bodyStyle = doc.select("body").attr("style");
+        Matcher matcherColor = patternBodyBgColor.matcher(bodyStyle);
         if (matcherColor.find()) {
             String colorName = matcherColor.group(1).toLowerCase();
             return ((colorName.isEmpty()) || colorName.equals("null") || colorName.equals("transparent")) ? "none" : colorName;
@@ -168,8 +169,6 @@ public class HtmlNote {
             return "none";
         }
     }
-
-
 /*
     public String GetPosition() {
         return HtmlNote.position;
