@@ -7,14 +7,20 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.Pau.ImapNotes2.Data.OneNote;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.internet.ContentType;
+import javax.mail.internet.MimeMessage;
 
 public class Sticky {
     private static final String TAG = "IN_Sticky";
@@ -108,6 +114,21 @@ public class Sticky {
         return sticky;
     }
 
+    public static Message GetMessageFromNote(@NonNull OneNote note, String noteBody) throws MessagingException {
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage message = new MimeMessage(session);
+
+        String body = "BEGIN:STICKYNOTE\nCOLOR:" + note.GetBgColor().toUpperCase() + "\nTEXT:" + noteBody +
+                "\nPOSITION:0 0 0 0\nEND:STICKYNOTE";
+        message.setText(body);
+        message.setHeader("Content-Transfer-Encoding", "8bit");
+        message.setHeader("Content-Type", "text/x-stickynote; charset=\"utf-8\"");
+
+        return (message);
+    }
+
+
     @NonNull
     private static Sticky ReadHtmlNote(String stringres) {
 //        Log.d(TAG,"From server (html):"+stringres);
@@ -162,7 +183,7 @@ public class Sticky {
         Matcher matcherColor = patternColor.matcher(stringres);
         if (matcherColor.find()) {
             String colorName = matcherColor.group(1).toLowerCase();
-            return ((colorName == null) || colorName.equals("null")) ? "none" : colorName;
+            return ((colorName.isEmpty()) || colorName.equals("null")) ? "none" : colorName;
         } else {
             return "none";
         }

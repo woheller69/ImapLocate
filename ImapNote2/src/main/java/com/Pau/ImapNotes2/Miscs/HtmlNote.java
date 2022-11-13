@@ -5,21 +5,31 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.Pau.ImapNotes2.Data.OneNote;
+
 import org.apache.commons.io.IOUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.InputStream;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.Flags;
 import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.internet.ContentType;
+import javax.mail.internet.MimeMessage;
 
 
 public class HtmlNote {
 
-    public static final String[] ColorHeader = {"SIO-Label"};
     private static final String TAG = "IN_HtmlNote";
-    private static final Pattern patternColor = Pattern.compile("bgcolor=(.*?);", Pattern.MULTILINE);
+    private static final String ColorBgStr = "background-color:";
+    private static final Pattern patternBodyBgColor = Pattern.compile("background-color:(.*?);", Pattern.MULTILINE);
 
     public final String text;
     // --Commented out by Inspection (11/26/16 11:50 PM):private final String position;
@@ -34,11 +44,51 @@ public class HtmlNote {
     }
 
     @Nullable
+    public static Message GetMessageFromNote(@NonNull OneNote note, String noteBody) throws MessagingException {
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage message = new MimeMessage(session);
+
+        message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
+        UUID uuid = UUID.randomUUID();
+        message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
+/*
+            <!DOCTYPE html>
+            <html>
+            <body style="background-color:khaki;">
+            </body>
+            </html>
+*/
+        Document doc = Jsoup.parse(noteBody, "utf-8");
+        String bodyStyle = doc.select("body").attr("style");
+        Matcher matcherColor = HtmlNote.patternBodyBgColor.matcher(bodyStyle);
+        String BgColorStr = "background-color:" + note.GetBgColor() + ";";
+        if (matcherColor.find()) {
+            bodyStyle = matcherColor.replaceFirst(BgColorStr);
+        } else {
+            bodyStyle = BgColorStr + bodyStyle;
+        }
+
+        doc.select("body").attr("style", bodyStyle);
+
+/*            body = body.replaceFirst("<p dir=ltr>", "<div>");
+            body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
+            body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
+            body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
+            body = body.replaceAll("</p>", "</div>");
+            body = body.replaceAll("<br>\n", "</div><div>");
+ */
+        message.setText(doc.toString(), "utf-8", "html");
+        message.setFlag(Flags.Flag.SEEN, true);
+
+        return (message);
+    }
+
+    @Nullable
     public static HtmlNote GetNoteFromMessage(@NonNull Message message) {
         ContentType contentType = null;
         String stringres = "";
         //InputStream iis = null;
-        String colorHeader = "none";
         //String charset;
         try {
             Log.d(TAG, "message :" + message);
@@ -46,7 +96,6 @@ public class HtmlNote {
             String charset = contentType.getParameter("charset");
             InputStream iis = (InputStream) message.getContent();
             stringres = IOUtils.toString(iis, charset);
-            colorHeader = message.getMatchingHeaders(ColorHeader).nextElement().getValue();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             Log.d(TAG, "Exception GetNoteFromMessage:");
@@ -56,7 +105,7 @@ public class HtmlNote {
 
         return new HtmlNote(
                 getText(stringres),
-                getColor(colorHeader));
+                getColor(stringres));
     }
 
 /*
@@ -110,10 +159,10 @@ public class HtmlNote {
 
     @NonNull
     private static String getColor(@NonNull String stringres) {
-        Matcher matcherColor = patternColor.matcher(stringres);
+        Matcher matcherColor = patternBodyBgColor.matcher(stringres);
         if (matcherColor.find()) {
-            String colorName = matcherColor.group(1);
-            return ((colorName == null) || colorName.equals("null")) ? "none" : colorName;
+            String colorName = matcherColor.group(1).toLowerCase();
+            return ((colorName.isEmpty()) || colorName.equals("null") || colorName.equals("transparent")) ? "none" : colorName;
         } else {
             return "none";
         }

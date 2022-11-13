@@ -24,14 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Properties;
-import java.util.UUID;
 
-import javax.mail.Flags;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -234,32 +232,11 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
         // Here we add the new note to the new note folder
         //Log.d(TAG,"Add new note");
-        Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
-        MimeMessage message = new MimeMessage(session);
-
+        Message message;
         if (useSticky) {
-            String body = "BEGIN:STICKYNOTE\nCOLOR:" + note.GetBgColor().toUpperCase() + "\nTEXT:" + noteBody +
-                    "\nPOSITION:0 0 0 0\nEND:STICKYNOTE";
-            message.setText(body);
-            message.setHeader("Content-Transfer-Encoding", "8bit");
-            message.setHeader("Content-Type", "text/x-stickynote; charset=\"utf-8\"");
+            message = Sticky.GetMessageFromNote(note, noteBody);
         } else {
-            message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
-            UUID uuid = UUID.randomUUID();
-            message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
-            String body = noteBody;
-            message.setHeader(HtmlNote.ColorHeader[0], "bgcolor=" + note.GetBgColor() + ";fgcolor=black;");
-
-/*            body = body.replaceFirst("<p dir=ltr>", "<div>");
-            body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
-            body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
-            body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
-            body = body.replaceAll("</p>", "</div>");
-            body = body.replaceAll("<br>\n", "</div><div>");
- */
-            message.setText(body, "utf-8", "html");
-            message.setFlag(Flags.Flag.SEEN, true);
+            message = HtmlNote.GetMessageFromNote(note, noteBody);
         }
         message.setSubject(note.GetTitle());
         MailDateFormat mailDateFormat = new MailDateFormat();
@@ -271,7 +248,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         File accountDirectory = new File(applicationContext.getFilesDir(),
                 Listactivity.imapNotes2Account.accountName);
         File directory = new File(accountDirectory, "new");
-        message.setFrom(Listactivity.imapNotes2Account.accountName);
+        message.setFrom(new InternetAddress(Listactivity.imapNotes2Account.accountName));
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);
