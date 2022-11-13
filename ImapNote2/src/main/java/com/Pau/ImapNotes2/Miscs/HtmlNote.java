@@ -43,7 +43,7 @@ public class HtmlNote {
         this.color = color;
     }
 
-    @Nullable
+    @NonNull
     public static Message GetMessageFromNote(@NonNull OneNote note, String noteBody) throws MessagingException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
@@ -52,6 +52,7 @@ public class HtmlNote {
         message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
         UUID uuid = UUID.randomUUID();
         message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
+        message.setHeader("Content-Transfer-Encoding", "quoted-printable");
 /*
             <!DOCTYPE html>
             <html>
@@ -84,9 +85,9 @@ public class HtmlNote {
         return (message);
     }
 
-    @Nullable
+    @NonNull
     public static HtmlNote GetNoteFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
+        ContentType contentType;
         String stringres = "";
         //InputStream iis = null;
         //String charset;

@@ -114,6 +114,7 @@ public class Sticky {
         return sticky;
     }
 
+    @NonNull
     public static Message GetMessageFromNote(@NonNull OneNote note, String noteBody) throws MessagingException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
