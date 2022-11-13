@@ -52,7 +52,7 @@ public class HtmlNote {
         message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
         UUID uuid = UUID.randomUUID();
         message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
-        message.setHeader("Content-Transfer-Encoding", "quoted-printable");
+
 /*
             <!DOCTYPE html>
             <html>
