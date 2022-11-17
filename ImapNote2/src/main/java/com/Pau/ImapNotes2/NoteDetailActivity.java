@@ -205,6 +205,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        NDSpinner spinner = (NDSpinner) parent;
+        if ((view == null) || (!spinner.initIsDone)) return;
         switch (view.getId()) {
             case R.id.action_bold:
                 editText.setBold();
@@ -365,7 +367,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
-        MenuItem item = menu.findItem(R.id.color);
+        //MenuItem item = menu.findItem(R.id.color);
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
         //item.setVisible(usesticky);

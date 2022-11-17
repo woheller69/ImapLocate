@@ -85,6 +85,7 @@ public class Sticky {
             String charset = contentType.getParameter("charset");
             InputStream iis = (InputStream) message.getContent();
             stringres = IOUtils.toString(iis, charset);
+            iis.close();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             Log.d(TAG, "Exception GetStickyFromMessage:");

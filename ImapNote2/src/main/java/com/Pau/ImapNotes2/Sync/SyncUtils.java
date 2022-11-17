@@ -154,6 +154,7 @@ public class SyncUtils {
             }
             // Get UIDValidity
             notesFolder = store.getFolder(sfolder);
+//            store.close();
             return new ImapNotes2Result(Imaper.ResultCodeSuccess,
                     "",
                     ((IMAPFolder) notesFolder).getUIDValidity(),
@@ -407,6 +408,7 @@ public class SyncUtils {
                 Properties props = new Properties();
                 Session session = Session.getDefaultInstance(props, null);
                 Message message = new MimeMessage(session, mailFileInputStream);
+                mailFileInputStream.close();
                 Log.d(TAG, "ReadMailFromFile return new MimeMessage.");
                 return message;
             } catch (MessagingException e) {
@@ -481,7 +483,6 @@ public class SyncUtils {
         Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
         try (OutputStream str = new FileOutputStream(outfile)) {
             notesMessage.writeTo(str);
-/*
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -491,7 +492,6 @@ public class SyncUtils {
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-*/
         }
 
     }

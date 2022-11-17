@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 @SuppressLint("AppCompatCustomView")
 public class NDSpinner extends Spinner {
     public boolean isDropDownMenuShown = false;
+    public boolean initIsDone = false;
 
     public NDSpinner(Context context) {
         super(context);
@@ -36,6 +37,7 @@ public class NDSpinner extends Spinner {
     setSelection(int position, boolean animate) {
         boolean sameSelected = position == getSelectedItemPosition();
         super.setSelection(position, animate);
+        initIsDone = true;
         if (sameSelected) {
             // Spinner does not call the OnItemSelectedListener if the same item is selected, so do it manually now
             getOnItemSelectedListener().onItemSelected(this, getSelectedView(), position, getSelectedItemId());
@@ -61,6 +63,7 @@ public class NDSpinner extends Spinner {
     setSelection(int position) {
         boolean sameSelected = position == getSelectedItemPosition();
         super.setSelection(position);
+        initIsDone = true;
         if (sameSelected) {
             // Spinner does not call the OnItemSelectedListener if the same item is selected, so do it manually now
             getOnItemSelectedListener().onItemSelected(this, getSelectedView(), position, getSelectedItemId());

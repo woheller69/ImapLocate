@@ -2,6 +2,7 @@ package com.Pau.ImapNotes2;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
 
@@ -68,6 +69,15 @@ public class ImapNotes2 extends Application {
         return this.thisSessionImapFolder;
     }
 
+    public ImapNotes2() {
+        if (BuildConfig.DEBUG)
+//            StrictMode.enableDefaults();
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+//                    .penaltyDeath()
+                    .build());
+    }
     /*// ?
     public void SetNotesList(ArrayList<OneNote> currentNotesList) {
     }

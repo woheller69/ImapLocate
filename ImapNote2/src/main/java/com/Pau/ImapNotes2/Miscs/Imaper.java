@@ -107,4 +107,14 @@ public class Imaper {
         return store != null && store.isConnected();
     }
 
+    public void close() throws MessagingException {
+        if (IsConnected()) {
+            store.close();
+        }
+    }
+
+    @Override
+    protected void finalize() throws MessagingException {
+        this.close();
+    }
 }

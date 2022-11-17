@@ -88,7 +88,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //Log.d(TAG,"Received request to delete message #"+suid);
                 // Here we delete the note from the local notes list
                 //Log.d(TAG,"Delete note in Listview");
-                notesList.remove(getIndexByNumber(suid));
+                int index = getIndexByNumber(suid);
+                if (index >= 0) notesList.remove(index);
                 MoveMailToDeleted(suid);
                 storedNotes.OpenDb();
                 storedNotes.notes.DeleteANote(suid, Listactivity.imapNotes2Account.accountName);
@@ -99,7 +100,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             // Do we have a note to add?
             if ((action == Action.Insert) || (action == Action.Update)) {
 //Log.d(TAG,"Sticky ? "+((ImapNotes2Account)stuffs[1]).GetUsesticky());
-//Log.d(TAG,"Color:"+color);
+                Log.d(TAG, "Action Insert/Update:" + suid);
                 String oldSuid = suid;
                 Log.d(TAG, "Received request to add new message: " + noteBody + "===");
                 // Use the first line as the tile
@@ -137,8 +138,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
-                if (action == Action.Update) {
-                    notesList.remove(getIndexByNumber(oldSuid));
+                int index = getIndexByNumber(oldSuid);
+                if ((action == Action.Update) && (index >= 0)) {
+                    notesList.remove(index);
                 }
                 notesList.add(0, currentNote);
                 return true;
@@ -252,7 +254,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);
-
+        str.close();
     }
 
     public enum Action {

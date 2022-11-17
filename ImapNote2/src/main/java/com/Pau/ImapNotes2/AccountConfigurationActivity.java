@@ -45,6 +45,8 @@ import com.Pau.ImapNotes2.Miscs.Utilities;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 
 public class AccountConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener {
     /**
@@ -536,6 +538,11 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         }
 
         protected void onPostExecute(@NonNull Result<String> result) {
+            try {
+                imapFolder.close();
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
             if (result.succeeded) {
                 accountConfigurationActivity.Clear();
                 // Hack! accountManager.addOnAccountsUpdatedListener
