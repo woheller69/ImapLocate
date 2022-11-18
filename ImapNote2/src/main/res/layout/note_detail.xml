@@ -66,24 +66,6 @@
                     android:title="@string/heading" />
 
                 <com.Pau.ImapNotes2.Miscs.NDSpinner
-                    android:id="@+id/action_txt_color"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/EditorMenuBgColor"
-                    android:contentDescription="@string/txt_color"
-                    android:minHeight="48dp"
-                    android:title="@string/txt_color" />
-
-                <com.Pau.ImapNotes2.Miscs.NDSpinner
-                    android:id="@+id/action_bg_color"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/EditorMenuBgColor"
-                    android:contentDescription="@string/bg_color"
-                    android:minHeight="48dp"
-                    android:title="@string/bg_color" />
-
-                <com.Pau.ImapNotes2.Miscs.NDSpinner
                     android:id="@+id/action_alignment"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

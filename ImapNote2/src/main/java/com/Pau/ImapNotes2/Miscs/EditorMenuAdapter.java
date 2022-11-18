@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.Pau.ImapNotes2.NoteDetailActivity;
 import com.Pau.ImapNotes2.R;
 
 public class EditorMenuAdapter extends ArrayAdapter<String> {
@@ -16,16 +17,17 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
     private final LayoutInflater mInflater;
     private final int mSpinnerResourceId;
     private final Context mContext;
+    private NoteDetailActivity mNoteDetailActivity;
 
 
     public EditorMenuAdapter(Context context, int textViewResourceId, String[] objects,
-                             int spinnerResourceId) {
+                             int spinnerResourceId, NoteDetailActivity noteDetailActivity) {
         super(context, textViewResourceId, objects);
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSpinnerResourceId = spinnerResourceId;
         mContext = context;
-
+        mNoteDetailActivity = noteDetailActivity;
 // TODO Auto-generated constructor stub
     }
 
@@ -46,9 +48,9 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
     public View getCustomView(int position, View convertView, ViewGroup parent) {
 // TODO Auto-generated method stub
 //return super.getView(position, convertView, parent);
-
         View row = mInflater.inflate(R.layout.editor_row, parent, false);
         ImageView icon = row.findViewById(R.id.cmd_icon);
+        NDSpinner spinner;
             /*
             row.setOnClickListener(new View.OnClickListener() {
                                        @Override
@@ -98,6 +100,26 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                     case 6:
                         row.setId(R.id.action_underline);
                         icon.setImageResource(R.drawable.underline);
+                        break;
+                    case 7:
+                        icon.setImageResource(0);
+                        icon.setVisibility(View.INVISIBLE);
+                        icon.setPadding(0, 0, 0, 0);
+                        spinner = row.findViewById(R.id.cmd_bg_color);
+                        spinner.setId(R.id.action_bg_color);
+                        spinner.setVisibility(View.VISIBLE);
+                        spinner.setAdapter(new EditorMenuAdapter(mContext, R.layout.editor_row, new String[8], R.id.action_txt_color, mNoteDetailActivity));
+                        spinner.setOnItemSelectedListener(mNoteDetailActivity);
+                        break;
+                    case 8:
+                        icon.setImageResource(0);
+                        icon.setVisibility(View.INVISIBLE);
+                        icon.setPadding(0, 0, 0, 0);
+                        spinner = row.findViewById(R.id.cmd_bg_color);
+                        spinner.setId(R.id.action_bg_color);
+                        spinner.setVisibility(View.VISIBLE);
+                        spinner.setAdapter(new EditorMenuAdapter(mContext, R.layout.editor_row, new String[8], R.id.action_bg_color, mNoteDetailActivity));
+                        spinner.setOnItemSelectedListener(mNoteDetailActivity);
                         break;
                 }
                 break;

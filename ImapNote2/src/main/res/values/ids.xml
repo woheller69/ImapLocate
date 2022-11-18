@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="action_txt_color" type="id" />
+    <item name="action_bg_color" type="id" />
     <item name="action_removeFormat" type="id" />
     <item name="action_bold" type="id" />
     <item name="action_italic" type="id" />

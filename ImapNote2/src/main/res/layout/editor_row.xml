@@ -14,4 +14,14 @@
         android:scaleType="center"
         android:contentDescription="@string/undo"
         android:src="@drawable/undo" />
+
+    <com.Pau.ImapNotes2.Miscs.NDSpinner
+        android:id="@+id/cmd_bg_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/EditorMenuBgColor"
+        android:contentDescription="@string/bg_color"
+        android:minWidth="0px"
+        android:title="@string/bg_color"
+        android:visibility="invisible" />
 </LinearLayout>

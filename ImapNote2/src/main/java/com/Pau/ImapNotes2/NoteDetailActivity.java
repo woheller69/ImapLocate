@@ -144,14 +144,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     }
 
     private void SetupRichEditor() {
-        //mEditor = (RichEditor) findViewById(R.id.editor);
-        //mEditor.setEditorHeight(200);
-        //mEditor.setEditorFontSize(22);
-
-
-        //mEditor.setEditorBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundResource(R.drawable.bg);
+        // more functions, maybe use this editor...
+        // https://github.com/Andrew-Chen-Wang/RichEditorView/blob/master/Sources/RichEditorView/Resources/editor/rich_editor.js
         editText.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         editText.setPlaceholder(getString(R.string.placeholder));
@@ -167,27 +161,19 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 */
 
         NDSpinner formatSpinner = findViewById(R.id.action_format);
-        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[7], R.id.action_format));
+        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[9], R.id.action_format, this));
         formatSpinner.setOnItemSelectedListener(this);
 
         NDSpinner insertSpinner = findViewById(R.id.action_insert);
-        insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[4], R.id.action_insert));
+        insertSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[4], R.id.action_insert, this));
         insertSpinner.setOnItemSelectedListener(this);
 
         NDSpinner headingSpinner = findViewById(R.id.action_heading);
-        headingSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_heading));
+        headingSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_heading, this));
         headingSpinner.setOnItemSelectedListener(this);
 
-        NDSpinner txtColorSpinner = findViewById(R.id.action_txt_color);
-        txtColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_txt_color));
-        txtColorSpinner.setOnItemSelectedListener(this);
-
-        NDSpinner bgColorSpinner = findViewById(R.id.action_bg_color);
-        bgColorSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[8], R.id.action_bg_color));
-        bgColorSpinner.setOnItemSelectedListener(this);
-
         NDSpinner alignmentSpinner = findViewById(R.id.action_alignment);
-        alignmentSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_alignment));
+        alignmentSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_alignment, this));
         alignmentSpinner.setOnItemSelectedListener(this);
 
         findViewById(R.id.action_undo).setOnClickListener(v -> editText.undo());
@@ -346,6 +332,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 editText.loadUrl("javascript:RE.insertHTML('<hr>');");
                 break;
         }
+
+        // for color selection, it doesnot closes by itself
+        NDSpinner formatSpinner = findViewById(R.id.action_format);
+        formatSpinner.onDetachedFromWindow();
+
     }
 
     @Override
