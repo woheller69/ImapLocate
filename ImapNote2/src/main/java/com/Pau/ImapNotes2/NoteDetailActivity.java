@@ -94,7 +94,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                             bgColor = htmlNote.color;
                         }
                         editText = findViewById(R.id.bodyView);
-                        SetupRichEditor(editText);
+                        SetupRichEditor();
                         editText.setHtml(stringres);
                     } else {
                         // Entry can not opened..
@@ -116,7 +116,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
             //bgColor = "yellow";
             editText = findViewById(R.id.bodyView);
-            SetupRichEditor(editText);
+            SetupRichEditor();
         }
 
 /*        // TODO: Watch for changes so that we can auto save.
@@ -143,7 +143,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         ResetColors();
     }
 
-    private void SetupRichEditor(@NonNull final RichEditor mEditor) {
+    private void SetupRichEditor() {
         //mEditor = (RichEditor) findViewById(R.id.editor);
         //mEditor.setEditorHeight(200);
         //mEditor.setEditorFontSize(22);
@@ -152,9 +152,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         //mEditor.setEditorBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundResource(R.drawable.bg);
-        mEditor.setPadding(10, 10, 10, 10);
+        editText.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder(getString(R.string.placeholder));
+        editText.setPlaceholder(getString(R.string.placeholder));
 
 /*
         mPreview = (TextView) findViewById(R.id.preview);
@@ -190,8 +190,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         alignmentSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_alignment));
         alignmentSpinner.setOnItemSelectedListener(this);
 
-        findViewById(R.id.action_undo).setOnClickListener(v -> mEditor.undo());
-        findViewById(R.id.action_redo).setOnClickListener(v -> mEditor.redo());
+        findViewById(R.id.action_undo).setOnClickListener(v -> editText.undo());
+        findViewById(R.id.action_redo).setOnClickListener(v -> editText.redo());
 
     }
 
