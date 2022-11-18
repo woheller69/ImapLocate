@@ -72,26 +72,30 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
             case R.id.action_format:
                 switch (position) {
                     case 0:
+                        row.setId(R.id.action_removeFormat);
+                        icon.setImageResource(R.drawable.remove_format);
+                        break;
+                    case 1:
                         row.setId(R.id.action_bold);
                         icon.setImageResource(R.drawable.bold);
                         break;
-                    case 1:
+                    case 2:
                         row.setId(R.id.action_italic);
                         icon.setImageResource(R.drawable.italic);
                         break;
-                    case 2:
+                    case 3:
                         row.setId(R.id.action_subscript);
                         icon.setImageResource(R.drawable.subscript);
                         break;
-                    case 3:
+                    case 4:
                         row.setId(R.id.action_superscript);
                         icon.setImageResource(R.drawable.superscript);
                         break;
-                    case 4:
+                    case 5:
                         row.setId(R.id.action_strikethrough);
                         icon.setImageResource(R.drawable.strikethrough);
                         break;
-                    case 5:
+                    case 6:
                         row.setId(R.id.action_underline);
                         icon.setImageResource(R.drawable.underline);
                         break;

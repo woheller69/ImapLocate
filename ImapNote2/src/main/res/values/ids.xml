@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="action_removeFormat" type="id" />
     <item name="action_bold" type="id" />
     <item name="action_italic" type="id" />
     <item name="action_subscript" type="id" />

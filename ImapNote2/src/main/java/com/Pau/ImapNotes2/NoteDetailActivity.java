@@ -167,7 +167,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 */
 
         NDSpinner formatSpinner = findViewById(R.id.action_format);
-        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[6], R.id.action_format));
+        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[7], R.id.action_format));
         formatSpinner.setOnItemSelectedListener(this);
 
         NDSpinner insertSpinner = findViewById(R.id.action_insert);
@@ -208,6 +208,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         NDSpinner spinner = (NDSpinner) parent;
         if ((view == null) || (!spinner.initIsDone)) return;
         switch (view.getId()) {
+            case R.id.action_removeFormat:
+                editText.removeFormat();
+                break;
             case R.id.action_bold:
                 editText.setBold();
                 break;
