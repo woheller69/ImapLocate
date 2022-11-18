@@ -24,7 +24,7 @@
     <color name="AccountBgColor">#FFFFAE</color>
     <color name="AccountTxtColor">#3C490D</color>
 
-    <color name="EditorMenuBgColor">@color/black</color>
+    <color name="EditorMenuBgColor">#C7C49E</color>
     <color name="EditorTxtColor">#3C490D</color>
 
     <color name="transparent">#00000000</color>
