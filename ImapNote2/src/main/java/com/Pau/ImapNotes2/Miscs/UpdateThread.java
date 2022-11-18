@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private final ArrayList<OneNote> notesList;
     private final String noteBody;
     private final String bgColor;
-    private final Context applicationContext;
+    private final WeakReference<Context> applicationContextRef;
     private final Action action;
     private String suid;
     private boolean bool_to_return;
@@ -62,7 +63,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         String suid,
                         String noteBody,
                         String bgColor,
-                        Context applicationContext,
+                        Context context,
                         Action action,
                         Db storedNotes) {
         Log.d(TAG, "UpdateThread: " + noteBody);
@@ -73,7 +74,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.suid = suid;
         this.noteBody = noteBody;
         this.bgColor = bgColor;
-        this.applicationContext = applicationContext;
+        this.applicationContextRef = new WeakReference<>(context);
         this.action = action;
         this.storedNotes = storedNotes;
         //Notifier.Show(resId, applicationContext, 1);
@@ -118,7 +119,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String stringDate = sdf.format(date);
                 OneNote currentNote = new OneNote(title, stringDate, "", bgColor);
                 // Add note to database
-                if (storedNotes == null) storedNotes = new Db(applicationContext);
+                if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
                 storedNotes.OpenDb();
                 suid = storedNotes.notes.GetTempNumber(Listactivity.imapNotes2Account.accountName);
                 currentNote.SetUid(suid);
@@ -139,9 +140,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
                 int index = getIndexByNumber(oldSuid);
-                if ((action == Action.Update) && (index >= 0)) {
-                    notesList.remove(index);
-                }
+                if ((action == Action.Update) && (index >= 0)) notesList.remove(index);
                 notesList.add(0, currentNote);
                 return true;
             }
@@ -173,7 +172,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
      * @param suid IMAP ID of the note.
      */
     private void MoveMailToDeleted(@NonNull String suid) {
-        String directory = applicationContext.getFilesDir() + "/" +
+        String directory = applicationContextRef.get().getFilesDir() + "/" +
                 Listactivity.imapNotes2Account.accountName;
         // TODO: Explain why we need to omit the first character of the UID
         File from = new File(directory, suid);
@@ -247,7 +246,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         message.addHeader("Date", headerDate);
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
-        File accountDirectory = new File(applicationContext.getFilesDir(),
+        File accountDirectory = new File(applicationContextRef.get().getFilesDir(),
                 Listactivity.imapNotes2Account.accountName);
         File directory = new File(accountDirectory, "new");
         message.setFrom(new InternetAddress(Listactivity.imapNotes2Account.accountName));
