@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- This is the layout where you edit the text of a note. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/bodyView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_alignParentBottom="true"
+        android:background="@color/EditorMenuBgColor"
+        android:gravity="bottom">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/EditorMenuBgColor">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/action_undo"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+            <ImageButton
+                android:id="@+id/action_undo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                     android:background="@color/EditorMenuBgColor"
                     android:contentDescription="@string/undo"
                     android:src="@drawable/undo" />
@@ -73,14 +76,8 @@
                     android:contentDescription="@string/alignment"
                     android:minHeight="48dp"
                     android:title="@string/alignment" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
-            </LinearLayout>
-        </HorizontalScrollView>
 
-
-        <jp.wasabeef.richeditor.RichEditor
-            android:id="@+id/bodyView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
