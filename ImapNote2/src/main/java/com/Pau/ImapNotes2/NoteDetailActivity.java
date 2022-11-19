@@ -114,7 +114,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
-            //bgColor = "yellow";
             editText = findViewById(R.id.bodyView);
             SetupRichEditor();
         }
@@ -354,7 +353,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 break;
         }
 
-        // for color selection, it doesnot closes by itself
+        // for color selection, it does not closes by itself
         NDSpinner formatSpinner = findViewById(R.id.action_format);
         formatSpinner.onDetachedFromWindow();
 
