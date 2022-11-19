@@ -234,52 +234,52 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 editText.setHeading(6);
                 break;
             case R.id.action_txt_color_white:
-                editText.setTextColor(Utilities.getColorByName("white", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_WhiteSmoke", getApplicationContext()));
                 break;
             case R.id.action_txt_color_grey:
-                editText.setTextColor(Utilities.getColorByName("grey", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_LightGray", getApplicationContext()));
                 break;
             case R.id.action_txt_color_black:
-                editText.setTextColor(Utilities.getColorByName("black", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_Black", getApplicationContext()));
                 break;
             case R.id.action_txt_color_red:
-                editText.setTextColor(Utilities.getColorByName("red", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_FireBrick", getApplicationContext()));
                 break;
             case R.id.action_txt_color_green:
-                editText.setTextColor(Utilities.getColorByName("green", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_Green", getApplicationContext()));
                 break;
             case R.id.action_txt_color_yellow:
-                editText.setTextColor(Utilities.getColorByName("yellow", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_Yellow", getApplicationContext()));
                 break;
             case R.id.action_txt_color_brown:
-                editText.setTextColor(Utilities.getColorByName("brown", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_Brown", getApplicationContext()));
                 break;
             case R.id.action_txt_color_blue:
-                editText.setTextColor(Utilities.getColorByName("blue", getApplicationContext()));
+                editText.setTextColor(Utilities.getColorByName("html_Blue", getApplicationContext()));
                 break;
             case R.id.action_bg_color_white:
-                editText.setTextBackgroundColor(Utilities.getColorByName("white", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_WhiteSmoke", getApplicationContext()));
                 break;
             case R.id.action_bg_color_grey:
-                editText.setTextBackgroundColor(Utilities.getColorByName("grey", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_LightGray", getApplicationContext()));
                 break;
             case R.id.action_bg_color_black:
-                editText.setTextBackgroundColor(Utilities.getColorByName("black", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_Black", getApplicationContext()));
                 break;
             case R.id.action_bg_color_red:
-                editText.setTextBackgroundColor(Utilities.getColorByName("red", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_FireBrick", getApplicationContext()));
                 break;
             case R.id.action_bg_color_green:
-                editText.setTextBackgroundColor(Utilities.getColorByName("green", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_Green", getApplicationContext()));
                 break;
             case R.id.action_bg_color_yellow:
-                editText.setTextBackgroundColor(Utilities.getColorByName("yellow", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_Yellow", getApplicationContext()));
                 break;
             case R.id.action_bg_color_brown:
-                editText.setTextBackgroundColor(Utilities.getColorByName("brown", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_Brown", getApplicationContext()));
                 break;
             case R.id.action_bg_color_blue:
-                editText.setTextBackgroundColor(Utilities.getColorByName("blue", getApplicationContext()));
+                editText.setTextBackgroundColor(Utilities.getColorByName("html_Blue", getApplicationContext()));
                 break;
             case R.id.action_font_size_06:
                 editText.setFontSize(1);

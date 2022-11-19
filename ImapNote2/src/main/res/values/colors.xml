@@ -28,4 +28,14 @@
     <color name="EditorTxtColor">#3C490D</color>
 
     <color name="transparent">#00000000</color>
+
+
+    <color name="html_WhiteSmoke">#F5F5F5</color>
+    <color name="html_LightGray">#D3D3D3</color>
+    <color name="html_Black">#000000</color>
+    <color name="html_FireBrick">#B22222</color>
+    <color name="html_Green">#008000</color>
+    <color name="html_Yellow">#FFFF00</color>
+    <color name="html_Blue">#0000FF</color>
+    <color name="html_Brown">#A52A2A</color>
 </resources>
