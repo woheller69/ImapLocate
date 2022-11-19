@@ -161,7 +161,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 */
 
         NDSpinner formatSpinner = findViewById(R.id.action_format);
-        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[9], R.id.action_format, this));
+        formatSpinner.setAdapter(new EditorMenuAdapter(NoteDetailActivity.this, R.layout.editor_row, new String[10], R.id.action_format, this));
         formatSpinner.setOnItemSelectedListener(this);
 
         NDSpinner insertSpinner = findViewById(R.id.action_insert);
@@ -280,6 +280,27 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 break;
             case R.id.action_bg_color_blue:
                 editText.setTextBackgroundColor(Utilities.getColorByName("blue", getApplicationContext()));
+                break;
+            case R.id.action_font_size_06:
+                editText.setFontSize(1);
+                break;
+            case R.id.action_font_size_08:
+                editText.setFontSize(2);
+                break;
+            case R.id.action_font_size_10:
+                editText.setFontSize(3);
+                break;
+            case R.id.action_font_size_12:
+                editText.setFontSize(4);
+                break;
+            case R.id.action_font_size_16:
+                editText.setFontSize(5);
+                break;
+            case R.id.action_font_size_20:
+                editText.setFontSize(6);
+                break;
+            case R.id.action_font_size_24:
+                editText.setFontSize(7);
                 break;
             case R.id.action_indent:
                 editText.setIndent();

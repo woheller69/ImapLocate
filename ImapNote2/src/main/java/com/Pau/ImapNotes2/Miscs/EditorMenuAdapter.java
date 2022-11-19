@@ -17,13 +17,15 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
     private final LayoutInflater mInflater;
     private final int mSpinnerResourceId;
     private final Context mContext;
-    private NoteDetailActivity mNoteDetailActivity;
+    private final int mTextViewResourceId;
+    private final NoteDetailActivity mNoteDetailActivity;
 
 
     public EditorMenuAdapter(Context context, int textViewResourceId, String[] objects,
                              int spinnerResourceId, NoteDetailActivity noteDetailActivity) {
         super(context, textViewResourceId, objects);
 
+        mTextViewResourceId = textViewResourceId;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSpinnerResourceId = spinnerResourceId;
         mContext = context;
@@ -48,8 +50,8 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
     public View getCustomView(int position, View convertView, ViewGroup parent) {
 // TODO Auto-generated method stub
 //return super.getView(position, convertView, parent);
-        View row = mInflater.inflate(R.layout.editor_row, parent, false);
-        ImageView icon = row.findViewById(R.id.cmd_icon);
+        View row = mInflater.inflate(mTextViewResourceId, parent, false);
+        ImageView icon = row.findViewById(R.id.row_icon_dummy);
         NDSpinner spinner;
             /*
             row.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +107,8 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                         icon.setImageResource(0);
                         icon.setVisibility(View.INVISIBLE);
                         icon.setPadding(0, 0, 0, 0);
-                        spinner = row.findViewById(R.id.cmd_bg_color);
-                        spinner.setId(R.id.action_bg_color);
+                        spinner = row.findViewById(R.id.row_spinner_dummy);
+                        spinner.setId(R.id.action_txt_color);
                         spinner.setVisibility(View.VISIBLE);
                         spinner.setAdapter(new EditorMenuAdapter(mContext, R.layout.editor_row, new String[8], R.id.action_txt_color, mNoteDetailActivity));
                         spinner.setOnItemSelectedListener(mNoteDetailActivity);
@@ -115,10 +117,20 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                         icon.setImageResource(0);
                         icon.setVisibility(View.INVISIBLE);
                         icon.setPadding(0, 0, 0, 0);
-                        spinner = row.findViewById(R.id.cmd_bg_color);
+                        spinner = row.findViewById(R.id.row_spinner_dummy);
                         spinner.setId(R.id.action_bg_color);
                         spinner.setVisibility(View.VISIBLE);
                         spinner.setAdapter(new EditorMenuAdapter(mContext, R.layout.editor_row, new String[8], R.id.action_bg_color, mNoteDetailActivity));
+                        spinner.setOnItemSelectedListener(mNoteDetailActivity);
+                        break;
+                    case 9:
+                        icon.setImageResource(0);
+                        icon.setVisibility(View.INVISIBLE);
+                        icon.setPadding(0, 0, 0, 0);
+                        spinner = row.findViewById(R.id.row_spinner_dummy);
+                        spinner.setId(R.id.action_font_size);
+                        spinner.setVisibility(View.VISIBLE);
+                        spinner.setAdapter(new EditorMenuAdapter(mContext, R.layout.editor_row, new String[7], R.id.action_font_size, mNoteDetailActivity));
                         spinner.setOnItemSelectedListener(mNoteDetailActivity);
                         break;
                 }
@@ -228,6 +240,38 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
                     case 7:
                         row.setId(R.id.action_bg_color_brown);
                         icon.setImageResource(R.drawable.bg_color_brown);
+                        break;
+                }
+                break;
+            case R.id.action_font_size:
+                switch (position) {
+                    case 0:
+                        row.setId(R.id.action_font_size_06);
+                        icon.setImageResource(R.drawable.font_size_06);
+                        break;
+                    case 1:
+                        row.setId(R.id.action_font_size_08);
+                        icon.setImageResource(R.drawable.font_size_08);
+                        break;
+                    case 2:
+                        row.setId(R.id.action_font_size_10);
+                        icon.setImageResource(R.drawable.font_size_10);
+                        break;
+                    case 3:
+                        row.setId(R.id.action_font_size_12);
+                        icon.setImageResource(R.drawable.font_size_12);
+                        break;
+                    case 4:
+                        row.setId(R.id.action_font_size_16);
+                        icon.setImageResource(R.drawable.font_size_16);
+                        break;
+                    case 5:
+                        row.setId(R.id.action_font_size_20);
+                        icon.setImageResource(R.drawable.font_size_20);
+                        break;
+                    case 6:
+                        row.setId(R.id.action_font_size_24);
+                        icon.setImageResource(R.drawable.font_size_24);
                         break;
                 }
                 break;

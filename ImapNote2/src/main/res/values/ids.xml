@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="action_font_size" type="id" />
     <item name="action_txt_color" type="id" />
     <item name="action_bg_color" type="id" />
     <item name="action_removeFormat" type="id" />
@@ -46,4 +47,11 @@
     <item name="action_insert_exclamation" type="id" />
     <item name="action_insert_question" type="id" />
     <item name="action_insert_hline" type="id" />
+    <item name="action_font_size_06" type="id" />
+    <item name="action_font_size_08" type="id" />
+    <item name="action_font_size_10" type="id" />
+    <item name="action_font_size_12" type="id" />
+    <item name="action_font_size_16" type="id" />
+    <item name="action_font_size_20" type="id" />
+    <item name="action_font_size_24" type="id" />
 </resources>
