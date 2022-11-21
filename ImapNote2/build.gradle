@@ -21,6 +21,7 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField 'String', 'APPLICATION_NAME', 'ImapNotes2'
             signingConfig signingConfigs.release
 
             // Enables code shrinking, obfuscation, and optimization for only
@@ -40,6 +41,7 @@ android {
 
         }
         debug {
+            buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes2"'
             signingConfig signingConfigs.release
         }
     }

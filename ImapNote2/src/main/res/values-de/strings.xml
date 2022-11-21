@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ImapNotes2</string>
     <string name="new_account">Neues Konto</string>
     <string name="new_note">Neue Notiz</string>
     <string name="refresh">Abgleichen</string>

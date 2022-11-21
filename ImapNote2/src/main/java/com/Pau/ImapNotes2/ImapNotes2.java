@@ -17,7 +17,7 @@ perhaps.
  */
 public class ImapNotes2 extends Application {
 
-    private static final String configurationFileName = "ImapNotes2.conf";
+    private static final String configurationFileName = BuildConfig.APPLICATION_NAME + ".conf";
     private Imaper thisSessionImapFolder;
 /*
     // Called when starting the application.

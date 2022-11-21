@@ -370,12 +370,13 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
 
             case R.id.about:
                 String about = getString(R.string.license) + "\n";
+                about += "Name: " + BuildConfig.APPLICATION_ID + "\n";
                 about += "Version: " + BuildConfig.VERSION_NAME + "\n";
                 about += "Code: " + BuildConfig.VERSION_CODE + "\n";
                 about += "Build typ: " + BuildConfig.BUILD_TYPE + "\n";
                 about += getString(R.string.internet) + "\n";
                 new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.about) + " ImapNotes2")
+                        .setTitle(getString(R.string.about) + " " + BuildConfig.APPLICATION_NAME)
                         .setMessage(about)
                         .setPositiveButton("OK", (dialog, which) -> {
                             // Do nothing
