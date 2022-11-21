@@ -24,9 +24,9 @@ still tested, it should work with others.
 Main changes V5
 
 - runs und android studio 2021
+- HTML Editor
+- color support
 - sdk version 33
-- load libs during compile time
-- switch no maven
 - notes from posteo.de and gmail.com are working again
 
 Main changes are:
