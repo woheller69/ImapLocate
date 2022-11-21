@@ -40,6 +40,7 @@ import com.Pau.ImapNotes2.Miscs.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -371,7 +372,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                 results.values = list;
                 results.count = list.size();
             } else {
-                String prefixString = prefix.toString().toLowerCase();
+                String prefixString = prefix.toString().toLowerCase(Locale.getDefault());
 
                 ArrayList<Map<String, ?>> unfilteredValues = mUnfilteredData;
                 int count = unfilteredValues.size();
@@ -387,7 +388,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                         for (int j = 0; j < len; j++) {
                             String str = (String) h.get(mFrom[j]);
 
-                            if (str.toLowerCase().contains(prefixString)) {
+                            if (str.toLowerCase(Locale.getDefault()).contains(prefixString)) {
                                 newValues.add(h);
                                 break;
                             }

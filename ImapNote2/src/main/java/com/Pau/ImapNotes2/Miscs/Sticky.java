@@ -12,6 +12,7 @@ import com.Pau.ImapNotes2.Data.OneNote;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,7 +122,7 @@ public class Sticky {
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(session);
 
-        String body = "BEGIN:STICKYNOTE\nCOLOR:" + note.GetBgColor().toUpperCase() + "\nTEXT:" + noteBody +
+        String body = "BEGIN:STICKYNOTE\nCOLOR:" + note.GetBgColor().toUpperCase(Locale.ROOT) + "\nTEXT:" + noteBody +
                 "\nPOSITION:0 0 0 0\nEND:STICKYNOTE";
         message.setText(body);
         message.setHeader("Content-Transfer-Encoding", "8bit");
@@ -184,7 +185,7 @@ public class Sticky {
     private static String getColor(@NonNull String stringres) {
         Matcher matcherColor = patternColor.matcher(stringres);
         if (matcherColor.find()) {
-            String colorName = matcherColor.group(1).toLowerCase();
+            String colorName = matcherColor.group(1).toLowerCase(Locale.ROOT);
             return ((colorName.isEmpty()) || colorName.equals("null")) ? "none" : colorName;
         } else {
             return "none";

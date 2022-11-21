@@ -11,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -164,7 +165,7 @@ public class HtmlNote {
         String bodyStyle = doc.select("body").attr("style");
         Matcher matcherColor = patternBodyBgColor.matcher(bodyStyle);
         if (matcherColor.find()) {
-            String colorName = matcherColor.group(1).toLowerCase();
+            String colorName = matcherColor.group(1).toLowerCase(Locale.ROOT);
             return ((colorName.isEmpty()) || colorName.equals("null") || colorName.equals("transparent")) ? "none" : colorName;
         } else {
             return "none";

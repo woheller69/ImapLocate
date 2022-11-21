@@ -39,7 +39,6 @@
     <string name="notes_folder_optional">Ordner für Notizen (optional)</string>
     <string name="manually_set_full_imap_path_to_notes_folder">Ordner für Notizen auf dem IMAP-Server</string>
     <string name="use_sticky_notes">Sticky-Notizen benutzen</string>
-    <string name="select_account">Konto wählen</string>
     <string name="refreshing_notes_list">Abgleich der Notizenliste</string>
     <string name="updating_notes_list">Aktualisieren der Notizenliste</string>
     <string name="editAccount">Konto bearbeiten</string>
