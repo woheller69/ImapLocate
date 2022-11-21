@@ -13,7 +13,7 @@ import com.Pau.ImapNotes2.Data.Db;
 import com.Pau.ImapNotes2.Data.OneNote;
 import com.Pau.ImapNotes2.Data.Security;
 import com.Pau.ImapNotes2.Miscs.HtmlNote;
-import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
+import com.Pau.ImapNotes2.Miscs.ImapNotesResult;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Sticky;
 import com.sun.mail.imap.AppendUID;
@@ -63,14 +63,14 @@ public class SyncUtils {
     private static Long UIDValidity;
 
     @NonNull
-    static ImapNotes2Result ConnectToRemote(@NonNull String username,
+    static ImapNotesResult ConnectToRemote(@NonNull String username,
                                             @NonNull String password,
                                             @NonNull String server,
                                             String portnum,
                                             @NonNull Security security,
                                             @NonNull String folderOverride) {
         Log.d(TAG, "ConnectToRemote: " + username);
-        //final ImapNotes2Result res = new ImapNotes2Result();
+        //final ImapNotesResult res = new ImapNotesResult();
         if (IsConnected()) {
             try {
                 store.close();
@@ -88,7 +88,7 @@ public class SyncUtils {
             sf = new MailSSLSocketFactory();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
-            return new ImapNotes2Result(Imaper.ResultCodeCantConnect,
+            return new ImapNotesResult(Imaper.ResultCodeCantConnect,
                     "Can't connect to server: " + e.getMessage(),
                     -1,
                     null);
@@ -155,7 +155,7 @@ public class SyncUtils {
             // Get UIDValidity
             notesFolder = store.getFolder(sfolder);
 //            store.close();
-            return new ImapNotes2Result(Imaper.ResultCodeSuccess,
+            return new ImapNotesResult(Imaper.ResultCodeSuccess,
                     "",
                     ((IMAPFolder) notesFolder).getUIDValidity(),
                     notesFolder);
@@ -166,7 +166,7 @@ public class SyncUtils {
             //return res;
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
-            return new ImapNotes2Result(Imaper.ResultCodeException,
+            return new ImapNotesResult(Imaper.ResultCodeException,
                     e.getMessage(),
                     -1,
                     null);

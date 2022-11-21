@@ -15,10 +15,10 @@ import android.util.Log;
 
 import com.Pau.ImapNotes2.Data.ConfigurationFieldNames;
 import com.Pau.ImapNotes2.Data.Db;
-import com.Pau.ImapNotes2.Data.ImapNotes2Account;
+import com.Pau.ImapNotes2.Data.ImapNotesAccount;
 import com.Pau.ImapNotes2.Data.Security;
 import com.Pau.ImapNotes2.Listactivity;
-import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
+import com.Pau.ImapNotes2.Miscs.ImapNotesResult;
 import com.sun.mail.imap.AppendUID;
 
 import java.io.File;
@@ -45,7 +45,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     private Db storedNotes;
     // TODO: Why was this static?
     //private Account account;
-    private ImapNotes2Account account;
+    private ImapNotesAccount account;
 
 // --Commented out by Inspection START (11/26/16 11:49 PM):
 //    /// See RFC 3501: http://www.faqs.org/rfcs/rfc3501.html
@@ -95,7 +95,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "Beginning network synchronization of account: " + accountArg.name);
         // TODO: should the account be static?  Should it be local?  If static then why do we not
         // provide it in the constructor?  What happens if we allow parallel syncs?
-        account = new ImapNotes2Account(accountArg, applicationContext);
+        account = new ImapNotesAccount(accountArg, applicationContext);
 
         //SyncUtils.CreateLocalDirectories(accountArg.name, applicationContext);
         account.CreateLocalDirectories();
@@ -107,7 +107,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         //String syncInterval = account.GetSyncinterval();
 
         // Connect to remote and get UIDValidity
-        ImapNotes2Result res = ConnectToRemote();
+        ImapNotesResult res = ConnectToRemote();
         if (res.returnCode != ResultCodeSuccess) {
             storedNotes.CloseDb();
             NotifySyncFinished(false, false);
@@ -197,10 +197,10 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     the caller becomes responsible.  This is the correct approach.
      */
     @NonNull
-    private ImapNotes2Result ConnectToRemote() {
+    private ImapNotesResult ConnectToRemote() {
         Log.d(TAG, "ConnectToRemote");
         AccountManager am = AccountManager.get(applicationContext);
-        ImapNotes2Result res = SyncUtils.ConnectToRemote(
+        ImapNotesResult res = SyncUtils.ConnectToRemote(
                 account.username,
                 //am.getUserData(account.GetAccount(), ConfigurationFieldNames.UserName),
                 am.getPassword(account.GetAccount()),

@@ -27,7 +27,7 @@ public class Imaper {
 
 
     @NonNull
-    public ImapNotes2Result ConnectToProvider(String username,
+    public ImapNotesResult ConnectToProvider(String username,
                                               String password,
                                               String server,
                                               String portnum,
@@ -41,7 +41,7 @@ public class Imaper {
             sf = new MailSSLSocketFactory();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
-            return new ImapNotes2Result(-1,
+            return new ImapNotesResult(-1,
                     "Can't connect to server",
                     -1,
                     null);
@@ -89,14 +89,14 @@ public class Imaper {
         try {
             store.connect(server, username, password);
 
-            return new ImapNotes2Result(ResultCodeSuccess,
+            return new ImapNotesResult(ResultCodeSuccess,
                     "",
                     -1,
                     null);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, e.getMessage());
-            return new ImapNotes2Result(ResultCodeException,
+            return new ImapNotesResult(ResultCodeException,
                     e.getMessage(),
                     -1,
                     null);

@@ -10,7 +10,7 @@ import android.text.Html;
 import android.util.Log;
 
 import com.Pau.ImapNotes2.Data.Db;
-import com.Pau.ImapNotes2.Data.ImapNotes2Account;
+import com.Pau.ImapNotes2.Data.ImapNotesAccount;
 import com.Pau.ImapNotes2.Data.OneNote;
 import com.Pau.ImapNotes2.Listactivity;
 import com.Pau.ImapNotes2.NotesListAdapter;
@@ -39,7 +39,7 @@ import javax.mail.internet.MimeMultipart;
 // TODO: move arguments from execute to constructor.
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private static final String TAG = "IN_UpdateThread";
-    private final ImapNotes2Account imapNotes2Account;
+    private final ImapNotesAccount ImapNotesAccount;
     private final @StringRes
     int resId;
     private final NotesListAdapter adapter;
@@ -56,7 +56,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     Assign all fields in the constructor because we never reuse this object.  This makes the code
     typesafe.  Make them final to prevent accidental reuse.
     */
-    public UpdateThread(ImapNotes2Account imapNotes2Account,
+    public UpdateThread(ImapNotesAccount ImapNotesAccount,
                         ArrayList<OneNote> noteList,
                         NotesListAdapter listToView,
                         @StringRes int resId,
@@ -67,7 +67,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         Action action,
                         Db storedNotes) {
         Log.d(TAG, "UpdateThread: " + noteBody);
-        this.imapNotes2Account = imapNotes2Account;
+        this.ImapNotesAccount = ImapNotesAccount;
         this.notesList = noteList;
         this.adapter = listToView;
         this.resId = resId;
@@ -93,14 +93,14 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 if (index >= 0) notesList.remove(index);
                 MoveMailToDeleted(suid);
                 storedNotes.OpenDb();
-                storedNotes.notes.DeleteANote(suid, Listactivity.imapNotes2Account.accountName);
+                storedNotes.notes.DeleteANote(suid, Listactivity.ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 bool_to_return = true;
             }
 
             // Do we have a note to add?
             if ((action == Action.Insert) || (action == Action.Update)) {
-//Log.d(TAG,"Sticky ? "+((ImapNotes2Account)stuffs[1]).GetUsesticky());
+//Log.d(TAG,"Sticky ? "+((ImapNotesAccount)stuffs[1]).GetUsesticky());
                 Log.d(TAG, "Action Insert/Update:" + suid);
                 String oldSuid = suid;
                 Log.d(TAG, "Received request to add new message: " + noteBody + "===");
@@ -108,7 +108,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String[] tok = Html.fromHtml(noteBody, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
                 String title = tok[0];
                 //String position = "0 0 0 0";
-                String body = (imapNotes2Account.usesticky) ?
+                String body = (ImapNotesAccount.usesticky) ?
                         noteBody.replaceAll("\n", "\\\\n") : noteBody;
 
                 //"<html><head></head><body>" + noteBody + "</body></html>";
@@ -121,19 +121,19 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Add note to database
                 if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
                 storedNotes.OpenDb();
-                suid = storedNotes.notes.GetTempNumber(Listactivity.imapNotes2Account.accountName);
+                suid = storedNotes.notes.GetTempNumber(Listactivity.ImapNotesAccount.accountName);
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: " + body);
                 WriteMailToNew(currentNote,
-                        imapNotes2Account.usesticky,
+                        ImapNotesAccount.usesticky,
                         body);
                 if (action == Action.Update) {
                     MoveMailToDeleted(oldSuid);
-                    storedNotes.notes.DeleteANote(oldSuid, Listactivity.imapNotes2Account.accountName);
+                    storedNotes.notes.DeleteANote(oldSuid, Listactivity.ImapNotesAccount.accountName);
                 }
-                storedNotes.notes.InsertANoteInDb(currentNote, Listactivity.imapNotes2Account.accountName);
+                storedNotes.notes.InsertANoteInDb(currentNote, Listactivity.ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
@@ -173,7 +173,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
      */
     private void MoveMailToDeleted(@NonNull String suid) {
         String directory = applicationContextRef.get().getFilesDir() + "/" +
-                Listactivity.imapNotes2Account.accountName;
+                Listactivity.ImapNotesAccount.accountName;
         // TODO: Explain why we need to omit the first character of the UID
         File from = new File(directory, suid);
         if (!from.exists()) {
@@ -247,9 +247,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
         File accountDirectory = new File(applicationContextRef.get().getFilesDir(),
-                Listactivity.imapNotes2Account.accountName);
+                Listactivity.ImapNotesAccount.accountName);
         File directory = new File(accountDirectory, "new");
-        message.setFrom(new InternetAddress(Listactivity.imapNotes2Account.accountName));
+        message.setFrom(new InternetAddress(Listactivity.ImapNotesAccount.accountName));
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);

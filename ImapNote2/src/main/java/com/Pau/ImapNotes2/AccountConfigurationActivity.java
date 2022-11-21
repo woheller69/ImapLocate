@@ -35,9 +35,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.Pau.ImapNotes2.Data.ConfigurationFieldNames;
-import com.Pau.ImapNotes2.Data.ImapNotes2Account;
+import com.Pau.ImapNotes2.Data.ImapNotesAccount;
 import com.Pau.ImapNotes2.Data.Security;
-import com.Pau.ImapNotes2.Miscs.ImapNotes2Result;
+import com.Pau.ImapNotes2.Miscs.ImapNotesResult;
 import com.Pau.ImapNotes2.Miscs.Imaper;
 import com.Pau.ImapNotes2.Miscs.Result;
 import com.Pau.ImapNotes2.Miscs.Notifier;
@@ -262,7 +262,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         // Spinner item selection Listener
         securitySpinner.setOnItemSelectedListener(this);
         securitySpinner.setSelection(Security.SSL_TLS.ordinal());
-        //imapNotes2Account = new ImapNotes2Account();
+        //ImapNotesAccount = new ImapNotesAccount();
         imapFolder = ((ImapNotes2) getApplicationContext()).GetImaper();
         //settings = new ConfigurationFile();
 
@@ -368,7 +368,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     // DoLogin method is defined in account_selection.xml (account_selection layout)
     private void DoLogin() {
         Log.d(TAG, "DoLogin");
-        final ImapNotes2Account imapNotes2Account = new ImapNotes2Account(
+        final ImapNotesAccount ImapNotesAccount = new ImapNotesAccount(
                 GetTextViewText(accountnameTextView),
                 GetTextViewText(usernameTextView),
                 GetTextViewText(passwordTextView),
@@ -386,7 +386,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         if (synchronizationInterval.succeeded) {
 */
         new LoginThread(
-                imapNotes2Account,
+                ImapNotesAccount,
                 this,
                 action).execute();
         //  }
@@ -440,16 +440,16 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
     class LoginThread extends AsyncTask<Void, Void, Result<String>> {
 
-        private final ImapNotes2Account imapNotes2Account;
+        private final ImapNotesAccount ImapNotesAccount;
 
         private final AccountConfigurationActivity accountConfigurationActivity;
 
         private final Actions action;
 
-        LoginThread(ImapNotes2Account imapNotes2Account,
+        LoginThread(ImapNotesAccount ImapNotesAccount,
                     AccountConfigurationActivity accountConfigurationActivity,
                     Actions action) {
-            this.imapNotes2Account = imapNotes2Account;
+            this.ImapNotesAccount = ImapNotesAccount;
             this.accountConfigurationActivity = accountConfigurationActivity;
             this.action = action;
             Notifier.Show(R.string.logging_in, accountConfigurationActivity, 1);
@@ -473,12 +473,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         protected Result<String> doInBackground(Void... none) {
             Log.d(TAG, "doInBackground");
             try {
-                ImapNotes2Result res = imapFolder.ConnectToProvider(
-                        imapNotes2Account.username,
-                        imapNotes2Account.password,
-                        imapNotes2Account.server,
-                        imapNotes2Account.portnum,
-                        imapNotes2Account.security
+                ImapNotesResult res = imapFolder.ConnectToProvider(
+                        ImapNotesAccount.username,
+                        ImapNotesAccount.password,
+                        ImapNotesAccount.server,
+                        ImapNotesAccount.portnum,
+                        ImapNotesAccount.security
                 );
                 //accountConfigurationActivity = accountConfigurationActivity;
                 if (res.returnCode != Imaper.ResultCodeSuccess) {
@@ -486,7 +486,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     return new Result<>("IMAP operation failed: " + res.errorMessage, false);
                 }
                 // TODO: Find out if "com.Pau.ImapNotes2" is the same as getApplicationContext().getPackageName(). -YES
-                final Account account = new Account(imapNotes2Account.accountName, Utilities.PackageName);
+                final Account account = new Account(ImapNotesAccount.accountName, Utilities.PackageName);
                 final AccountManager am = AccountManager.get(accountConfigurationActivity);
                 accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);
                 if (action == Actions.EDIT_ACCOUNT) {
@@ -498,10 +498,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     // Run the Sync Adapter Periodically
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), imapNotes2Account.syncInterval);
+                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
                     return new Result<>("Account has been modified", true);
                 } else {
-                    if (!am.addAccountExplicitly(account, imapNotes2Account.password, null)) {
+                    if (!am.addAccountExplicitly(account, ImapNotesAccount.password, null)) {
                         return new Result<>(getString(R.string.account_already_exists_or_is_null), false);
                     }
                     // TODO: make function for these repeated lines.
@@ -513,7 +513,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     // Run the Sync Adapter Periodically
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), imapNotes2Account.syncInterval);
+                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
                     Log.d(TAG, "doInBackground End");
                     return new Result<>(getString(R.string.account_added), true);
                 }
@@ -528,13 +528,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
         private void setUserData(@NonNull AccountManager am,
                                  @NonNull Account account) {
-            am.setUserData(account, ConfigurationFieldNames.UserName, imapNotes2Account.username);
-            am.setUserData(account, ConfigurationFieldNames.Server, imapNotes2Account.server);
-            am.setUserData(account, ConfigurationFieldNames.PortNumber, imapNotes2Account.portnum);
-            am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(imapNotes2Account.syncInterval));
-            am.setUserData(account, ConfigurationFieldNames.Security, imapNotes2Account.security.name());
-            am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(imapNotes2Account.usesticky));
-            am.setUserData(account, ConfigurationFieldNames.ImapFolder, imapNotes2Account.imapfolder);
+            am.setUserData(account, ConfigurationFieldNames.UserName, ImapNotesAccount.username);
+            am.setUserData(account, ConfigurationFieldNames.Server, ImapNotesAccount.server);
+            am.setUserData(account, ConfigurationFieldNames.PortNumber, ImapNotesAccount.portnum);
+            am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(ImapNotesAccount.syncInterval));
+            am.setUserData(account, ConfigurationFieldNames.Security, ImapNotesAccount.security.name());
+            am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(ImapNotesAccount.usesticky));
+            am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.imapfolder);
         }
 
         protected void onPostExecute(@NonNull Result<String> result) {

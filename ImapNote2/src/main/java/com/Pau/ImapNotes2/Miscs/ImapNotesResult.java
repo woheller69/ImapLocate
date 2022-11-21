@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import javax.mail.Folder;
 
-public class ImapNotes2Result {
+public class ImapNotesResult {
 
     public final int returnCode;
     @NonNull
@@ -14,7 +14,7 @@ public class ImapNotes2Result {
     @Nullable
     public final Folder notesFolder;
 
-    public ImapNotes2Result(int returnCode,
+    public ImapNotesResult(int returnCode,
                             String errorMessage,
                             long UIDValidity,
                             Folder notesFolder) {
@@ -25,7 +25,7 @@ public class ImapNotes2Result {
     }
 
 /*
-    public ImapNotes2Result() {
+    public ImapNotesResult() {
         returnCode = -1;
         errorMessage = "";
         UIDValidity = (long) -1;

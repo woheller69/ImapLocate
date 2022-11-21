@@ -78,7 +78,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 suid = hm.get("uid").toString();
                 if (Integer.parseInt(suid) > 0) {
                     File rootDir = new File(getApplicationContext().getFilesDir(),
-                            Listactivity.imapNotes2Account.accountName);
+                            Listactivity.ImapNotesAccount.accountName);
                     Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
                     //Log.d(TAG, "rootDir is null: " + (rootDir == null));
                     Log.d(TAG, "rootDir: " + rootDir);
@@ -482,7 +482,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {
 //        String directory = getApplicationContext().getFilesDir() + "/" +
-//                Listactivity.imapNotes2Account.accountName;
+//                Listactivity.ImapNotesAccount.accountName;
 //        try {
 //            File outfile = new File(directory, suid);
 //            OutputStream str = new FileOutputStream(outfile);

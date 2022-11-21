@@ -14,9 +14,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class ImapNotes2Account {
+public class ImapNotesAccount {
 
-    private static final String TAG = "IN_ImapNotes2Account";
+    private static final String TAG = "IN_ImapNotesAccount";
     @NonNull
     public final String accountName;
     @NonNull
@@ -39,7 +39,7 @@ public class ImapNotes2Account {
     private File dirForDeletedFiles;
     private File rootDir;
 
-    public ImapNotes2Account(@NonNull String accountName,
+    public ImapNotesAccount(@NonNull String accountName,
                              @NonNull String username,
                              @NonNull String password,
                              @NonNull String server,
@@ -60,7 +60,7 @@ public class ImapNotes2Account {
         this.syncInterval = syncInterval;
     }
 
-    public ImapNotes2Account(@NonNull Account account,
+    public ImapNotesAccount(@NonNull Account account,
                              @NonNull Context applicationContext) {
         this.accountName = account.name;
         rootDir = new File(applicationContext.getFilesDir(), accountName);

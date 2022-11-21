@@ -20,7 +20,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     // --Commented out by Inspection (11/26/16 11:48 PM):boolean bool_to_return;
 // --Commented out by Inspection START (11/26/16 11:48 PM):
 //    @NonNull
-//    ImapNotes2Result res = new ImapNotes2Result();
+//    ImapNotesResult res = new ImapNotesResult();
 // --Commented out by Inspection STOP (11/26/16 11:48 PM)
     private static final String TAG = "SyncThread";
     private final @StringRes
@@ -41,7 +41,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
                       @Nullable Db storedNotes,
                       Context applicationContext) {
         //this.imapFolder = imapFolder;
-        //this.imapNotes2Account = imapNotes2Account;
+        //this.ImapNotesAccount = ImapNotesAccount;
         this.notesList = noteList;
         this.adapter = listToView;
         this.resId = resId;
@@ -67,16 +67,16 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
         this.storedNotes = ((NotesDb) stuffs[5]);
         this.ctx = (Context) stuffs[6];
  */
-        //username = ((ImapNotes2Account) stuffs[1]).GetUsername();
-        //password = ((ImapNotes2Account) stuffs[1]).GetPassword();
-        //server = ((ImapNotes2Account) stuffs[1]).GetServer();
-        //portnum = ((ImapNotes2Account) stuffs[1]).GetPortnum();
-        //security = ((ImapNotes2Account) stuffs[1]).GetSecurity();
-        //usesticky = ((ImapNotes2Account) stuffs[1]).GetUsesticky();
+        //username = ((ImapNotesAccount) stuffs[1]).GetUsername();
+        //password = ((ImapNotesAccount) stuffs[1]).GetPassword();
+        //server = ((ImapNotesAccount) stuffs[1]).GetServer();
+        //portnum = ((ImapNotesAccount) stuffs[1]).GetPortnum();
+        //security = ((ImapNotesAccount) stuffs[1]).GetSecurity();
+        //usesticky = ((ImapNotesAccount) stuffs[1]).GetUsesticky();
 
 
         storedNotes.OpenDb();
-        storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.imapNotes2Account.accountName, Listactivity.sortOrder);
+        storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.ImapNotesAccount.accountName, Listactivity.sortOrder);
         storedNotes.CloseDb();
         return true;
     }
