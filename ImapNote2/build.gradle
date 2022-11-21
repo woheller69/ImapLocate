@@ -61,6 +61,11 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
+
 }
 
 dependencies {
