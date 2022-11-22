@@ -9,7 +9,7 @@ import androidx.annotation.StringRes;
 
 import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.OneNote;
-import de.niendo.ImapNotes3.Listactivity;
+import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.NotesListAdapter;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
 
 
         storedNotes.OpenDb();
-        storedNotes.notes.GetStoredNotes(this.notesList, Listactivity.ImapNotesAccount.accountName, Listactivity.sortOrder);
+        storedNotes.notes.GetStoredNotes(this.notesList, ListActivity.ImapNotesAccount.accountName, ListActivity.sortOrder);
         storedNotes.CloseDb();
         return true;
     }

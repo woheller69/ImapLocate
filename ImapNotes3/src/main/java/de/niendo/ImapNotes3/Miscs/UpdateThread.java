@@ -12,7 +12,7 @@ import android.util.Log;
 import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.OneNote;
-import de.niendo.ImapNotes3.Listactivity;
+import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.NotesListAdapter;
 
 import java.io.File;
@@ -93,7 +93,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 if (index >= 0) notesList.remove(index);
                 MoveMailToDeleted(suid);
                 storedNotes.OpenDb();
-                storedNotes.notes.DeleteANote(suid, Listactivity.ImapNotesAccount.accountName);
+                storedNotes.notes.DeleteANote(suid, ListActivity.ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 bool_to_return = true;
             }
@@ -121,7 +121,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Add note to database
                 if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
                 storedNotes.OpenDb();
-                suid = storedNotes.notes.GetTempNumber(Listactivity.ImapNotesAccount.accountName);
+                suid = storedNotes.notes.GetTempNumber(ListActivity.ImapNotesAccount.accountName);
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
@@ -131,9 +131,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         body);
                 if (action == Action.Update) {
                     MoveMailToDeleted(oldSuid);
-                    storedNotes.notes.DeleteANote(oldSuid, Listactivity.ImapNotesAccount.accountName);
+                    storedNotes.notes.DeleteANote(oldSuid, ListActivity.ImapNotesAccount.accountName);
                 }
-                storedNotes.notes.InsertANoteInDb(currentNote, Listactivity.ImapNotesAccount.accountName);
+                storedNotes.notes.InsertANoteInDb(currentNote, ListActivity.ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
@@ -173,7 +173,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
      */
     private void MoveMailToDeleted(@NonNull String suid) {
         String directory = applicationContextRef.get().getFilesDir() + "/" +
-                Listactivity.ImapNotesAccount.accountName;
+                ListActivity.ImapNotesAccount.accountName;
         // TODO: Explain why we need to omit the first character of the UID
         File from = new File(directory, suid);
         if (!from.exists()) {
@@ -247,9 +247,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
         File accountDirectory = new File(applicationContextRef.get().getFilesDir(),
-                Listactivity.ImapNotesAccount.accountName);
+                ListActivity.ImapNotesAccount.accountName);
         File directory = new File(accountDirectory, "new");
-        message.setFrom(new InternetAddress(Listactivity.ImapNotesAccount.accountName));
+        message.setFrom(new InternetAddress(ListActivity.ImapNotesAccount.accountName));
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);

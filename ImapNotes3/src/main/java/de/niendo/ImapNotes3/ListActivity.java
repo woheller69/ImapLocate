@@ -59,7 +59,7 @@ import java.util.ListIterator;
 import static de.niendo.ImapNotes3.AccountConfigurationActivity.ACTION;
 
 
-public class Listactivity extends AppCompatActivity implements OnItemSelectedListener, Filterable {
+public class ListActivity extends AppCompatActivity implements OnItemSelectedListener, Filterable {
     private static final int SEE_DETAIL = 2;
     public static final int DELETE_BUTTON = 3;
     private static final int NEW_BUTTON = 4;
@@ -111,7 +111,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         String mClass = ".AccountConfigurationActivity";
         res.setComponent(new ComponentName(mPackage, mPackage + mClass));
         res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
-        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, Listactivity.ImapNotesAccount.accountName);
+        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
         startActivity(res);
     };
     private static final String TAG = "IN_Listactivity";
@@ -125,8 +125,8 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
             boolean isChanged = intent.getBooleanExtra(CHANGED, false);
             boolean isSynced = intent.getBooleanExtra(SYNCED, false);
             String syncInterval = String.valueOf(intent.getIntExtra(SYNCINTERVAL, 14));
-            Log.d(TAG, "if " + accountName + " " + Listactivity.ImapNotesAccount.accountName);
-            if (accountName.equals(Listactivity.ImapNotesAccount.accountName)) {
+            Log.d(TAG, "if " + accountName + " " + ListActivity.ImapNotesAccount.accountName);
+            if (accountName.equals(ListActivity.ImapNotesAccount.accountName)) {
                 String statusText;
                 if (isSynced) {
                     // Display last sync date
@@ -167,7 +167,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
     private static void TriggerSync(@NonNull TextView statusField) {
         OldStatus = statusField.getText().toString();
         statusField.setText(R.string.syncing);
-        Account mAccount = Listactivity.ImapNotesAccount.GetAccount();
+        Account mAccount = ListActivity.ImapNotesAccount.GetAccount();
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -191,19 +191,19 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
 
         this.accountSpinner = findViewById(R.id.accountSpinner);
-        Listactivity.currentList = new ArrayList<>();
+        ListActivity.currentList = new ArrayList<>();
 
         this.accountSpinner.setOnItemSelectedListener(this);
 
         //ImapNotesAccount = new ImapNotesAccount();
-        Listactivity.accountManager = AccountManager.get(getApplicationContext());
-        Listactivity.accountManager.addOnAccountsUpdatedListener(
+        ListActivity.accountManager = AccountManager.get(getApplicationContext());
+        ListActivity.accountManager.addOnAccountsUpdatedListener(
                 new AccountsUpdateListener(), null, true);
 
         status = findViewById(R.id.status);
 
         spinnerList = new ArrayAdapter<>
-                (this, R.layout.account_spinner_item, Listactivity.currentList);
+                (this, R.layout.account_spinner_item, ListActivity.currentList);
         accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
@@ -223,7 +223,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         Imaper imapFolder = new Imaper();
         ((ImapNotes3) this.getApplicationContext()).SetImaper(imapFolder);
 
-        if (Listactivity.storedNotes == null)
+        if (ListActivity.storedNotes == null)
             storedNotes = new Db(getApplicationContext());
 
         // When item is clicked, we go to NoteDetailActivity
@@ -231,7 +231,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
             Log.d(TAG, "onItemClick");
             Intent toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
             toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
-            toDetail.putExtra(NoteDetailActivity.useSticky, Listactivity.ImapNotesAccount.usesticky);
+            toDetail.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
             toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
             startActivityForResult(toDetail, SEE_DETAIL);
             Log.d(TAG, "onItemClick, back from detail.");
@@ -277,16 +277,16 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                             String noteBody,
                             String bgColor,
                             UpdateThread.Action action) {
-            new UpdateThread(Listactivity.ImapNotesAccount,
-                    noteList,
-                    listToView,
-                    R.string.updating_notes_list,
-                    suid,
-                    noteBody,
-                    bgColor,
-                    getApplicationContext(),
-                    action,
-                    storedNotes).execute();
+        new UpdateThread(ListActivity.ImapNotesAccount,
+                noteList,
+                listToView,
+                R.string.updating_notes_list,
+                suid,
+                noteBody,
+                bgColor,
+                getApplicationContext(),
+                action,
+                storedNotes).execute();
     }
 
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
@@ -327,7 +327,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                 String mClass = ".AccountConfigurationActivity";
                 res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
-                res.putExtra(ACCOUNTNAME, Listactivity.ImapNotesAccount.accountName);
+                res.putExtra(ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
                 startActivity(res);
                 return true;
             case R.id.refresh:
@@ -336,19 +336,19 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                 return true;
             case R.id.newnote:
                 Intent toNew = new Intent(this, NoteDetailActivity.class);
-                toNew.putExtra(NoteDetailActivity.useSticky, Listactivity.ImapNotesAccount.usesticky);
+                toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
                 toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-                startActivityForResult(toNew, Listactivity.NEW_BUTTON);
+                startActivityForResult(toNew, ListActivity.NEW_BUTTON);
                 return true;
             case R.id.sort_date: {
-                Listactivity.sortOrder = OneNote.DATE + " DESC";
+                ListActivity.sortOrder = OneNote.DATE + " DESC";
                 sortingChanged = true;
                 item.setChecked(true);
                 TriggerSync(status);
                 return true;
             }
             case R.id.sort_title: {
-                Listactivity.sortOrder = OneNote.TITLE + " ASC";
+                ListActivity.sortOrder = OneNote.TITLE + " ASC";
                 item.setChecked(true);
                 sortingChanged = true;
                 TriggerSync(status);
@@ -359,7 +359,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                 return true;
             }
             case R.id.sort_color: {
-                Listactivity.sortOrder = OneNote.BGCOLOR + " ASC";
+                ListActivity.sortOrder = OneNote.BGCOLOR + " ASC";
                 sortingChanged = true;
                 item.setChecked(true);
                 TriggerSync(status);
@@ -390,15 +390,15 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode);
         switch (requestCode) {
-            case Listactivity.SEE_DETAIL:
+            case ListActivity.SEE_DETAIL:
                 // Returning from NoteDetailActivity
-                if (resultCode == Listactivity.DELETE_BUTTON) {
+                if (resultCode == ListActivity.DELETE_BUTTON) {
                     // Delete Message asked for
                     // String suid will contain the Message Imap UID to delete
                     String suid = data.getStringExtra(DELETE_ITEM_NUM_IMAP);
                     this.UpdateList(suid, null, null, UpdateThread.Action.Delete);
                 }
-                if (resultCode == Listactivity.EDIT_BUTTON) {
+                if (resultCode == ListActivity.EDIT_BUTTON) {
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
@@ -409,9 +409,9 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                     TriggerSync(status);
                 }
                 break;
-            case Listactivity.NEW_BUTTON:
+            case ListActivity.NEW_BUTTON:
                 // Returning from NewNoteActivity
-                if (resultCode == Listactivity.EDIT_BUTTON) {
+                if (resultCode == ListActivity.EDIT_BUTTON) {
                     //String res = data.getStringExtra(SAVE_ITEM);
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
@@ -420,12 +420,12 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                     TriggerSync(status);
                 }
                 break;
-            case Listactivity.ADD_ACCOUNT:
+            case ListActivity.ADD_ACCOUNT:
                 Log.d(TAG, "onActivityResult AccountsUpdateListener");
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 if (resultCode == ResultCodeSuccess) {
                     EnableAccountsUpdate = true;
-                    Listactivity.accountManager.addOnAccountsUpdatedListener(
+                    ListActivity.accountManager.addOnAccountsUpdatedListener(
                             new AccountsUpdateListener(), null, true);
                 }
                 break;
@@ -437,7 +437,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
     // Spinner item selected listener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Account account = Listactivity.accounts[pos];
+        Account account = ListActivity.accounts[pos];
         // Check periodic sync. If set to 86400 (once a day), set it to 900 (15 minutes)
         // this is due to bad upgrade to v4 which handles offline mode and syncing
         // Remove this code after V4.0 if version no more used
@@ -453,7 +453,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
             }
         }
 
-        Listactivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
+        ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
         this.RefreshList();
     }
 
@@ -471,17 +471,17 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
             this.accountSpinner.setSelection(0);
         }
 
-        if (Listactivity.currentList.size() == 1) {
-            Account account = Listactivity.accounts[0];
-            Listactivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
-/*            ImapNotesAccount.SetUsername(Listactivity.accountManager.getUserData(account, ConfigurationFieldNames.UserName));
-            String pwd = Listactivity.accountManager.getPassword(account);
+        if (ListActivity.currentList.size() == 1) {
+            Account account = ListActivity.accounts[0];
+            ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
+/*            ImapNotesAccount.SetUsername(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.UserName));
+            String pwd = ListActivity.accountManager.getPassword(account);
             ImapNotesAccount.SetPassword(pwd);
-            ImapNotesAccount.SetServer(Listactivity.accountManager.getUserData(account, ConfigurationFieldNames.Server));
-            ImapNotesAccount.SetPortnum(Listactivity.accountManager.getUserData(account, ConfigurationFieldNames.PortNumber));
-            ImapNotesAccount.SetSecurity(Listactivity.accountManager.getUserData(account, ConfigurationFieldNames.Security));
+            ImapNotesAccount.SetServer(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.Server));
+            ImapNotesAccount.SetPortnum(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.PortNumber));
+            ImapNotesAccount.SetSecurity(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.Security));
             ImapNotesAccount.SetUsesticky("true".equals(accountManager.getUserData(account, ConfigurationFieldNames.UseSticky)));
-            ImapNotesAccount.SetSyncinterval(Listactivity.accountManager.getUserData(account, ConfigurationFieldNames.SyncInterval));
+            ImapNotesAccount.SetSyncinterval(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.SyncInterval));
             //ImapNotesAccount.SetaccountHasChanged();
  */
         }
@@ -549,15 +549,15 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                     ImapNotesAccounts[i] = account;
                     i++;
                 }
-                Listactivity.accounts = ImapNotesAccounts;
+                ListActivity.accounts = ImapNotesAccounts;
                 newList = new ArrayList<>();
-                for (Account account : Listactivity.accounts) {
+                for (Account account : ListActivity.accounts) {
                     newList.add(account.name);
                 }
                 if (newList.size() == 0) return;
 
                 boolean equalLists = true;
-                ListIterator<String> iter = Listactivity.currentList.listIterator();
+                ListIterator<String> iter = ListActivity.currentList.listIterator();
                 while (iter.hasNext()) {
                     String s = iter.next();
                     if (!(newList.contains(s))) {
@@ -574,8 +574,8 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                     }
                 }
                 for (String accountName : newList) {
-                    if (!(Listactivity.currentList.contains(accountName))) {
-                        Listactivity.currentList.add(accountName);
+                    if (!(ListActivity.currentList.contains(accountName))) {
+                        ListActivity.currentList.add(accountName);
                         SyncUtils.CreateLocalDirectories(accountName, getApplicationContext());
 
                         equalLists = false;
@@ -588,7 +588,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                 if (EnableAccountsUpdate) {
                     File filesDir = ImapNotes3.ConfigurationDir(getApplicationContext());
                     EnableAccountsUpdate = false;
-                    Listactivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
+                    ListActivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
                     try {
                         FileUtils.cleanDirectory(filesDir);
                     } catch (IOException e) {
@@ -600,7 +600,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
                     String mClass = ".AccountConfigurationActivity";
                     res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                     // Hack! accountManager.addOnAccountsUpdatedListener
-                    startActivityForResult(res, Listactivity.ADD_ACCOUNT);
+                    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 }
             }
         }

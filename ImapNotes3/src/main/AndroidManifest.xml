@@ -23,7 +23,7 @@
         android:theme="@style/ImapNotesTheme">
 
         <activity
-            android:name=".Listactivity"
+            android:name=".ListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTop">
@@ -44,21 +44,21 @@
         <activity
             android:name=".AccountConfigurationActivity"
             android:exported="true"
-            android:parentActivityName="de.niendo.ImapNotes3.Listactivity">
+            android:parentActivityName="de.niendo.ImapNotes3.ListActivity">
             <!-- What is this meta-data for?  There doesn't seem to be any code that uses it -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.niendo.ImapNotes3.Listactivity" />
+                android:value="de.niendo.ImapNotes3.ListActivity" />
         </activity>
 
         <activity
             android:name=".NoteDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName="de.niendo.ImapNotes3.Listactivity">
+            android:parentActivityName="de.niendo.ImapNotes3.ListActivity">
             <!-- What is this meta-data for?  There doesn't seem to be any code that uses it -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.niendo.ImapNotes3.Listactivity" />
+                android:value="de.niendo.ImapNotes3.ListActivity" />
         </activity>
 
         <service

@@ -46,8 +46,6 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 
 import java.util.List;
 
-import javax.mail.MessagingException;
-
 
 public class AccountConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener {
     /**
@@ -549,10 +547,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             if (result.succeeded) {
                 accountConfigurationActivity.Clear();
                 // Hack! accountManager.addOnAccountsUpdatedListener
-                setResult(Listactivity.ResultCodeSuccess);
+                setResult(ListActivity.ResultCodeSuccess);
             } else {
                 // Hack! accountManager.addOnAccountsUpdatedListener
-                setResult(Listactivity.ResultCodeError);
+                setResult(ListActivity.ResultCodeError);
             }
             Notifier.Show(result.result, getApplicationContext(), 5);
             if (action == Actions.EDIT_ACCOUNT) {

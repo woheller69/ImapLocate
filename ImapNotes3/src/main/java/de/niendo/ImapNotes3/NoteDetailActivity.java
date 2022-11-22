@@ -78,7 +78,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 suid = hm.get("uid").toString();
                 if (Integer.parseInt(suid) > 0) {
                     File rootDir = new File(getApplicationContext().getFilesDir(),
-                            Listactivity.ImapNotesAccount.accountName);
+                            ListActivity.ImapNotesAccount.accountName);
                     Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
                     //Log.d(TAG, "rootDir is null: " + (rootDir == null));
                     Log.d(TAG, "rootDir: " + rootDir);
@@ -401,7 +401,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
                             //Log.d(TAG,"We ask to delete Message #"+this.currentNote.get("number"));
                             intent.putExtra("DELETE_ITEM_NUM_IMAP", suid);
-                            setResult(Listactivity.DELETE_BUTTON, intent);
+                            setResult(ListActivity.DELETE_BUTTON, intent);
                             finish();//finishing activity
                         })
                         .setNegativeButton(R.string.no, null).show();
@@ -466,11 +466,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void Save() {
         Log.d(TAG, "Save");
         Intent intent = new Intent();
-        intent.putExtra(Listactivity.EDIT_ITEM_NUM_IMAP, suid);
+        intent.putExtra(ListActivity.EDIT_ITEM_NUM_IMAP, suid);
         Log.d(TAG, "Save html: " + ((RichEditor) findViewById(R.id.bodyView)).getHtml());
-        intent.putExtra(Listactivity.EDIT_ITEM_TXT,
+        intent.putExtra(ListActivity.EDIT_ITEM_TXT,
                 ((RichEditor) findViewById(R.id.bodyView)).getHtml());
-        intent.putExtra(Listactivity.EDIT_ITEM_COLOR, bgColor);
+        intent.putExtra(ListActivity.EDIT_ITEM_COLOR, bgColor);
         setResult(NoteDetailActivity.EDIT_BUTTON, intent);
         finish();//finishing activity
 
@@ -482,7 +482,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {
 //        String directory = getApplicationContext().getFilesDir() + "/" +
-//                Listactivity.ImapNotesAccount.accountName;
+//                ListActivity.ImapNotesAccount.accountName;
 //        try {
 //            File outfile = new File(directory, suid);
 //            OutputStream str = new FileOutputStream(outfile);

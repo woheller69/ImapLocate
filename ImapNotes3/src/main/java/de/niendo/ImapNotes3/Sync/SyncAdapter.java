@@ -17,7 +17,7 @@ import de.niendo.ImapNotes3.Data.ConfigurationFieldNames;
 import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.Security;
-import de.niendo.ImapNotes3.Listactivity;
+import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
 
 import com.sun.mail.imap.AppendUID;
@@ -140,7 +140,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 e.printStackTrace();
             }
             SyncUtils.SetUIDValidity(accountArg, res.UIDValidity, applicationContext);
-            // Notify Listactivity that it's finished, and that it can refresh display
+            // Notify ListActivity that it's finished, and that it can refresh display
             NotifySyncFinished(true, true);
             return;
         }
@@ -176,7 +176,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Disconnect from remote
         SyncUtils.DisconnectFromRemote();
         //Log.d(TAG, "Network synchronization complete of account: "+account.name);
-        // Notify Listactivity that it's finished, and that it can refresh display
+        // Notify ListActivity that it's finished, and that it can refresh display
         NotifySyncFinished(isChanged, true);
     }
 
@@ -184,10 +184,10 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                                     boolean isSynced) {
         Log.d(TAG, "NotifySyncFinished: " + isChanged + " " + isSynced);
         Intent i = new Intent(SyncService.SYNC_FINISHED);
-        i.putExtra(Listactivity.ACCOUNTNAME, account.accountName);
-        i.putExtra(Listactivity.CHANGED, isChanged);
-        i.putExtra(Listactivity.SYNCED, isSynced);
-        i.putExtra(Listactivity.SYNCINTERVAL, account.syncInterval);
+        i.putExtra(ListActivity.ACCOUNTNAME, account.accountName);
+        i.putExtra(ListActivity.CHANGED, isChanged);
+        i.putExtra(ListActivity.SYNCED, isSynced);
+        i.putExtra(ListActivity.SYNCINTERVAL, account.syncInterval);
         applicationContext.sendBroadcast(i);
 
     }
