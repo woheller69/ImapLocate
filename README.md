@@ -1,10 +1,7 @@
-imapnote2
+ImapNote3
 =========
 
-This project is cherry picked from the following projects:
-* https://github.com/nbenm/ImapNote2
-* https://github.com/N0ury/ImapNote2
-* and maybe others...
+This project is a clone from https://github.com/nbenm/ImapNote2.
 
 Sync your notes between Android, iOs devices and different accounts like Gmail, iCloud and others
 
@@ -21,7 +18,7 @@ server that respects Apple method. It has been tested with Gmail, iCloud (imap.m
 Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com), posteo.de and of course my server. Even if not
 still tested, it should work with others.
 
-Main changes V5
+Main changes ImapNote3 are:
 
 - runs und android studio 2021
 - HTML Editor
@@ -29,7 +26,7 @@ Main changes V5
 - sdk version 33
 - notes from posteo.de and gmail.com are working again
 
-Main changes are:
+Main changes ImapNote2 are :
 
 - app can be used with other servers, not only gmail
 - it's possible to open notes
