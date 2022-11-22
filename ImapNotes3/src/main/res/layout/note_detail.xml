@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This is the layout where you edit the text of a note. -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical">
+
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/bodyView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/EditorMenuBgColor"
+        android:gravity="bottom">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/action_undo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                    android:background="@color/EditorMenuBgColor"
+                    android:contentDescription="@string/undo"
+                    android:src="@drawable/undo" />
+
+                <ImageButton
+                    android:id="@+id/action_redo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@color/EditorMenuBgColor"
+                    android:contentDescription="@string/redo"
+                    android:src="@drawable/redo" />
+
+                <de.niendo.ImapNotes3.Miscs.NDSpinner
+                    android:id="@+id/action_format"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/EditorMenuBgColor"
+                    android:contentDescription="@string/format"
+                    android:minHeight="48dp"
+                    android:title="@string/format" />
+
+            <de.niendo.ImapNotes3.Miscs.NDSpinner
+                android:id="@+id/action_insert"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/EditorMenuBgColor"
+                android:contentDescription="@string/insert"
+                android:minHeight="48dp"
+                android:title="@string/insert" />
+
+            <de.niendo.ImapNotes3.Miscs.NDSpinner
+                android:id="@+id/action_heading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/EditorMenuBgColor"
+                android:contentDescription="@string/heading"
+                android:minHeight="48dp"
+                android:title="@string/heading" />
+
+            <de.niendo.ImapNotes3.Miscs.NDSpinner
+                android:id="@+id/action_alignment"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/EditorMenuBgColor"
+                android:contentDescription="@string/alignment"
+                android:minHeight="48dp"
+                android:title="@string/alignment" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+</RelativeLayout>
