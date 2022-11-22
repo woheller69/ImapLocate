@@ -5,9 +5,9 @@
     <color name="white">#FFFFFFCC</color>
     <color name="yellow">#808037</color>
     <color name="pink">#4C2540</color>
-    <color name="green">#5C653A</color>
+    <color name="green">#597147</color>
     <color name="brown">#6D4A2F</color>
-    <color name="grey">#363636</color>
+    <color name="grey">#696969</color>
     <color name="black">#14150E</color>
     <color name="red">#713631</color>
     <color name="none">@color/black</color>
