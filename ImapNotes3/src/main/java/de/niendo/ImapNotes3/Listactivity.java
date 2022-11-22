@@ -203,9 +203,7 @@ public class Listactivity extends AppCompatActivity implements OnItemSelectedLis
         status = findViewById(R.id.status);
 
         spinnerList = new ArrayAdapter<>
-                (this, android.R.layout.simple_spinner_item, Listactivity.currentList);
-        spinnerList.setDropDownViewResource
-                (android.R.layout.simple_spinner_dropdown_item);
+                (this, R.layout.account_spinner_item, Listactivity.currentList);
         accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();

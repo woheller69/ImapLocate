@@ -17,7 +17,6 @@
         <item name="colorAccent">@color/ActionTxtColor</item>
         <item name="android:background">@color/ActionBgColor</item>
         <item name="actionMenuTextColor">@color/ActionTxtColor</item -->
-        <item name="android:spinnerDropDownItemStyle">@style/MySpinnerDropDownItemStyle</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
@@ -29,11 +28,6 @@
 
     <style name="MyActionBar.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/ActionTxtColor</item>
-    </style>
-
-    <style name="MySpinnerDropDownItemStyle" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:textColor">@color/AccountTxtColor</item>
-        <item name="android:colorBackground">@color/AccountBgColor</item>
     </style>
 
 </resources>

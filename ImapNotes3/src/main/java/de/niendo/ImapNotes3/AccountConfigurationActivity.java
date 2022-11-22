@@ -257,9 +257,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         */
         List<String> list = Security.Printables();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
-                (this, android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource
-                (android.R.layout.simple_spinner_dropdown_item);
+                (this, R.layout.ssl_spinner_item, list);
         securitySpinner.setAdapter(dataAdapter);
         // Spinner item selection Listener
         securitySpinner.setOnItemSelectedListener(this);
