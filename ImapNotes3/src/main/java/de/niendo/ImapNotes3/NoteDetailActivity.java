@@ -366,10 +366,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
     private void ResetColors() {
-        RichEditor bodyView = findViewById(R.id.bodyView);
-        bodyView.setEditorBackgroundColor(Utilities.getColorIdByName(bgColor));
-        bodyView.setEditorFontColor(getColor(R.color.EditorTxtColor));
-
+        editText.setEditorBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
+        editText.setEditorFontColor(getColor(R.color.EditorTxtColor));
         (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
         //invalidateOptionsMenu();
     }
