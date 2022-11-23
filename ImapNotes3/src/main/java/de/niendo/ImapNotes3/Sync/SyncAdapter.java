@@ -41,6 +41,7 @@ import static de.niendo.ImapNotes3.Miscs.Imaper.ResultCodeSuccess;
 /// of the application.
 class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SyncAdapter";
+    private static final int THREAD_ID = 0xF00C;
     @NonNull
     private final Context applicationContext;
     private Db storedNotes;
@@ -208,7 +209,9 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.Server),
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
                 Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
-                account.imapfolder);
+                account.imapfolder,
+                THREAD_ID
+        );
         if (res.returnCode != ResultCodeSuccess) {
             // TODO: Notify the user?
             Log.d(TAG, "Connection problem: " + res.errorMessage);

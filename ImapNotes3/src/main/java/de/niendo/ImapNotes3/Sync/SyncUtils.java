@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.net.TrafficStats;
 import android.util.Log;
 
 import de.niendo.ImapNotes3.Data.Db;
@@ -62,12 +63,17 @@ public class SyncUtils {
 
     @NonNull
     static ImapNotesResult ConnectToRemote(@NonNull String username,
-                                            @NonNull String password,
-                                            @NonNull String server,
-                                            String portnum,
-                                            @NonNull Security security,
-                                            @NonNull String folderOverride) {
+                                           @NonNull String password,
+                                           @NonNull String server,
+                                           String portnum,
+                                           @NonNull Security security,
+                                           @NonNull String folderOverride,
+                                           int threadID
+    ) {
         Log.d(TAG, "ConnectToRemote: " + username);
+
+        TrafficStats.setThreadStatsTag(threadID);
+
         //final ImapNotesResult res = new ImapNotesResult();
         if (IsConnected()) {
             try {

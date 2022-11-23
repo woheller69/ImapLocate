@@ -30,11 +30,13 @@ public class Imaper {
 
     @NonNull
     public ImapNotesResult ConnectToProvider(String username,
-                                              String password,
-                                              String server,
-                                              String portnum,
-                                              @NonNull Security security) throws MessagingException {
+                                             String password,
+                                             String server,
+                                             String portnum,
+                                             @NonNull Security security,
+                                             int threadID) throws MessagingException {
 
+        TrafficStats.setThreadStatsTag(threadID);
 
         if (IsConnected()) {
             this.close();

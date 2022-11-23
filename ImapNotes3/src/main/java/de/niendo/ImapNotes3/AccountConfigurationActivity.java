@@ -471,13 +471,14 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         protected Result<String> doInBackground(Void... none) {
             Log.d(TAG, "doInBackground");
             try {
-                TrafficStats.setThreadStatsTag(THREAD_ID);
+
                 ImapNotesResult res = imapFolder.ConnectToProvider(
                         ImapNotesAccount.username,
                         ImapNotesAccount.password,
                         ImapNotesAccount.server,
                         ImapNotesAccount.portnum,
-                        ImapNotesAccount.security
+                        ImapNotesAccount.security,
+                        THREAD_ID
                 );
                 //accountConfigurationActivity = accountConfigurationActivity;
                 if (res.returnCode != Imaper.ResultCodeSuccess) {
