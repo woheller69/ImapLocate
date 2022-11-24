@@ -134,8 +134,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     //        android.text.format.DateFormat.getDateFormat(getApplicationContext());
                     Date date = new Date();
                     String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
-                    String sinterval = " (interval:" + syncInterval + " min)";
-                    statusText = "Last sync: " + sdate + sinterval;
+                    statusText = getText(R.string.Last_sync) + sdate + " (" + syncInterval + " " + getText(R.string.minuten_short) + ")";
                 } else {
                     statusText = OldStatus;
                 }

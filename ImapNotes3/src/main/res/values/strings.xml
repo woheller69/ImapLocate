@@ -67,7 +67,9 @@
     <string name="no">No</string>
     <string name="sort_color">Sort by Color</string>
     <string name="license">License: GPL v3.0</string>
-    <string name="internet">Internet: github.com/niendo1/ImapNote2/</string>
+    <string name="internet">Internet: github.com/niendo1/ImapNotes3/</string>
     <string name="placeholder">Insert text here…</string>
     <string name="AccountList">AccountList</string>
+    <string name="Last_sync">"Last sync: "</string>
+    <string name="minuten_short">min</string>
 </resources>
