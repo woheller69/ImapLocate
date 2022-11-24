@@ -72,4 +72,6 @@
     <string name="AccountList">AccountList</string>
     <string name="Last_sync">"Last sync: "</string>
     <string name="minuten_short">min</string>
+    <string name="share">Share</string>
+    <string name="shared_note_from">"Shared note from "</string>
 </resources>

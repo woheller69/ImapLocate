@@ -71,4 +71,6 @@
     <string name="AccountList">Kontoliste</string>
     <string name="Last_sync">"Letzter Abgl.: "</string>
     <string name="minuten_short">min</string>
+    <string name="share">Teilen</string>
+    <string name="shared_note_from">"geteilte Notiz von "</string>
 </resources>

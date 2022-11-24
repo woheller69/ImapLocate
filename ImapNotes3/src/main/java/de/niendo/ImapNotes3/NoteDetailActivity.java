@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -407,6 +408,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             case R.id.save:
                 Save();
                 return true;
+            case R.id.share:
+                Share();
+                return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
@@ -465,17 +469,27 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         Log.d(TAG, "Save");
         Intent intent = new Intent();
         intent.putExtra(ListActivity.EDIT_ITEM_NUM_IMAP, suid);
-        Log.d(TAG, "Save html: " + ((RichEditor) findViewById(R.id.bodyView)).getHtml());
-        intent.putExtra(ListActivity.EDIT_ITEM_TXT,
-                ((RichEditor) findViewById(R.id.bodyView)).getHtml());
+        Log.d(TAG, "Save html: " + editText.getHtml());
+        intent.putExtra(ListActivity.EDIT_ITEM_TXT, editText.getHtml());
         intent.putExtra(ListActivity.EDIT_ITEM_COLOR, bgColor);
         setResult(NoteDetailActivity.EDIT_BUTTON, intent);
         finish();//finishing activity
-
     }
 
+    private void Share() {
+        Log.d(TAG, "Share");
+        Intent sendIntent = new Intent();
+        String html = Html.fromHtml(editText.getHtml(), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString();
+        String[] tok = html.split("\n", 2);
+        String title = tok[0];
 
-
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, html);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + title);
+        sendIntent.setType("text/html");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
 
 // --Commented out by Inspection START (12/2/16 8:50 PM):
 //    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {
