@@ -47,11 +47,11 @@
     <item name="action_insert_exclamation" type="id" />
     <item name="action_insert_question" type="id" />
     <item name="action_insert_hline" type="id" />
-    <item name="action_font_size_06" type="id" />
-    <item name="action_font_size_08" type="id" />
-    <item name="action_font_size_10" type="id" />
-    <item name="action_font_size_12" type="id" />
-    <item name="action_font_size_16" type="id" />
-    <item name="action_font_size_20" type="id" />
-    <item name="action_font_size_24" type="id" />
+    <item name="action_font_size_1" type="id" />
+    <item name="action_font_size_2" type="id" />
+    <item name="action_font_size_3" type="id" />
+    <item name="action_font_size_4" type="id" />
+    <item name="action_font_size_5" type="id" />
+    <item name="action_font_size_6" type="id" />
+    <item name="action_font_size_7" type="id" />
 </resources>

@@ -246,32 +246,32 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
             case R.id.action_font_size:
                 switch (position) {
                     case 0:
-                        row.setId(R.id.action_font_size_06);
-                        icon.setImageResource(R.drawable.font_size_06);
+                        row.setId(R.id.action_font_size_1);
+                        icon.setImageResource(R.drawable.font_size_1);
                         break;
                     case 1:
-                        row.setId(R.id.action_font_size_08);
-                        icon.setImageResource(R.drawable.font_size_08);
+                        row.setId(R.id.action_font_size_2);
+                        icon.setImageResource(R.drawable.font_size_2);
                         break;
                     case 2:
-                        row.setId(R.id.action_font_size_10);
-                        icon.setImageResource(R.drawable.font_size_10);
+                        row.setId(R.id.action_font_size_3);
+                        icon.setImageResource(R.drawable.font_size_3);
                         break;
                     case 3:
-                        row.setId(R.id.action_font_size_12);
-                        icon.setImageResource(R.drawable.font_size_12);
+                        row.setId(R.id.action_font_size_4);
+                        icon.setImageResource(R.drawable.font_size_4);
                         break;
                     case 4:
-                        row.setId(R.id.action_font_size_16);
-                        icon.setImageResource(R.drawable.font_size_16);
+                        row.setId(R.id.action_font_size_5);
+                        icon.setImageResource(R.drawable.font_size_5);
                         break;
                     case 5:
-                        row.setId(R.id.action_font_size_20);
-                        icon.setImageResource(R.drawable.font_size_20);
+                        row.setId(R.id.action_font_size_6);
+                        icon.setImageResource(R.drawable.font_size_6);
                         break;
                     case 6:
-                        row.setId(R.id.action_font_size_24);
-                        icon.setImageResource(R.drawable.font_size_24);
+                        row.setId(R.id.action_font_size_7);
+                        icon.setImageResource(R.drawable.font_size_7);
                         break;
                 }
                 break;

@@ -3,6 +3,7 @@ package de.niendo.ImapNotes3;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 
 import android.util.Log;
 import android.view.Menu;
@@ -288,8 +290,13 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 storedNotes).execute();
     }
 
+
+    @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.list, menu);
+
+        MenuBuilder m = (MenuBuilder) menu;
+        m.setOptionalIconsVisible(true);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =

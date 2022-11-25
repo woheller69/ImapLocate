@@ -19,7 +19,7 @@
     <color name="ListInfoTxtColor">#C7C49E</color>
 
     <color name="StatusBgColor">#FFFFAE</color>
-    <color name="StatusTxtColor">#3C490D</color>
+    <color name="StatusTxtColor">#C7C49E</color>
 
     <color name="AccountBgColor">#FFFFAE</color>
     <color name="AccountTxtColor">#3C490D</color>

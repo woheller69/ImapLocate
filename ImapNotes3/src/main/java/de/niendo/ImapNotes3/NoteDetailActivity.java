@@ -1,14 +1,18 @@
 package de.niendo.ImapNotes3;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.NavUtils;
 
 import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -281,25 +285,25 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             case R.id.action_bg_color_blue:
                 editText.setTextBackgroundColor(Utilities.getColorByName("html_Blue", getApplicationContext()));
                 break;
-            case R.id.action_font_size_06:
+            case R.id.action_font_size_1:
                 editText.setFontSize(1);
                 break;
-            case R.id.action_font_size_08:
+            case R.id.action_font_size_2:
                 editText.setFontSize(2);
                 break;
-            case R.id.action_font_size_10:
+            case R.id.action_font_size_3:
                 editText.setFontSize(3);
                 break;
-            case R.id.action_font_size_12:
+            case R.id.action_font_size_4:
                 editText.setFontSize(4);
                 break;
-            case R.id.action_font_size_16:
+            case R.id.action_font_size_5:
                 editText.setFontSize(5);
                 break;
-            case R.id.action_font_size_20:
+            case R.id.action_font_size_6:
                 editText.setFontSize(6);
                 break;
-            case R.id.action_font_size_24:
+            case R.id.action_font_size_7:
                 editText.setFontSize(7);
                 break;
             case R.id.action_indent:
@@ -373,8 +377,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         //invalidateOptionsMenu();
     }
 
+    @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
+        MenuBuilder m = (MenuBuilder) menu;
+        m.setOptionalIconsVisible(true);
         return true;
     }
 
@@ -479,15 +486,16 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void Share() {
         Log.d(TAG, "Share");
         Intent sendIntent = new Intent();
-        String html = Html.fromHtml(editText.getHtml(), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString();
-        String[] tok = html.split("\n", 2);
-        String title = tok[0];
+        Spanned html = Html.fromHtml(editText.getHtml(), Html.FROM_HTML_MODE_COMPACT);
+        String[] tok = html.toString().split("\n", 2);
+        String title = getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + tok[0];
 
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, html);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + title);
         sendIntent.setType("text/html");
-        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, html);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+
+        Intent shareIntent = Intent.createChooser(sendIntent, title);
         startActivity(shareIntent);
     }
 
