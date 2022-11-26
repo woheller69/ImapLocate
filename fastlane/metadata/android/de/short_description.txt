@@ -1,0 +1,1 @@
+Anzeigen, Barbeiten und Synchronisieren von HTML-Notizen über IMAP-Server

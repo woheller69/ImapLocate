@@ -1,14 +1,12 @@
-This app allows to sync notes between an Android device and an IMAP server in
-an apple way. ie the way iPhone notes are synced with an IMAP server. All other
-devices that sync with the server, will then be synced with the Android device.
+This app allows to view, edit and syncronise HTML notes between Android devices and IMAP servers.
 
 <ul>
     <li>app can be used with other servers (Gmail, Yahoo, AOL, Posteo and your server)</li>
     <li>HTML editor with lots of features</li>
     <li>light and dark mode support</li>
     <li>color support for notes</li>
+    <li>share your notes</li>
     <li>app can handle sticky notes used by Kerio Connect servers</li>
-    <li>imap port number can be choosen</li>
     <li>security can be plain text, SSL/TLS or STARTTLS</li>
     <li>multiple accounts can be used. Android account manager is used</li>
     <li>works offline and sync is done in the background</li>
