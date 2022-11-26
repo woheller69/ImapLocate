@@ -309,6 +309,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             @Override
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
+                accountSpinner.setEnabled(newText.isEmpty());
                 listToView.getFilter().filter(newText);
                 return true;
             }
@@ -320,6 +321,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 return true;
             }
         };
+        // restore List and Filter after closing search
+        searchView.setOnCloseListener(() -> {
+            this.listToView.ResetFilterData(noteList);
+            return true;
+        });
+
         searchView.setOnQueryTextListener(textChangeListener);
 
         return true;
@@ -458,7 +465,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         2);
             }
         }
-
+        listToView.ResetFilterData(noteList);
         ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
         this.RefreshList();
     }

@@ -103,6 +103,14 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    /**
+     * After Closing the filter, reset all filter data
+     */
+    public void ResetFilterData(List<? extends Map<String, ?>> mData) {
+        mFilter = null;
+        mUnfilteredData = null;
+        this.mData = mData;
+    }
 
     /**
      * @see android.widget.Adapter#getCount()
