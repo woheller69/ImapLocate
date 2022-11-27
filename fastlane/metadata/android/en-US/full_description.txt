@@ -1,14 +1,13 @@
-This app allows to view, edit and syncronise HTML notes between Android devices and IMAP servers.
+This app allows to view, edit and synchronise HTML notes between Android devices and IMAP servers.
 
-<ul>
-    <li>app can be used with other servers (Gmail, Yahoo, AOL, Posteo and your server)</li>
-    <li>HTML editor with lots of features</li>
-    <li>light and dark mode support</li>
-    <li>color support for notes</li>
-    <li>share your notes</li>
-    <li>app can handle sticky notes used by Kerio Connect servers</li>
-    <li>security can be plain text, SSL/TLS or STARTTLS</li>
-    <li>multiple accounts can be used. Android account manager is used</li>
-    <li>works offline and sync is done in the background</li>
-    <li>no permissions are needed by the app</li>
-</ul>
+* be used with other servers (Gmail, Yahoo, AOL, Posteo and your server)
+* HTML editor with lots of features
+* light and dark mode support
+* color support for notes
+* share your notes
+* app can handle sticky notes used by Kerio Connect servers
+* security can be plain text, SSL/TLS or STARTTLS
+* multiple IMAP accounts can be managed
+* works offline and sync is done in the background
+* no permissions are needed by the app
+

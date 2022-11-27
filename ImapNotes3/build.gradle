@@ -18,10 +18,10 @@ android {
         applicationId "de.niendo.ImapNotes3"
         minSdkVersion 26
         signingConfig signingConfigs.release
+        buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
     }
     buildTypes {
         release {
-            buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
             signingConfig signingConfigs.release
 
             // Enables code shrinking, obfuscation, and optimization for only
@@ -41,7 +41,6 @@ android {
 
         }
         debug {
-            buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
             signingConfig signingConfigs.release
         }
     }
