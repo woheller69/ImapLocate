@@ -51,6 +51,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private String suid;
     private boolean bool_to_return;
     private Db storedNotes;
+    private OneNote currentNote;
+    private int indexToDelete;
 
     /*
     Assign all fields in the constructor because we never reuse this object.  This makes the code
@@ -77,6 +79,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.applicationContextRef = new WeakReference<>(context);
         this.action = action;
         this.storedNotes = storedNotes;
+        currentNote = null;
+        indexToDelete = -1;
         //Notifier.Show(resId, applicationContext, 1);
     }
 
@@ -89,8 +93,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //Log.d(TAG,"Received request to delete message #"+suid);
                 // Here we delete the note from the local notes list
                 //Log.d(TAG,"Delete note in Listview");
-                int index = getIndexByNumber(suid);
-                if (index >= 0) notesList.remove(index);
+                indexToDelete = getIndexByNumber(suid);
                 MoveMailToDeleted(suid);
                 storedNotes.OpenDb();
                 storedNotes.notes.DeleteANote(suid, ListActivity.ImapNotesAccount.accountName);
@@ -117,19 +120,20 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
                 String stringDate = sdf.format(date);
-                OneNote currentNote = new OneNote(title, stringDate, "", bgColor);
+                currentNote = new OneNote(title, stringDate, "", bgColor);
                 // Add note to database
                 if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
                 storedNotes.OpenDb();
-                suid = storedNotes.notes.GetTempNumber(ListActivity.ImapNotesAccount.accountName);
+                if (!suid.startsWith("-")) {
+                    // no temp. suid in use
+                    suid = storedNotes.notes.GetTempNumber(ListActivity.ImapNotesAccount.accountName);
+                }
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: " + body);
-                WriteMailToNew(currentNote,
-                        ImapNotesAccount.usesticky,
-                        body);
-                if (action == Action.Update) {
+                WriteMailToNew(currentNote, ImapNotesAccount.usesticky, body);
+                if ((action == Action.Update) && (!suid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
                     storedNotes.notes.DeleteANote(oldSuid, ListActivity.ImapNotesAccount.accountName);
                 }
@@ -139,24 +143,24 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
-                int index = getIndexByNumber(oldSuid);
-                if ((action == Action.Update) && (index >= 0)) notesList.remove(index);
-                notesList.add(0, currentNote);
-                return true;
+                indexToDelete = getIndexByNumber(oldSuid);
+                bool_to_return = true;
             }
 
         } catch (Exception e) {
             Log.d(TAG, "Action: " + action);
             e.printStackTrace();
-            return false;
+            bool_to_return = false;
         }
         return bool_to_return;
     }
 
     protected void onPostExecute(Boolean result) {
         if (result) {
-            if (bool_to_return) /* note added or removed */
-                adapter.notifyDataSetChanged();
+            if (bool_to_return) /* add or remove note */
+                if (indexToDelete >= 0) notesList.remove(indexToDelete);
+            if (!(currentNote == null)) notesList.add(0, currentNote);
+            adapter.notifyDataSetChanged();
         }
     }
 

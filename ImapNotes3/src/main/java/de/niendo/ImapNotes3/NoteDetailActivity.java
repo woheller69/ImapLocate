@@ -80,7 +80,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
             if (hm != null) {
                 suid = hm.get("uid").toString();
-                if (Integer.parseInt(suid) > 0) {
                     File rootDir = new File(getApplicationContext().getFilesDir(),
                             ListActivity.ImapNotesAccount.accountName);
                     Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
@@ -106,12 +105,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         finish();
                         return;
                     }
-                } else {
-                    // Entry can not opened..
-                    Notifier.Show(R.string.Waiting_for_sync, getApplicationContext(), 1);
-                    finish();
-                    return;
-                }
             } else { // Entry can not opened..
                 Notifier.Show(R.string.Invalid_Message, getApplicationContext(), 1);
                 finish();

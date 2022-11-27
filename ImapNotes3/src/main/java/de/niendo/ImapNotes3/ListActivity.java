@@ -430,7 +430,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
-                    this.UpdateList(null, txt, bgcolor, UpdateThread.Action.Insert);
+                    this.UpdateList("", txt, bgcolor, UpdateThread.Action.Insert);
                     TriggerSync(status);
                 }
                 break;

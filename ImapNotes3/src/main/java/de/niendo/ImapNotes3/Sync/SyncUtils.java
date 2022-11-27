@@ -368,13 +368,17 @@ public class SyncUtils {
     public static Message ReadMailFromFileRootAndNew(@NonNull String uid,
                                                      @NonNull File fileDir) {
         Log.d(TAG, "ReadMailFromFileRootAndNew: " + fileDir.getPath() + " " + uid);
-        //File mailFile;
-        //Message message = null;
+
+        // new or changed file
+        if (uid.startsWith("-")) {
+            uid = uid.substring(1);
+            fileDir = new File(fileDir, "new");
+        }
         File mailFile = new File(fileDir, uid);
 
         if (!mailFile.exists()) {
-            fileDir = new File(fileDir, "new");
-            uid = uid.substring(1);
+            Log.d(TAG, "ReadMailFromFileRootAndNew: file not found..");
+            return null;
         }
 
         return ReadMailFromFile(fileDir, uid);

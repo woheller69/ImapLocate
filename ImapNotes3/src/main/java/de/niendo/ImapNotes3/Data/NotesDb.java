@@ -112,7 +112,7 @@ public class NotesDb {
                                @NonNull String sortOrder) {
         noteList.clear();
         Date date = null;
-        try (Cursor resultPointer = db.notesDb.query(TABLE_NAME, null, "number >= 0 and accountname = ?",
+        try (Cursor resultPointer = db.notesDb.query(TABLE_NAME, null, "accountname = ?",
                 new String[]{accountName}, null, null, sortOrder)) {
 
             if (resultPointer.moveToFirst()) {
