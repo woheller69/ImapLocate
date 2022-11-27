@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="vector"
+    version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)" sodipodi:docname="font_size_3.svg">
+    <sodipodi:namedview bordercolor="#000000" borderopacity="0.25" id="namedview52909"
+        pagecolor="#ffffff" showgrid="false" inkscape:current-layer="vector" inkscape:cx="12"
+        inkscape:cy="12.050847" inkscape:deskcolor="#d1d1d1" inkscape:pagecheckerboard="0"
+        inkscape:pageopacity="0.0" inkscape:showpageshadow="2" inkscape:window-height="1117"
+        inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="0"
+        inkscape:window-y="0" inkscape:zoom="9.8333333" />
+    <defs id="defs5">
+        <linearGradient id="linearGradient543">
+            <stop style="stop-color:#000000;stop-opacity:1;" id="stop539" offset="0" />
+            <stop style="stop-color:#000000;stop-opacity:0;" id="stop541" offset="1" />
+        </linearGradient>
+        <linearGradient gradientUnits="userSpaceOnUse" id="linearGradient545" x1="1.3471173"
+            x2="4.4028583" y1="6.4886951" y2="12.960814" xlink:href="#linearGradient543" />
+    </defs>
+    <g style="font-size:15.7459px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';stroke-width:1.31216"
+        aria-label="3" id="text169" transform="scale(1.1231038,0.89038968)">
+        <path
+            d="m 16.5494,24.73014 q 1.401385,0 1.999729,-0.551106 0.61409,-0.551107 0.61409,-1.480115 0,-0.598344 -0.251934,-1.007738 -0.251934,-0.409393 -0.661328,-0.645581 -0.409393,-0.251935 -0.9605,-0.34641 -0.53536,-0.110222 -1.102213,-0.110222 H 15.809343 V 19.39228 h 0.519614 q 0.393648,0 0.803041,-0.07873 0.42514,-0.07873 0.771549,-0.283426 0.34641,-0.204696 0.566853,-0.551106 0.220442,-0.362156 0.220442,-0.897517 0,-0.440885 -0.157459,-0.755803 -0.157459,-0.314918 -0.425139,-0.519614 -0.251934,-0.204697 -0.598344,-0.283427 -0.330664,-0.09447 -0.708566,-0.09447 -0.755803,0 -1.291163,0.220443 -0.519615,0.220442 -0.881771,0.456631 l -0.566852,-1.117959 q 0.188951,-0.125967 0.472377,-0.267681 0.299172,-0.157459 0.661328,-0.283426 0.362155,-0.125967 0.771549,-0.204696 0.425139,-0.09448 0.88177,-0.09448 0.866025,0 1.495861,0.220443 0.629836,0.204696 1.039229,0.598344 0.409393,0.377902 0.61409,0.913262 0.204697,0.519615 0.204697,1.133705 0,0.850279 -0.488123,1.464369 -0.488123,0.598344 -1.180943,0.913262 0.42514,0.125967 0.818787,0.362156 0.393648,0.236188 0.677074,0.598344 0.299172,0.362156 0.472377,0.834533 0.188951,0.472377 0.188951,1.054975 0,0.708565 -0.251935,1.322655 -0.236188,0.598345 -0.755803,1.03923 -0.503869,0.440885 -1.275418,0.692819 -0.771549,0.251935 -1.826524,0.251935 -0.409394,0 -0.850279,-0.06298 -0.425139,-0.06298 -0.803041,-0.157459 -0.377901,-0.09448 -0.661327,-0.188951 -0.283427,-0.09448 -0.409394,-0.157459 l 0.283426,-1.275417 q 0.267681,0.125967 0.881771,0.330663 0.629836,0.204697 1.527352,0.204697 z"
+            id="path52911" />
+    </g>
+    <path style="fill:#000000"
+        d="M 2.3182981,21.301958 C 2.3899242,5.8059979 2.3899242,5.8059979 2.3899242,5.8059979"
+        id="path383" />
+    <path style="fill:#000000" d="M 4.1152964,19.755522 4.2596041,4.3675293 v 0" id="path387" />
+    <path style="fill:#000000" d="M 4.2596041,20.762779 6.4526603,14.722528 Z" id="path391" />
+    <path style="fill:url(#linearGradient545);fill-opacity:1"
+        d="m 9.581082,19.935907 c 0,0 -6.0756704,0.826872 -5.896602,-0.287693 0.1790685,-1.114566 2.912488,-3.092215 2.912488,-3.092215"
+        id="path393" />
+    <path style="fill:#000000" d="M 3.0724885,6.8125967 3.9720421,12.78109" id="path621" />
+    <path style="fill:#000000"
+        d="M 12.852758,12.133943 C 13.93138,6.4169361 13.93138,6.4169361 13.93138,6.4169361"
+        id="path623" />
+    <path style="fill:#000000" d="M 4.8705423,16.98721 5.01485,5.8415487 v 0" id="path2032" />
+    <path style="fill:#000000;stroke-width:1.13625"
+        d="M 5,5 V 19 H 3 l 3,4 3,-4 H 7 V 5 H 9 L 6,1 3,5 Z" id="path2036" />
+</svg>
