@@ -331,11 +331,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 editText.setNumbers();
                 break;
             case R.id.action_insert_image:
-                editText.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                        "dachshund");
+                editText.insertImage("image_url", "dachshund");
                 break;
             case R.id.action_insert_link:
-                editText.insertLink("https://github.com/wasabeef", "wasabeef");
+                editText.insertLink("link_url", "wasabeef");
                 break;
             case R.id.action_insert_checkbox:
                 editText.insertTodo();
