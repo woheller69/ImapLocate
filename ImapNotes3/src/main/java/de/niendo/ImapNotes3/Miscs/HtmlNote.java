@@ -128,7 +128,7 @@ public class HtmlNote {
             e.printStackTrace();
         }
         if (contentType.match("text/x-stickynote")) {
-            stringres = Sticky.ReadStickyNote(stringres).toString();
+            stringres = StickyNote.ReadStickyNote(stringres).toString();
 //        } else if (contentType.match("TEXT/HTML")) {
         } else if (contentType.match("TEXT/PLAIN")) {
             Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);

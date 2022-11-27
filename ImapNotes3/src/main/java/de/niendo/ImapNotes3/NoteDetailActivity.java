@@ -12,7 +12,6 @@ import androidx.core.app.NavUtils;
 
 import android.text.Html;
 import android.text.Spanned;
-import android.text.SpannedString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import de.niendo.ImapNotes3.Miscs.EditorMenuAdapter;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.NDSpinner;
-import de.niendo.ImapNotes3.Miscs.Sticky;
+import de.niendo.ImapNotes3.Miscs.StickyNote;
 import de.niendo.ImapNotes3.Miscs.Notifier;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
@@ -89,10 +88,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     Log.d(TAG, "rootDir: " + rootDir);
                     if (message != null) {
                         if (usesticky) {
-                            Sticky sticky = Sticky.GetStickyFromMessage(message);
-                            stringres = sticky.text;
+                            StickyNote stickyNote = StickyNote.GetStickyFromMessage(message);
+                            stringres = stickyNote.text;
                             //String position = sticky.position;
-                            bgColor = sticky.color;
+                            bgColor = stickyNote.color;
                         } else {
                             HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
                             stringres = htmlNote.text;

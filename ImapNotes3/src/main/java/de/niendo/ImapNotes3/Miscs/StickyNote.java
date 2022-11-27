@@ -23,7 +23,7 @@ import javax.mail.Session;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeMessage;
 
-public class Sticky {
+public class StickyNote {
     private static final String TAG = "IN_Sticky";
     private static final Pattern patternColor = Pattern.compile("^COLOR:(.*?)$", Pattern.MULTILINE);
     // --Commented out by Inspection (12/2/16 8:50 PM):private static final Pattern patternPosition = Pattern.compile("^POSITION:(.*?)$", Pattern.MULTILINE);
@@ -34,15 +34,15 @@ public class Sticky {
     @NonNull
     public final String color;
 
-    public Sticky(String text,
-                  @NonNull String color) {
+    public StickyNote(String text,
+                      @NonNull String color) {
         this.text = text;
         // this.position = position;
         this.color = color;
     }
 /*
     @Nullable
-    public static Sticky GetStickyFromMessage(@NonNull Message message) {
+    public static StickyNote GetStickyFromMessage(@NonNull Message message) {
         ContentType contentType = null;
         String stringres = "";
         //InputStream iis = null;
@@ -74,7 +74,7 @@ public class Sticky {
     }*/
 
     @Nullable
-    public static Sticky GetStickyFromMessage(@NonNull Message message) {
+    public static StickyNote GetStickyFromMessage(@NonNull Message message) {
         ContentType contentType = null;
         String stringres = "";
         //InputStream iis = null;
@@ -95,25 +95,25 @@ public class Sticky {
         }
 
         Log.d(TAG, "contentType:" + contentType);
-        Sticky sticky = null;
+        StickyNote stickyNote = null;
         if (contentType.match("text/x-stickynote")) {
-            sticky = Sticky.ReadStickyNote(stringres);
+            stickyNote = StickyNote.ReadStickyNote(stringres);
         } else if (contentType.match("TEXT/HTML")) {
-            sticky = ReadHtmlNote(stringres);
+            stickyNote = ReadHtmlNote(stringres);
         } else if (contentType.match("TEXT/PLAIN")) {
-            sticky = ReadPlainNote(stringres);
+            stickyNote = ReadPlainNote(stringres);
         } else if (contentType.match("multipart/related")) {
 // All next is a workaround
 // All function need to be rewritten to handle correctly multipart and images
             if (contentType.getParameter("type").equalsIgnoreCase("TEXT/HTML")) {
-                sticky = ReadHtmlNote(stringres);
+                stickyNote = ReadHtmlNote(stringres);
             } else if (contentType.getParameter("type").equalsIgnoreCase("TEXT/PLAIN")) {
-                sticky = ReadPlainNote(stringres);
+                stickyNote = ReadPlainNote(stringres);
             }
         } else if (contentType.getParameter("BOUNDARY") != null) {
-            sticky = ReadHtmlNote(stringres);
+            stickyNote = ReadHtmlNote(stringres);
         }
-        return sticky;
+        return stickyNote;
     }
 
     @NonNull
@@ -133,7 +133,7 @@ public class Sticky {
 
 
     @NonNull
-    private static Sticky ReadHtmlNote(String stringres) {
+    private static StickyNote ReadHtmlNote(String stringres) {
 //        Log.d(TAG,"From server (html):"+stringres);
         Spanned spanres = Html.fromHtml(stringres, Html.FROM_HTML_MODE_LEGACY);
         stringres = Html.toHtml(spanres, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
@@ -143,15 +143,15 @@ public class Sticky {
         stringres = stringres.replaceAll("<p dir=\"ltr\">", "<br>");
         stringres = stringres.replaceAll("</p>", "");
 
-        return new Sticky(stringres, "none");
+        return new StickyNote(stringres, "none");
     }
 
     @NonNull
-    private static Sticky ReadPlainNote(String stringres) {
+    private static StickyNote ReadPlainNote(String stringres) {
 //        Log.d(TAG,"From server (plain):"+stringres);
         stringres = stringres.replaceAll("\n", "<br>");
 
-        return new Sticky(stringres, "none");
+        return new StickyNote(stringres, "none");
     }
 
     // List the colours together with the ids of the option widgets used to select them and the
@@ -159,10 +159,10 @@ public class Sticky {
     // in switch statements, etc.
 
     @NonNull
-    public static Sticky ReadStickyNote(@NonNull String stringres) {
+    public static StickyNote ReadStickyNote(@NonNull String stringres) {
         Log.d(TAG, "ReadStickyNote");
 
-        return new Sticky(
+        return new StickyNote(
                 getText(stringres),
                 getColor(stringres));
     }
@@ -195,26 +195,26 @@ public class Sticky {
 
 /*
     public String GetPosition() {
-        return Sticky.position;
+        return StickyNote.position;
     }
 
     public String GetText() {
-        return Sticky.text;
+        return StickyNote.text;
     }
 
     public Colors GetColor() {
-        return Sticky.color;
+        return StickyNote.color;
     }
 
     public void SetText(String text) {
-        Sticky.text = text;
+        StickyNote.text = text;
     }
 
     public void SetPosition(String position) {
-        Sticky.position = position;
+        StickyNote.position = position;
     }
 
     public void SetColor(Colors color) {
-        Sticky.color = color;
+        StickyNote.color = color;
     }*/
 }

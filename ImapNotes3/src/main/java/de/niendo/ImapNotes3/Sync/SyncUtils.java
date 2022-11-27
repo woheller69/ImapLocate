@@ -16,7 +16,7 @@ import de.niendo.ImapNotes3.Data.Security;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
 import de.niendo.ImapNotes3.Miscs.Imaper;
-import de.niendo.ImapNotes3.Miscs.Sticky;
+import de.niendo.ImapNotes3.Miscs.StickyNote;
 
 import com.sun.mail.imap.AppendUID;
 import com.sun.mail.imap.IMAPFolder;
@@ -216,7 +216,7 @@ public class SyncUtils {
             String suid = UIDM.toString();
             String bgColor;
             if (useSticky) {
-                bgColor = Sticky.GetStickyFromMessage(notesMessage).color;
+                bgColor = StickyNote.GetStickyFromMessage(notesMessage).color;
             } else {
                 bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
             }
@@ -616,7 +616,7 @@ public class SyncUtils {
                 File outfile = new File(rootDir, suid);
                 String bgColor;
                 if (useSticky) {
-                    bgColor = Sticky.GetStickyFromMessage(notesMessage).color;
+                    bgColor = StickyNote.GetStickyFromMessage(notesMessage).color;
                 } else {
                     bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
                 }

@@ -100,7 +100,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
             // Do we have a note to add?
             if ((action == Action.Insert) || (action == Action.Update)) {
-//Log.d(TAG,"Sticky ? "+((ImapNotesAccount)stuffs[1]).GetUsesticky());
+//Log.d(TAG,"StickyNote ? "+((ImapNotesAccount)stuffs[1]).GetUsesticky());
                 Log.d(TAG, "Action Insert/Update:" + suid);
                 String oldSuid = suid;
                 Log.d(TAG, "Received request to add new message: " + noteBody + "===");
@@ -235,7 +235,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         //Log.d(TAG,"Add new note");
         Message message;
         if (useSticky) {
-            message = Sticky.GetMessageFromNote(note, noteBody);
+            message = StickyNote.GetMessageFromNote(note, noteBody);
         } else {
             message = HtmlNote.GetMessageFromNote(note, noteBody);
         }
