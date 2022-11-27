@@ -157,8 +157,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
     protected void onPostExecute(Boolean result) {
         if (result) {
-            if (bool_to_return) /* add or remove note */
-                if (indexToDelete >= 0) notesList.remove(indexToDelete);
+            /* add or remove note */
+            if (indexToDelete >= 0) notesList.remove(indexToDelete);
             if (!(currentNote == null)) notesList.add(0, currentNote);
             adapter.notifyDataSetChanged();
         }
