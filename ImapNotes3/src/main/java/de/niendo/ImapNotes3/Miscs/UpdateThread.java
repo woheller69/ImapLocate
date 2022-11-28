@@ -133,10 +133,10 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: " + body);
                 WriteMailToNew(currentNote, ImapNotesAccount.usesticky, body);
-                if ((action == Action.Update) && (!suid.startsWith("-"))) {
+                if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
-                    storedNotes.notes.DeleteANote(oldSuid, ListActivity.ImapNotesAccount.accountName);
                 }
+                storedNotes.notes.DeleteANote(oldSuid, ListActivity.ImapNotesAccount.accountName);
                 storedNotes.notes.InsertANoteInDb(currentNote, ListActivity.ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 // Add note to noteList but change date format before
@@ -157,7 +157,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
     protected void onPostExecute(Boolean result) {
         if (result) {
-            /* add or remove note */
             if (indexToDelete >= 0) notesList.remove(indexToDelete);
             if (!(currentNote == null)) notesList.add(0, currentNote);
             adapter.notifyDataSetChanged();
