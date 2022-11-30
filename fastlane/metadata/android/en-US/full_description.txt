@@ -1,6 +1,5 @@
-This app allows to view, edit and synchronise HTML notes between Android devices and IMAP servers.
-
-* be used with other servers (Gmail, Yahoo, AOL, Posteo and your server)
+* synchronise HTML notes between Android devices and IMAP servers.
+* be used with different servers (Gmail, Yahoo, AOL, Posteo and your server)
 * HTML editor with lots of features
 * light and dark mode support
 * color support for notes
