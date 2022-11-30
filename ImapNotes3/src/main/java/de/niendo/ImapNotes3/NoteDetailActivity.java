@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.core.app.NavUtils;
 
 import android.text.Html;
 import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -71,7 +74,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         );
 
         Bundle extras = getIntent().getExtras();
-
         String stringres;
         String ChangeNote = extras.getString(ActivityType);
         if (ChangeNote.equals(ActivityTypeEdit)) {
@@ -96,7 +98,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                             stringres = htmlNote.text;
                             bgColor = htmlNote.color;
                         }
-                        editText = findViewById(R.id.bodyView);
                         SetupRichEditor();
                         editText.setHtml(stringres);
                     } else {
@@ -111,10 +112,22 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
-            editText = findViewById(R.id.bodyView);
             SetupRichEditor();
-        }
 
+            if (extras.getBoolean("SHARE")) {
+                String sharedText = extras.getString(Intent.EXTRA_TEXT);
+                String type = extras.getString("TYPE");
+                if (sharedText != null) {
+                    if (type.equals("text/html")) {
+                        editText.setHtml(sharedText);
+                    } else if (type.equals("text/plain")) {
+                        editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+                    } else if (type.startsWith("image/")) {
+                        // toDo
+                    }
+                }
+            }
+        }
 /*        // TODO: Watch for changes so that we can auto save.
         // See http://stackoverflow.com/questions/7117209/how-to-know-key-presses-in-edittext#14251047
         editText.addTextChangedListener(new TextWatcher() {
@@ -142,6 +155,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void SetupRichEditor() {
         // more functions, maybe use this editor...
         // https://github.com/Andrew-Chen-Wang/RichEditorView/blob/master/Sources/RichEditorView/Resources/editor/rich_editor.js
+        // https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_collapsible_symbol
+        editText = findViewById(R.id.bodyView);
         editText.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         editText.setPlaceholder(getString(R.string.placeholder));

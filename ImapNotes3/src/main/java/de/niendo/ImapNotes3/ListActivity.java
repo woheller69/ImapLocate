@@ -243,6 +243,36 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
 
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            //if (type.startsWith("text/")) {
+            Intent toNew = new Intent(this, NoteDetailActivity.class);
+            toNew.putExtra("SHARE", true);
+            toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
+            toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
+            toNew.putExtra(Intent.EXTRA_TEXT, intent.getStringExtra(Intent.EXTRA_TEXT));
+            toNew.putExtra(Intent.EXTRA_SUBJECT, intent.getStringExtra(Intent.EXTRA_SUBJECT));
+
+            toNew.putExtra("TYPE", type);
+            startActivityForResult(toNew, ListActivity.NEW_BUTTON);
+
+            //} else if (type.startsWith("image/")) {
+
+            // handleSendImage(intent); // Handle single image being sent
+            // }
+//        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            //          if (type.startsWith("image/")) {
+            // handleSendMultipleImages(intent); // Handle multiple images being sent
+            //        }
+//        } else {
+            // Handle other intents, such as being started from the home screen
+        }
+
+
     }
 
     public void onStart() {
