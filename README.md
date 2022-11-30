@@ -1,7 +1,8 @@
 ImapNote3
 =========
 
-This project is a clone from https://github.com/nbenm/ImapNote2.
+This project is a clone from https://github.com/nbenm/ImapNote2. It also uses some changes
+from https://github.com/kwhitefoot/ImapNote2 and maybe others
 
 Sync your notes between Android, iOs devices and different accounts like Gmail, iCloud and others
 
