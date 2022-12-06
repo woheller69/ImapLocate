@@ -6,5 +6,5 @@
 * Notizen auf dem Handy teilen
 * verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
 * mehrere IMAP-Konten können angelegt und verwaltet werden
-* Die Synchronisation mit dem Server erfolgt im Hintergrund
+* Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
 * Die App benötigt keine Benutzer-Rechte
