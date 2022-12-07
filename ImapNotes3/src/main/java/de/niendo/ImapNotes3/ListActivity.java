@@ -97,8 +97,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     @Nullable
     private static Db storedNotes = null;
     private static List<String> currentList;
-    public static String sortOrder = OneNote.DATE + " DESC";
-    private static boolean sortingChanged = false;
+    private static Menu actionMenu;
     // FIXME
     // Hack! accountManager.addOnAccountsUpdatedListener
     // OnAccountsUpdatedListener is called to early - so not all
@@ -144,12 +143,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 //TextView status = (TextView) findViewById(R.id.status);
                 status.setText(statusText);
 
-                if (isChanged | sortingChanged) {
+                if (isChanged) {
                     if (storedNotes == null) {
                         storedNotes = new Db(getApplicationContext());
                     }
                     storedNotes.OpenDb();
-                    storedNotes.notes.GetStoredNotes(noteList, accountName, sortOrder);
+                    storedNotes.notes.GetStoredNotes(noteList, accountName, getSortOrder());
                     listToView.notifyDataSetChanged();
                     storedNotes.CloseDb();
                 }
@@ -319,6 +318,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 listToView,
                 R.string.refreshing_notes_list,
                 storedNotes,
+                getSortOrder(),
                 this.getApplicationContext()).execute();
         //TextView status = (TextView) findViewById(R.id.status);
         status.setText(R.string.welcome);
@@ -343,6 +343,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        actionMenu = menu;
         getMenuInflater().inflate(R.menu.list, menu);
 
         MenuBuilder m = (MenuBuilder) menu;
@@ -382,6 +383,17 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         return true;
     }
 
+    private String getSortOrder() {
+        MenuItem item;
+
+        item = actionMenu.findItem(R.id.sort_title);
+        if (item != null && item.isChecked()) return OneNote.TITLE + " ASC";
+        item = actionMenu.findItem(R.id.sort_color);
+        if (item != null && item.isChecked()) return OneNote.BGCOLOR + " ASC";
+
+        return OneNote.DATE + " DESC";
+    }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newaccount:
@@ -403,29 +415,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
                 startActivityForResult(toNew, ListActivity.NEW_BUTTON);
                 return true;
-            case R.id.sort_date: {
-                ListActivity.sortOrder = OneNote.DATE + " DESC";
-                sortingChanged = true;
-                item.setChecked(true);
-                TriggerSync(status);
-                return true;
-            }
-            case R.id.sort_title: {
-                ListActivity.sortOrder = OneNote.TITLE + " ASC";
-                item.setChecked(true);
-                sortingChanged = true;
-                TriggerSync(status);
-/*                noteList.sort((t1, t2) -> t1.GetTitle().toLowerCase().compareTo(t2.GetTitle().toLowerCase()));
-                ListView listview = findViewById(R.id.notesList);
-                listview.postInvalidate();
- */
-                return true;
-            }
+            case R.id.sort_date:
+            case R.id.sort_title:
             case R.id.sort_color: {
-                ListActivity.sortOrder = OneNote.BGCOLOR + " ASC";
-                sortingChanged = true;
                 item.setChecked(true);
-                TriggerSync(status);
+                RefreshList();
                 return true;
             }
 
