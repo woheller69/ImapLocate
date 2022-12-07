@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.PeriodicSync;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -85,6 +86,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     private static final String SAVE_ITEM = "SAVE_ITEM";
     private static final String DELETE_ITEM_NUM_IMAP = "DELETE_ITEM_NUM_IMAP";
     private static final String ACCOUNTSPINNER_POS = "ACCOUNTSPINNER_POS";
+    private static final String SORT_BY_DATE = "SORT_BY_DATE";
+    private static final String SORT_BY_TITLE = "SORT_BY_TITLE";
+    private static final String SORT_BY_COLOR = "SORT_BY_COLOR";
     //endregion
 
     private ArrayList<OneNote> noteList;
@@ -280,6 +284,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Log.d(TAG, "onStart");
         super.onStart();
         int len = accounts.length;
+
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        accountSpinner.setSelection((int) preferences.getLong(ACCOUNTSPINNER_POS, 0));
         if (len > 0) updateAccountSpinner();
     }
 
@@ -301,15 +308,21 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     protected void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        outState.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
+
+        SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
+        preferences.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
+
+        preferences.putBoolean(SORT_BY_DATE, actionMenu.findItem(R.id.sort_date).isChecked());
+        preferences.putBoolean(SORT_BY_TITLE, actionMenu.findItem(R.id.sort_title).isChecked());
+        preferences.putBoolean(SORT_BY_COLOR, actionMenu.findItem(R.id.sort_color).isChecked());
+
+        preferences.apply();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "onRestoreInstanceState");
         super.onRestoreInstanceState(savedInstanceState);
-        accountSpinner.setSelection((int) savedInstanceState.getLong(ACCOUNTSPINNER_POS));
-        updateAccountSpinner();
     }
 
     private void RefreshList() {
@@ -380,16 +393,22 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         searchView.setOnQueryTextListener(textChangeListener);
 
+        // load values from disk
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+
+        if (preferences.getBoolean(SORT_BY_TITLE, false))
+            actionMenu.findItem(R.id.sort_title).setChecked(true);
+        else if (preferences.getBoolean(SORT_BY_COLOR, false))
+            actionMenu.findItem(R.id.sort_color).setChecked(true);
+        else
+            actionMenu.findItem(R.id.sort_date).setChecked(true);
+
         return true;
     }
 
     private String getSortOrder() {
-        MenuItem item;
-
-        item = actionMenu.findItem(R.id.sort_title);
-        if (item != null && item.isChecked()) return OneNote.TITLE + " ASC";
-        item = actionMenu.findItem(R.id.sort_color);
-        if (item != null && item.isChecked()) return OneNote.BGCOLOR + " ASC";
+        if (actionMenu.findItem(R.id.sort_title).isChecked()) return OneNote.TITLE + " ASC";
+        if (actionMenu.findItem(R.id.sort_color).isChecked()) return OneNote.BGCOLOR + " ASC";
 
         return OneNote.DATE + " DESC";
     }
