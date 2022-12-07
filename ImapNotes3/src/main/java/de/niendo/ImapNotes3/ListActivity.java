@@ -176,6 +176,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         //Log.d(TAG,"Request a sync for:"+mAccount);
+        ContentResolver.cancelSync(mAccount, AUTHORITY);
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
     }
 

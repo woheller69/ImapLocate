@@ -142,6 +142,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
             SyncUtils.SetUIDValidity(accountArg, res.UIDValidity, applicationContext);
             // Notify ListActivity that it's finished, and that it can refresh display
+            Log.d(TAG, "end on perform ");
             NotifySyncFinished(true, true);
             return;
         }
@@ -178,6 +179,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         SyncUtils.DisconnectFromRemote();
         //Log.d(TAG, "Network synchronization complete of account: "+account.name);
         // Notify ListActivity that it's finished, and that it can refresh display
+        Log.d(TAG, "Finish network synchronization of account: " + accountArg.name);
         NotifySyncFinished(isChanged, true);
     }
 
