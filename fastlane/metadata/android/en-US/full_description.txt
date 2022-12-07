@@ -1,4 +1,4 @@
-* synchronise HTML notes between Android devices and IMAP servers.
+* synchronize HTML notes between Android devices and IMAP servers.
 * to be used with different IMAP servers (Gmail, Yahoo, AOL, Posteo and your server)
 * HTML editor with lots of features
 * light and dark mode support

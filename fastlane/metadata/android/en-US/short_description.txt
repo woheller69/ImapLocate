@@ -1,1 +1,1 @@
-View, edit and synchronise HTML notes on your IMAP accounts
+View, edit and synchronize HTML notes on your IMAP mailboxes
