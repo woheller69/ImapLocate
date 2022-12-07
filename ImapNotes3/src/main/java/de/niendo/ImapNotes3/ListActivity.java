@@ -84,6 +84,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     private static final String SAVE_ITEM_COLOR = "SAVE_ITEM_COLOR";
     private static final String SAVE_ITEM = "SAVE_ITEM";
     private static final String DELETE_ITEM_NUM_IMAP = "DELETE_ITEM_NUM_IMAP";
+    private static final String ACCOUNTSPINNER_POS = "ACCOUNTSPINNER_POS";
     //endregion
 
     private ArrayList<OneNote> noteList;
@@ -276,6 +277,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     public void onStart() {
+        Log.d(TAG, "onStart");
         super.onStart();
         int len = accounts.length;
         if (len > 0) updateAccountSpinner();
@@ -283,14 +285,31 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
         registerReceiver(syncFinishedReceiver, new IntentFilter(SyncService.SYNC_FINISHED));
     }
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause");
         super.onPause();
         unregisterReceiver(syncFinishedReceiver);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        outState.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState");
+        super.onRestoreInstanceState(savedInstanceState);
+        accountSpinner.setSelection((int) savedInstanceState.getLong(ACCOUNTSPINNER_POS));
+        updateAccountSpinner();
     }
 
     private void RefreshList() {

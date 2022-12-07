@@ -2,7 +2,7 @@
 * kann für alle gängigen IMAP-fähigen Postfächer genutzt werden (Gmail, Yahoo, AOL, Posteo und viele andere)
 * umfangreicher HTML-Editor
 * Hell- und Dunkelmodus
-* Jeder Notiz können Farben zu geordnet werden
+* Jeder Notiz können Farben zugeordnet werden
 * Notizen auf dem Handy teilen
 * verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
 * mehrere IMAP-Konten können angelegt und verwaltet werden
