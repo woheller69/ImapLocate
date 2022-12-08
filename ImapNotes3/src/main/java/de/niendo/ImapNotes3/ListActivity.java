@@ -131,8 +131,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             boolean isChanged = intent.getBooleanExtra(CHANGED, false);
             boolean isSynced = intent.getBooleanExtra(SYNCED, false);
             String syncInterval = String.valueOf(intent.getIntExtra(SYNCINTERVAL, 14));
-            Log.d(TAG, "if " + accountName + " " + ListActivity.ImapNotesAccount.accountName);
-            if (accountName.equals(ListActivity.ImapNotesAccount.accountName)) {
+            Log.d(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
+            if (accountName.equals(ImapNotesAccount.accountName)) {
                 String statusText;
                 if (isSynced) {
                     // Display last sync date
@@ -327,6 +327,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     private void RefreshList() {
         new SyncThread(
+                ImapNotesAccount.accountName,
                 noteList,
                 listToView,
                 R.string.refreshing_notes_list,
@@ -341,7 +342,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                             String noteBody,
                             String bgColor,
                             UpdateThread.Action action) {
-        new UpdateThread(ListActivity.ImapNotesAccount,
+        new UpdateThread(ImapNotesAccount,
                 noteList,
                 listToView,
                 R.string.updating_notes_list,
@@ -421,7 +422,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 String mClass = ".AccountConfigurationActivity";
                 res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
-                res.putExtra(ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
+                res.putExtra(ACCOUNTNAME, ImapNotesAccount.accountName);
                 startActivity(res);
                 return true;
             case R.id.refresh:

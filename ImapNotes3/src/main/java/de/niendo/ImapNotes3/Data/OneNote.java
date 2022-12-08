@@ -12,8 +12,8 @@ public class OneNote extends HashMap<String, String> {
     public static final String TITLE = "title";
     public static final String DATE = "date";
     public static final String BGCOLOR = "bgColor";
-    private static final String UID = "uid";
-
+    public static final String UID = "uid";
+    public static final String ACCOUNT = "account";
 
 
     /**
@@ -22,11 +22,12 @@ public class OneNote extends HashMap<String, String> {
     private static final long serialVersionUID = 1L;
 
 
-    public OneNote(String title, String date, String uid, String bgColor) {
+    public OneNote(String title, String date, String uid, String account, String bgColor) {
         super();
         put(TITLE, title);
         put(DATE, date);
         put(UID, uid);
+        put(ACCOUNT, account);
         put(BGCOLOR, bgColor);
     }
 
@@ -43,6 +44,11 @@ public class OneNote extends HashMap<String, String> {
     @NonNull
     public String GetUid() {
         return this.get(UID);
+    }
+
+    @NonNull
+    public String GetAccount() {
+        return this.get(ACCOUNT);
     }
 
     @NonNull
@@ -69,6 +75,7 @@ public class OneNote extends HashMap<String, String> {
         return ("Title:" + this.GetTitle() +
                 " Date: " + this.GetDate() +
                 " BgColor: " + this.GetBgColor() +
+                " Account: " + this.GetAccount() +
                 " Uid: " + this.GetUid());
     }
 }

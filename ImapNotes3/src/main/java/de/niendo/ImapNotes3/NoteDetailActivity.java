@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.EditorMenuAdapter;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.NDSpinner;
@@ -32,7 +33,6 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -81,29 +81,28 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             usesticky = extras.getBoolean(useSticky);
 
             if (hm != null) {
-                suid = hm.get("uid").toString();
-                    File rootDir = new File(getApplicationContext().getFilesDir(),
-                            ListActivity.ImapNotesAccount.accountName);
-                    Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
-                    //Log.d(TAG, "rootDir is null: " + (rootDir == null));
-                    Log.d(TAG, "rootDir: " + rootDir);
-                    if (message != null) {
-                        if (usesticky) {
-                            StickyNote stickyNote = StickyNote.GetStickyFromMessage(message);
-                            stringres = stickyNote.text;
-                            //String position = sticky.position;
-                            bgColor = stickyNote.color;
-                        } else {
-                            HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
-                            stringres = htmlNote.text;
-                            bgColor = htmlNote.color;
-                        }
-                        SetupRichEditor();
-                        editText.setHtml(stringres);
+                suid = hm.get(OneNote.UID).toString();
+                File rootDir = new File(getApplicationContext().getFilesDir(), hm.get(OneNote.ACCOUNT).toString());
+                Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
+                //Log.d(TAG, "rootDir is null: " + (rootDir == null));
+                Log.d(TAG, "rootDir: " + rootDir);
+                if (message != null) {
+                    if (usesticky) {
+                        StickyNote stickyNote = StickyNote.GetStickyFromMessage(message);
+                        stringres = stickyNote.text;
+                        //String position = sticky.position;
+                        bgColor = stickyNote.color;
                     } else {
-                        // Entry can not opened..
-                        Notifier.Show(R.string.sync_necessary, getApplicationContext(), 1);
-                        finish();
+                        HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
+                        stringres = htmlNote.text;
+                        bgColor = htmlNote.color;
+                    }
+                    SetupRichEditor();
+                    editText.setHtml(stringres);
+                } else {
+                    // Entry can not opened..
+                    Notifier.Show(R.string.sync_necessary, getApplicationContext(), 1);
+                    finish();
                         return;
                     }
             } else { // Entry can not opened..

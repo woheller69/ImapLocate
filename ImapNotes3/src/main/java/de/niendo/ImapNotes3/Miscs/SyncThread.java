@@ -28,6 +28,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     private final NotesListAdapter adapter;
     private final ArrayList<OneNote> notesList;
     private final String sortOrder;
+    private final String imapNotesAccountName;
     /**
      * SQLite database that holds status information about the notes.
      */
@@ -36,14 +37,15 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     private final Db storedNotes;
 
     // TODO: remove unused arguments.
-    public SyncThread(ArrayList<OneNote> noteList,
+    public SyncThread(String imapNotesAccountName,
+                      ArrayList<OneNote> noteList,
                       NotesListAdapter listToView,
                       @StringRes int resId,
                       @Nullable Db storedNotes,
                       String sortOrder,
                       Context applicationContext) {
         //this.imapFolder = imapFolder;
-        //this.ImapNotesAccount = ImapNotesAccount;
+        this.imapNotesAccountName = imapNotesAccountName;
         this.notesList = noteList;
         this.adapter = listToView;
         this.resId = resId;
@@ -79,7 +81,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
 
 
         storedNotes.OpenDb();
-        storedNotes.notes.GetStoredNotes(this.notesList, ListActivity.ImapNotesAccount.accountName, sortOrder);
+        storedNotes.notes.GetStoredNotes(this.notesList, imapNotesAccountName, sortOrder);
         storedNotes.CloseDb();
         return true;
     }

@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 
 import java.util.ArrayList;
@@ -390,15 +391,11 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                     Map<String, ?> h = unfilteredValues.get(i);
                     if (h != null) {
 
-                        int len = mTo.length;
+                        String str = (String) h.get(OneNote.TITLE) + (String) h.get(OneNote.DATE);
+                        String suid = (String) h.get(OneNote.UID);
 
-                        for (int j = 0; j < len; j++) {
-                            String str = (String) h.get(mFrom[j]);
-
-                            if (str.toLowerCase(Locale.getDefault()).contains(prefixString)) {
-                                newValues.add(h);
-                                break;
-                            }
+                        if (str.toLowerCase(Locale.getDefault()).contains(prefixString)) {
+                            newValues.add(h);
                         }
                     }
                 }

@@ -96,7 +96,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 indexToDelete = getIndexByNumber(suid);
                 MoveMailToDeleted(suid);
                 storedNotes.OpenDb();
-                storedNotes.notes.DeleteANote(suid, ListActivity.ImapNotesAccount.accountName);
+                storedNotes.notes.DeleteANote(suid, ImapNotesAccount.accountName);
                 storedNotes.CloseDb();
                 bool_to_return = true;
             }
@@ -120,13 +120,13 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
                 String stringDate = sdf.format(date);
-                currentNote = new OneNote(title, stringDate, "", bgColor);
+                currentNote = new OneNote(title, stringDate, "", ImapNotesAccount.accountName, bgColor);
                 // Add note to database
                 if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
                 storedNotes.OpenDb();
                 if (!suid.startsWith("-")) {
                     // no temp. suid in use
-                    suid = storedNotes.notes.GetTempNumber(ListActivity.ImapNotesAccount.accountName);
+                    suid = storedNotes.notes.GetTempNumber(currentNote.GetAccount());
                 }
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
@@ -136,8 +136,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
                 }
-                storedNotes.notes.DeleteANote(oldSuid, ListActivity.ImapNotesAccount.accountName);
-                storedNotes.notes.InsertANoteInDb(currentNote, ListActivity.ImapNotesAccount.accountName);
+                storedNotes.notes.DeleteANote(oldSuid, currentNote.GetAccount());
+                storedNotes.notes.InsertANoteInDb(currentNote);
                 storedNotes.CloseDb();
                 // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
@@ -249,10 +249,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         message.addHeader("Date", headerDate);
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
-        File accountDirectory = new File(applicationContextRef.get().getFilesDir(),
-                ListActivity.ImapNotesAccount.accountName);
+        File accountDirectory = new File(applicationContextRef.get().getFilesDir(), note.GetAccount());
         File directory = new File(accountDirectory, "new");
-        message.setFrom(new InternetAddress(ListActivity.ImapNotesAccount.accountName));
+        message.setFrom(new InternetAddress(note.GetAccount()));
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);

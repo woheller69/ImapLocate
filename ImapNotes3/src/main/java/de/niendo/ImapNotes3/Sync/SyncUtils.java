@@ -566,8 +566,9 @@ public class SyncUtils {
                 title,
                 internaldate,
                 suid,
+                accountName,
                 bgColor);
-        storedNotes.notes.InsertANoteInDb(aNote, accountName);
+        storedNotes.notes.InsertANoteInDb(aNote);
     }
 
     static boolean handleRemoteNotes(@NonNull Context context,

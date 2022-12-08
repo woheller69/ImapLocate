@@ -43,18 +43,17 @@ public class NotesDb {
 
     }
 
-    public void InsertANoteInDb(@NonNull OneNote noteElement,
-                                @NonNull String accountname) {
+    public void InsertANoteInDb(@NonNull OneNote noteElement) {
         // delete DS with TempNumber
         db.notesDb.execSQL("delete from notesTable where number = '" + noteElement.GetUid() +
-                "' and accountname = '" + accountname + "' and title = 'tmp'");
+                "' and accountname = '" + noteElement.GetAccount() + "' and title = 'tmp'");
 
         ContentValues tableRow = new ContentValues();
         tableRow.put(COL_TITLE, noteElement.GetTitle());
         tableRow.put(COL_DATE, noteElement.GetDate());
         tableRow.put(COL_NUMBER, noteElement.GetUid());
         tableRow.put(COL_BGCOLOR, noteElement.GetBgColor());
-        tableRow.put(COL_ACCOUNT_NAME, accountname);
+        tableRow.put(COL_ACCOUNT_NAME, noteElement.GetAccount());
         db.insert(TABLE_NAME, null, tableRow);
         //Log.d(TAG, "note inserted");
     }
@@ -138,6 +137,7 @@ public class NotesDb {
                     noteList.add(new OneNote(resultPointer.getString(titleIndex),
                             sdate,
                             resultPointer.getString(numberIndex),
+                            accountName,
                             resultPointer.getString(bgColorIndex)));
 
                 } while (resultPointer.moveToNext());
