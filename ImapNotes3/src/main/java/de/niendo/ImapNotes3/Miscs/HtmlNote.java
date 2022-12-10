@@ -62,6 +62,7 @@ public class HtmlNote {
 */
         Document doc = Jsoup.parse(noteBody, "utf-8");
         String bodyStyle = doc.select("body").attr("style");
+        doc.outputSettings().prettyPrint(false);
         Matcher matcherColor = HtmlNote.patternBodyBgColor.matcher(bodyStyle);
         String BgColorStr = "background-color:" + note.GetBgColor() + ";";
         if (matcherColor.find()) {
