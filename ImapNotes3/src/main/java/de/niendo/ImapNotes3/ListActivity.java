@@ -366,15 +366,15 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem menuItem = menu.findItem(R.id.search);
         SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
+                (SearchView) menuItem.getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
-                accountSpinner.setEnabled(newText.isEmpty());
                 listToView.getFilter().filter(newText);
                 return true;
             }
@@ -408,7 +408,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     private String getSortOrder() {
-        if (actionMenu.findItem(R.id.sort_title).isChecked()) return OneNote.TITLE + " ASC";
+        if (actionMenu.findItem(R.id.sort_title).isChecked())
+            return "UPPER(" + OneNote.TITLE + ") ASC";
         if (actionMenu.findItem(R.id.sort_color).isChecked()) return OneNote.BGCOLOR + " ASC";
 
         return OneNote.DATE + " DESC";
