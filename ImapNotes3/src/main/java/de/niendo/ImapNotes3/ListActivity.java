@@ -392,6 +392,22 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             return true;
         });
 
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                accountSpinner.setEnabled(false);
+                listToView.getFilter().filter("");
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                accountSpinner.setEnabled(true);
+                listToView.getFilter().filter("");
+                return true;
+            }
+        });
+
         searchView.setOnQueryTextListener(textChangeListener);
 
         // load values from disk
