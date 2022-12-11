@@ -95,6 +95,12 @@ public class ImapNotesAccount {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        // for anbox - otherwise it will crash
+        catch (Error e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
     }
 
 
