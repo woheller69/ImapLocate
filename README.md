@@ -19,15 +19,16 @@ server that respects Apple method. It has been tested with Gmail, iCloud (imap.m
 Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com), posteo.de and of course my server. Even if not
 still tested, it should work with others.
 
-Main changes ImapNote3 are:
+Main changes in ImapNote3 are:
 
 - runs und android studio 2021
 - HTML Editor
 - color support
+- full text search
 - sdk version 33
 - notes from posteo.de and gmail.com are working again
 
-Main changes ImapNote2 are :
+Main changes in ImapNote2 are :
 
 - app can be used with other servers, not only gmail
 - it's possible to open notes

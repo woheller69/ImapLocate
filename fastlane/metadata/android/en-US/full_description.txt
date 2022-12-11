@@ -1,6 +1,7 @@
 * synchronize HTML notes between Android devices and IMAP servers.
 * to be used with different IMAP servers (Gmail, Yahoo, AOL, Posteo and your server)
 * HTML editor with lots of features
+* full text search
 * light and dark mode support
 * color support for notes
 * share your notes
