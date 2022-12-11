@@ -364,13 +364,14 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         m.setOptionalIconsVisible(true);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // disable SearchManager and setSearchableInfo .. it seems confusing and useless
+        //SearchManager searchManager =
+        //        (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem menuItem = menu.findItem(R.id.search);
         SearchView searchView =
                 (SearchView) menuItem.getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        // searchView.setSearchableInfo(
+        //         searchManager.getSearchableInfo(getComponentName()));
         SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
