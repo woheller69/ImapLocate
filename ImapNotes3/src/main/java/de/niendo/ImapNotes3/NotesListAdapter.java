@@ -38,10 +38,17 @@ import android.widget.TextView;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * An easy adapter to map static data to views defined in an XML file. You can specify the data
@@ -359,6 +366,51 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         boolean setViewValue(View view, Object data, String textRepresentation);
     }
 
+    public static List<String> searchHTML(String filePath, String searchTerm, boolean useRegex) {
+        List<String> matches = new ArrayList<>();
+
+        // Open the HTML file
+        File htmlFile = new File(filePath);
+        if (!htmlFile.exists()) {
+            // Return an empty list if the file doesn't exist
+            return matches;
+        }
+
+        // Read the contents of the HTML file
+        String html = "";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(htmlFile));
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                html += line + "\n";
+            }
+            br.close();
+        } catch (IOException e) {
+            // Return an empty list if there is an error reading the file
+            return matches;
+        }
+
+        // Compile the regular expression pattern if necessary
+        Pattern pattern = null;
+        if (useRegex) {
+            try {
+                pattern = Pattern.compile(searchTerm);
+            } catch (PatternSyntaxException e) {
+                // Return an empty list if the regular expression is invalid
+                return matches;
+            }
+        } else {
+            pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
+        }
+        // Use a Matcher to search the HTML for the search term
+        Matcher matcher = pattern.matcher(html);
+        while (matcher.find()) {
+            matches.add(matcher.group());
+        }
+
+        return matches;
+    }
+
     /**
      * <p>An array filters constrains the content of the array adapter with
      * a prefix. Each item that does not start with the supplied prefix
@@ -391,10 +443,20 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                     Map<String, ?> h = unfilteredValues.get(i);
                     if (h != null) {
 
-                        String str = (String) h.get(OneNote.TITLE) + (String) h.get(OneNote.DATE);
-                        String suid = (String) h.get(OneNote.UID);
+                        //String str = (String) h.get(OneNote.TITLE) + (String) h.get(OneNote.DATE);
+                        File directory = new File(mContext.getFilesDir(), (String) h.get(OneNote.ACCOUNT));
 
-                        if (str.toLowerCase(Locale.getDefault()).contains(prefixString)) {
+                        String uid = (String) h.get(OneNote.UID);
+                        if (uid.startsWith("-")) {
+                            uid = uid.substring(1);
+                            directory = new File(directory, "new");
+                        }
+
+                        File searchfile = new File(directory, uid);
+
+                        List<String> matches = searchHTML(searchfile.toString(), prefixString, false);
+
+                        if (!matches.isEmpty()) {
                             newValues.add(h);
                         }
                     }
@@ -419,4 +481,5 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
             }
         }
     }
+
 }
