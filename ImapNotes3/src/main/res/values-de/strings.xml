@@ -73,4 +73,5 @@
     <string name="minuten_short">min</string>
     <string name="share">Teilen</string>
     <string name="shared_note_from">"geteilte Notiz von "</string>
+    <string name="app_name">ImapNotes3</string>
 </resources>
