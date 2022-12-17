@@ -1,5 +1,5 @@
-ImapNote3
-=========
+ImapNotes3
+==========
 
 This project is a clone from https://github.com/nbenm/ImapNote2. It also uses some changes
 from https://github.com/kwhitefoot/ImapNote2 and maybe others
@@ -19,7 +19,7 @@ server that respects Apple method. It has been tested with Gmail, iCloud (imap.m
 Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com), posteo.de and of course my server. Even if not
 still tested, it should work with others.
 
-Main changes in ImapNote3 are:
+Main changes in ImapNotes3 are:
 
 - runs und android studio 2021
 - HTML Editor
@@ -45,5 +45,4 @@ Main changes in ImapNote2 are :
 - multiple accounts can be used. Android account manager is used
 - works offline and sync is done in the background. Sync interval can be different for each account
 
-This app is available at Google Play under the name "ImapNote2". But for people who don't have access to this market, it will be possible to compile source code. Furthermore, an apk is available in bin directory.
 
