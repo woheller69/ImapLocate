@@ -115,11 +115,16 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             if (extras.getBoolean("SHARE")) {
                 String sharedText = extras.getString(Intent.EXTRA_TEXT);
                 String type = extras.getString("TYPE");
+                String subject = extras.getString(Intent.EXTRA_SUBJECT);
+                if (subject != null) {
+                    subject = "<b>" + subject + "</b><br>";
+                } else subject = "";
                 if (sharedText != null) {
                     if (type.equals("text/html")) {
-                        editText.setHtml(sharedText);
-                    } else if (type.equals("text/plain")) {
-                        editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+                        editText.setHtml(subject + sharedText);
+                    } else if (type.startsWith("text/")) {
+                        editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(subject + sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+                        //editText.setHtml(subject+sharedText);
                     } else if (type.startsWith("image/")) {
                         // toDo
                     }
