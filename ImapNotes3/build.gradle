@@ -47,6 +47,12 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${project.name}-${variant.versionName}-${variant.buildType.name}.apk"
+        }
+    }
+
     //noinspection GroovyMissingReturnStatement
     packagingOptions {
         resources {
@@ -64,9 +70,9 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
-    lint {
-        baseline = file("lint-baseline.xml")
-    }
+    //lint {
+    //    baseline = file("lint-baseline.xml")
+    //}
 
 
 }
