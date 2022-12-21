@@ -16,7 +16,8 @@ android {
     //noinspection GroovyMissingReturnStatement
     defaultConfig {
         applicationId "de.niendo.ImapNotes3"
-        minSdkVersion 27
+        targetSdkVersion 33
+        minSdkVersion 25
         signingConfig signingConfigs.release
         buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
     }
