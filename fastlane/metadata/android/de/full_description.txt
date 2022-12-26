@@ -8,4 +8,4 @@
 * verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
 * mehrere IMAP-Konten können angelegt und verwaltet werden
 * Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
-* Die App benötigt keine Benutzer-Rechte
+* Die App benötigt keine Benutzerrechte oder Tracker etc.

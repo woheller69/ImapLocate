@@ -9,5 +9,5 @@
 * security can be plain text, SSL/TLS or STARTTLS
 * multiple IMAP accounts can be managed
 * works offline and sync is done in the background
-* no permissions are needed by the app
+* no user permissions or tracker are needed by the app
 
