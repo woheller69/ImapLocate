@@ -1,11 +1,11 @@
-* ermöglicht die Synchronisation von HTML-Notizen zwischen Android-Geräten und IMAP-Servern
-* kann für alle gängigen IMAP-fähigen Postfächer genutzt werden (Gmail, Yahoo, AOL, Posteo und viele andere)
-* umfangreicher HTML-Editor
-* Volltextsuche
-* Hell- und Dunkelmodus
-* Jeder Notiz können Farben zugeordnet werden
-* Notizen auf dem Handy teilen
-* verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
-* mehrere IMAP-Konten können angelegt und verwaltet werden
-* Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
-* Die App benötigt keine Benutzer-Rechte
+- ermöglicht die Synchronisation von HTML-Notizen zwischen Android-Geräten und IMAP-Servern
+- kann für alle gängigen IMAP-fähigen Postfächer genutzt werden (Gmail, Yahoo, AOL, Posteo und viele andere)
+- umfangreicher HTML-Editor
+- Volltextsuche
+- Hell- und Dunkelmodus
+- Jeder Notiz können Farben zugeordnet werden
+- Notizen auf dem Handy teilen
+- verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
+- mehrere IMAP-Konten können angelegt und verwaltet werden
+- Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
+- Die App benötigt keine Benutzer-Rechte, keiner Tracker etc.

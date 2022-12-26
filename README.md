@@ -40,7 +40,7 @@ Main changes in ImapNote2 are :
 - navigation uses ActionBar (minSdkVersion=14)
 - app has been modified to handle sticky notes used by Kerio Connect servers and Courier IMAP servers
 - even if not recommended, untrusted certificates can be used.
-- imap port number can be choosed. 993 is no more the only one accepted
+- imap port number can be chosen. 993 is no more the only one accepted
 - security can be plain text, SSL/TLS or STARTTLS
 - multiple accounts can be used. Android account manager is used
 - works offline and sync is done in the background. Sync interval can be different for each account
