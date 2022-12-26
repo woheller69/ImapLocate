@@ -1,2 +1,3 @@
 - Chinese translation (thanks to sr093906)
+- Russian translation (thanks to goatli)
 
