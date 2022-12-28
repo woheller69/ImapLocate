@@ -47,8 +47,8 @@ Main changes in ImapNote2 are :
 
 ## Download
 
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
-     alt="Get it on IzzyOnDroid"
-     height="80">](https://apt.izzysoft.de/fdroid/index/apk/de.niendo.ImapNotes3)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/de.niendo.ImapNotes3/)
 
 Or get the APK from the [Releases Section](https://github.com/niendo1/ImapNotes3/releases/latest).
