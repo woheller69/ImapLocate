@@ -71,7 +71,7 @@
     <string name="placeholder">在此插入文本…</string>
     <string name="AccountList">账户列表</string>
     <string name="Last_sync">"上次同步: "</string>
-    <string name="minuten_short">分钟</string>
+    <string name="minutes_short">分钟</string>
     <string name="share">分享</string>
     <string name="shared_note_from">"Shared note from "</string>
 </resources>

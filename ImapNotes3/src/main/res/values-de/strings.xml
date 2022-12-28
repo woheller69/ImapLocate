@@ -60,7 +60,7 @@
     <string name="note_title">Notiz-Titel</string>
     <string name="brown">Braun</string>
     <string name="none">Keine</string>
-    <string name="delete_note">Delete note</string>
+    <string name="delete_note">Notiz löschen</string>
     <string name="are_you_sure_you_wish_to_delete_the_note">Wollen Sie die Notiz wirklich löschen?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
@@ -70,7 +70,7 @@
     <string name="placeholder">Text hier einfügen…</string>
     <string name="AccountList">Kontoliste</string>
     <string name="Last_sync">"Letzter Abgl.: "</string>
-    <string name="minuten_short">min</string>
+    <string name="minutes_short">min</string>
     <string name="share">Teilen</string>
     <string name="shared_note_from">"geteilte Notiz von "</string>
     <string name="app_name">ImapNotes3</string>

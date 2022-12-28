@@ -72,7 +72,7 @@
     <string name="placeholder">"Insert text here…"</string>
     <string name="AccountList">"AccountList"</string>
     <string name="Last_sync">"Последняя синхронизация:"</string>
-    <string name="minuten_short">"min"</string>
+    <string name="minutes_short">"min"</string>
     <string name="share">"Поделиться"</string>
     <string name="shared_note_from">"Shared note from"</string>
 </resources>
