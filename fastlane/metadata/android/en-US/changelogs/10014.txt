@@ -1,4 +1,6 @@
 - Chinese translation (thanks to sr093906)
 - Russian translation (thanks to goatli)
 - fix xml icon on version < v26
+- account name have to be an valid email address
+- avoid crash, when last account is deleted
 
