@@ -16,7 +16,7 @@
     <string name="account_added">Account has been added</string>
     <string name="add_account">Add Account</string>
     <string name="account_name">Account name</string>
-    <string name="choose_a_name_for_this_account">Choose a name for this account</string>
+    <string name="account_name_your_email">Account Name: an E-Mail address</string>
     <string name="username">Username</string>
     <string name="your_login_name">Your login name</string>
     <string name="password">Password</string>
@@ -73,5 +73,6 @@
     <string name="Last_sync">"Last sync: "</string>
     <string name="minutes_short">min</string>
     <string name="share">Share</string>
-    <string name="shared_note_from">"Shared note from "</string>
+    <string name="shared_note_from">Shared note from </string>
+    <string name="account_name_not_valid_email">Account Name: not an valid E-Mail address</string>
 </resources>

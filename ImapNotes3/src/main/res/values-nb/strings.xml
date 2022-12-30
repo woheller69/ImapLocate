@@ -22,6 +22,6 @@
     <string name="add_account">Legge til konto</string>
     <string name="blue">Bl</string>
     <string name="check_and_create_account">Kontollerer og lag kontoen</string>
-    <string name="choose_a_name_for_this_account">Velg et navn.</string>
+    <string name="account_name_your_email">Velg et navn.</string>
     <string name="app_name">ImapNotes3</string>
 </resources>

@@ -32,7 +32,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
-            android:hint="@string/choose_a_name_for_this_account"
+            android:hint="@string/account_name_your_email"
             android:autofillHints="yes"
             android:inputType="textEmailAddress">
             <requestFocus />

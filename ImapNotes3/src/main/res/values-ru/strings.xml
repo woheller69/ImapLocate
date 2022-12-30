@@ -17,7 +17,7 @@
     <string name="account_added">"Учетная запись была добавлена"</string>
     <string name="add_account">"Добавить аккаунт"</string>
     <string name="account_name">"Имя аккаунта"</string>
-    <string name="choose_a_name_for_this_account">"Выберите имя для этого аккаунта"</string>
+    <string name="account_name_your_email">"Выберите имя для этого аккаунта"</string>
     <string name="username">"Имя пользователя"</string>
     <string name="your_login_name">"Логин"</string>
     <string name="password">"Пароль"</string>

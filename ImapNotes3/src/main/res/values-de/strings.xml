@@ -15,7 +15,6 @@
     <string name="account_added">Konto angelegt</string>
     <string name="add_account">Konto hinzufügen</string>
     <string name="account_name">Name</string>
-    <string name="choose_a_name_for_this_account">Namen wählen</string>
     <string name="username">Benutzer</string>
     <string name="your_login_name">Login auf Mail-Server</string>
     <string name="password">Passwort</string>
@@ -74,4 +73,6 @@
     <string name="share">Teilen</string>
     <string name="shared_note_from">"geteilte Notiz von "</string>
     <string name="app_name">ImapNotes3</string>
+    <string name="account_name_your_email">Kontoname: eine gültige E-Mail-Adresse</string>
+    <string name="account_name_not_valid_email">Kontoname: keine gültige E-Mail-Adresse</string>
 </resources>

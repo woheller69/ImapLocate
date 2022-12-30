@@ -46,6 +46,9 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 
 import java.util.List;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 
 public class AccountConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener {
     /**
@@ -184,7 +187,17 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private final OnClickListener clickListenerEdit = v -> {
         // Click on Edit Button
         Log.d(TAG, "clickListenerEdit onClick");
-        CheckNameAndLogIn();
+        // CheckNameAndLogIn(); - for now the name can not changed anyway
+        DoLogin();
+    };
+
+    private final View.OnFocusChangeListener FinishAccountnameEdit = (v, r) -> {
+        if (!v.hasFocus()) {
+            TextView tv = (TextView) v;
+            if (usernameTextView.getText().toString().isEmpty()) {
+                usernameTextView.setText(tv.getText().toString());
+            }
+        }
     };
 
     private final View.OnFocusChangeListener FinishEmailEdit = (v, r) -> {
@@ -212,11 +225,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private String accountname;
 
     private void CheckNameAndLogIn() {
-        if (accountnameTextView.getText().toString().contains("'")) {
-            Notifier.Show(R.string.quotation_marks_not_allowed, getApplicationContext(), 3);
-        } else {
-            DoLogin();
+        try {
+            String test = String.valueOf(new InternetAddress(accountnameTextView.getText().toString(), true));
+        } catch (AddressException e) {
+            Notifier.Show(R.string.account_name_not_valid_email, getApplicationContext(), 3);
+            return;
         }
+        DoLogin();
     }
 
     @Override
@@ -230,6 +245,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
+        accountnameTextView.setOnFocusChangeListener(FinishAccountnameEdit);
         usernameTextView = findTextViewById(R.id.usernameEdit);
         usernameTextView.setOnFocusChangeListener(FinishEmailEdit);
         passwordTextView = findTextViewById(R.id.passwordEdit);

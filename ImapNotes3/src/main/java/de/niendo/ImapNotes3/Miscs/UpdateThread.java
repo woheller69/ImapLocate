@@ -30,6 +30,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeBodyPart;
@@ -251,7 +252,12 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
         File accountDirectory = new File(applicationContextRef.get().getFilesDir(), note.GetAccount());
         File directory = new File(accountDirectory, "new");
-        message.setFrom(new InternetAddress(note.GetAccount()));
+        try {
+            message.setFrom(new InternetAddress(note.GetAccount(), false));
+        } catch (AddressException e) {
+            Log.d(TAG, "setFrom: " + e.toString());
+            //message.setFrom(new InternetAddress(""));
+        }
         File outfile = new File(directory, uid);
         OutputStream str = new FileOutputStream(outfile);
         message.writeTo(str);

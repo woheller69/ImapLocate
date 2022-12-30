@@ -282,8 +282,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     public void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-        int len = accounts.length;
-
+        //int len = accounts.length;
+        int len = accountManager.getAccounts().length;
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
         accountSpinner.setSelection((int) preferences.getLong(ACCOUNTSPINNER_POS, 0));
         if (len > 0) updateAccountSpinner();
@@ -689,6 +689,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
+                    } catch (Error err) {
+                        // TODO Auto-generated catch block
+                        err.printStackTrace();
                     }
                     Intent res = new Intent();
                     String mPackage = Utilities.PackageName;
