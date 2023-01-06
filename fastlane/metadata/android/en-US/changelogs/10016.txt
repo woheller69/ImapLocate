@@ -1,0 +1,3 @@
+- if synchronising failed, show a message in status
+
+

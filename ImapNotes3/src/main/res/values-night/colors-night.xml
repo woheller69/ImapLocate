@@ -20,6 +20,7 @@
     <color name="ListInfoTxtColor">#AB9C69</color>
 
     <color name="StatusBgColor">#2F4F4F</color>
+    <color name="StatusBgErrColor">#713631</color>
     <color name="StatusTxtColor">#AB9C69</color>
 
     <color name="AccountBgColor">#2F4F4F</color>

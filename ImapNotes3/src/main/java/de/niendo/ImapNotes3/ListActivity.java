@@ -81,6 +81,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     public static final String SYNCINTERVAL = "SYNCINTERVAL";
     public static final String CHANGED = "CHANGED";
     public static final String SYNCED = "SYNCED";
+    public static final String SYNCED_ERR_MSG = "SYNCED_ERR_MSG";
     private static final String SAVE_ITEM_COLOR = "SAVE_ITEM_COLOR";
     private static final String SAVE_ITEM = "SAVE_ITEM";
     private static final String DELETE_ITEM_NUM_IMAP = "DELETE_ITEM_NUM_IMAP";
@@ -130,9 +131,10 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             boolean isChanged = intent.getBooleanExtra(CHANGED, false);
             boolean isSynced = intent.getBooleanExtra(SYNCED, false);
             String syncInterval = String.valueOf(intent.getIntExtra(SYNCINTERVAL, 14));
+            String errorMessage = intent.getStringExtra(SYNCED_ERR_MSG);
             Log.d(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
             if (accountName.equals(ImapNotesAccount.accountName)) {
-                String statusText;
+                String statusText = OldStatus;
                 if (isSynced) {
                     // Display last sync date
                     //DateFormat dateFormat =
@@ -140,10 +142,14 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     Date date = new Date();
                     String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
                     statusText = getText(R.string.Last_sync) + sdate + " (" + syncInterval + " " + getText(R.string.minutes_short) + ")";
-                } else {
-                    statusText = OldStatus;
                 }
-                //TextView status = (TextView) findViewById(R.id.status);
+                status.setBackgroundColor(getColor(R.color.StatusBgColor));
+                if (!errorMessage.isEmpty()) {
+                    statusText = errorMessage;
+                    status.setBackgroundColor(getColor(R.color.StatusBgErrColor));
+                }
+                ;
+
                 status.setText(statusText);
 
                 if (isChanged) {
@@ -333,7 +339,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 storedNotes,
                 getSortOrder(),
                 this.getApplicationContext()).execute();
-        //TextView status = (TextView) findViewById(R.id.status);
+
+        status.setBackgroundColor(getColor(R.color.StatusBgColor));
         status.setText(R.string.welcome);
     }
 

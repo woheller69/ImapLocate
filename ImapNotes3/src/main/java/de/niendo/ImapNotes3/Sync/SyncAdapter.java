@@ -32,8 +32,6 @@ import javax.mail.internet.MimeMessage;
 
 import static de.niendo.ImapNotes3.Miscs.Imaper.ResultCodeSuccess;
 
-//import de.niendo.ImapNotes3.Data.NotesDb;
-
 /// A SyncAdapter provides methods to be called by the Android
 /// framework when the framework is ready for the synchronization to
 /// occur.  The application does not need to consider threading
@@ -112,9 +110,11 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         ImapNotesResult res = ConnectToRemote();
         if (res.returnCode != ResultCodeSuccess) {
             storedNotes.CloseDb();
-            NotifySyncFinished(false, false);
+            NotifySyncFinished(false, false, res.errorMessage);
             return;
         }
+
+        String errorMessage = "";
         // Compare UIDValidity to old saved one
         //
         if (!(res.UIDValidity.equals(
@@ -135,15 +135,17 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 storedNotes.CloseDb();
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
+                errorMessage = e.getMessage();
                 e.printStackTrace();
             } catch (IOException e) {
+                errorMessage = e.getMessage();
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             SyncUtils.SetUIDValidity(accountArg, res.UIDValidity, applicationContext);
             // Notify ListActivity that it's finished, and that it can refresh display
-            Log.d(TAG, "end on perform ");
-            NotifySyncFinished(true, true);
+            Log.d(TAG, "end on perform :" + errorMessage);
+            NotifySyncFinished(true, true, errorMessage);
             return;
         }
 
@@ -165,9 +167,11 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             remoteNotesManaged = SyncUtils.handleRemoteNotes(applicationContext, res.notesFolder,
                     storedNotes, accountArg.name, useSticky);
         } catch (MessagingException e) {
+            errorMessage = e.getMessage();
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
+            errorMessage = e.getMessage();
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -179,20 +183,21 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         SyncUtils.DisconnectFromRemote();
         //Log.d(TAG, "Network synchronization complete of account: "+account.name);
         // Notify ListActivity that it's finished, and that it can refresh display
-        Log.d(TAG, "Finish network synchronization of account: " + accountArg.name);
-        NotifySyncFinished(isChanged, true);
+        Log.d(TAG, "Finish network synchronization of account: " + accountArg.name + " Msg: " + errorMessage);
+        NotifySyncFinished(isChanged, true, errorMessage);
     }
 
     private void NotifySyncFinished(boolean isChanged,
-                                    boolean isSynced) {
+                                    boolean isSynced,
+                                    String errorMessage) {
         Log.d(TAG, "NotifySyncFinished: " + isChanged + " " + isSynced);
         Intent i = new Intent(SyncService.SYNC_FINISHED);
         i.putExtra(ListActivity.ACCOUNTNAME, account.accountName);
         i.putExtra(ListActivity.CHANGED, isChanged);
         i.putExtra(ListActivity.SYNCED, isSynced);
         i.putExtra(ListActivity.SYNCINTERVAL, account.syncInterval);
+        i.putExtra(ListActivity.SYNCED_ERR_MSG, errorMessage);
         applicationContext.sendBroadcast(i);
-
     }
 
     /* It is possible for this function to throw exceptions; the original code caught
