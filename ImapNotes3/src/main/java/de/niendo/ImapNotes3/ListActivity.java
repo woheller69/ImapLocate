@@ -141,7 +141,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     //        android.text.format.DateFormat.getDateFormat(getApplicationContext());
                     Date date = new Date();
                     String sdate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
-                    statusText = getText(R.string.Last_sync) + sdate + " (" + syncInterval + " " + getText(R.string.minutes_short) + ")";
+                    statusText = getText(R.string.Last_sync) + sdate;
+                    if (!syncInterval.equals("0"))
+                        statusText += " (" + syncInterval + " " + getText(R.string.minutes_short) + ")";
                 }
                 status.setBackgroundColor(getColor(R.color.StatusBgColor));
                 if (!errorMessage.isEmpty()) {

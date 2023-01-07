@@ -255,7 +255,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         //syncintervalTextView.addTextChangedListener(textWatcher);
         syncIntervalNumberPicker = findViewById(R.id.syncintervalMinutes);
         syncIntervalNumberPicker.setMaxValue(24 * 60);
-        syncIntervalNumberPicker.setMinValue(1);
+        syncIntervalNumberPicker.setMinValue(0);
         syncIntervalNumberPicker.setValue(15);
 
         folderTextView = findTextViewById(R.id.folderEdit);
@@ -514,7 +514,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     // Run the Sync Adapter Periodically
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
+                    if (ImapNotesAccount.syncInterval > 0)
+                        ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
                     return new Result<>("Account has been modified", true);
                 } else {
                     if (!am.addAccountExplicitly(account, ImapNotesAccount.password, null)) {
@@ -529,7 +530,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     // Run the Sync Adapter Periodically
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
+                    if (ImapNotesAccount.syncInterval > 0)
+                        ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
                     Log.d(TAG, "doInBackground End");
                     return new Result<>(getString(R.string.account_added), true);
                 }

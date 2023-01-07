@@ -25,7 +25,7 @@
     <string name="imap_notes_server">IMAP notes server</string>
     <string name="server_port_number_to_use">Server port number to use</string>
     <string name="port_number">Port Number</string>
-    <string name="sync_interval_minutes">Sync Interval (minutes)</string>
+    <string name="sync_interval_minutes">Sync Interval in Minutes (0=Off)</string>
     <string name="notes_folder_optional">Notes Folder (optional)</string>
     <string name="manually_set_full_imap_path_to_notes_folder">Manually set full IMAP path to notes folder</string>
     <string name="use_sticky_notes">Use Sticky Notes</string>
