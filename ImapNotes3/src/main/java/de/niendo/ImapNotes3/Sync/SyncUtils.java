@@ -148,17 +148,23 @@ public class SyncUtils {
             Log.d(TAG, "Personal Namespaces=" + rootFolder.getFullName());
             // TODO: this the wrong place to make decisions about the name of the notes folder, that
             // should be done where it is created.
-            if (folderOverride.length() > 0) {
+            if (folderOverride.length() > 0)
                 sfolder = folderOverride;
-            } else if (rootFolder.getFullName().length() == 0) {
+            else
                 sfolder = "Notes";
-            } else {
+            if (rootFolder.getFullName().length() > 0) {
                 char separator = rootFolder.getSeparator();
-                sfolder = rootFolder.getFullName() + separator + "Notes";
+                sfolder = rootFolder.getFullName() + separator + sfolder;
             }
             // Get UIDValidity
             notesFolder = store.getFolder(sfolder);
-//            store.close();
+            if (!notesFolder.exists()) {
+                if (notesFolder.create(Folder.HOLDS_MESSAGES)) {
+                    notesFolder.setSubscribed(true);
+                    Log.d(TAG, "Folder was created successfully");
+                }
+            }
+//          store.close();
             return new ImapNotesResult(Imaper.ResultCodeSuccess,
                     "",
                     ((IMAPFolder) notesFolder).getUIDValidity(),
