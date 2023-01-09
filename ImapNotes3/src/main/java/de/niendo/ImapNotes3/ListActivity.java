@@ -222,7 +222,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         this.noteList = new ArrayList<>();
         //((de.niendo.ImapNotes3) this.getApplicationContext()).SetNotesList(this.noteList);
         this.listToView = new NotesListAdapter(
-                getApplicationContext(),
+                this,
                 this.noteList,
                 new String[]{OneNote.TITLE, OneNote.DATE},
                 new int[]{R.id.noteTitle, R.id.noteLastChange},
