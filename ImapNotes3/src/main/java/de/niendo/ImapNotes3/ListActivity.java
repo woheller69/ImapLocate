@@ -340,6 +340,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 R.string.refreshing_notes_list,
                 storedNotes,
                 getSortOrder(),
+                // FIXME: this. ?
                 getApplicationContext()).execute();
 
         status.setBackgroundColor(getColor(R.color.StatusBgColor));
@@ -357,6 +358,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 suid,
                 noteBody,
                 bgColor,
+                // FIXME: this. ?
                 getApplicationContext(),
                 action,
                 storedNotes).execute();

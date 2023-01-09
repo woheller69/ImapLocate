@@ -567,12 +567,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 accountConfigurationActivity.Clear();
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeSuccess);
+                finish();
             } else {
+                // FIXME shows an exception
+                Notifier.Show(result.result, getApplicationContext(), 5);
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeError);
-            }
-            if (action == Actions.EDIT_ACCOUNT) {
-                finish();
             }
         }
 

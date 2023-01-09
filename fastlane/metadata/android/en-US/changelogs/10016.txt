@@ -1,4 +1,5 @@
 - if synchronising failed, show a message in status
 - create notes folder on server, if it not exists
 - background sync can be deactivated
+- close account settings after adding a account
 
