@@ -40,11 +40,6 @@ public final class Utilities {
             Class res = R.color.class;
             Field field = res.getField(name);
             color = field.getInt(null);
-
-
-            //     color = context.getResources().getColor(field.getInt(null));
-//            color = ContextCompat.getResources().getColor(field.getInt(null));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,6 +48,10 @@ public final class Utilities {
     }
 
     public static int getColorByName(String name, Context context) {
+        // it is already a color like #ffffff
+        if (name.contains("#")) {
+            return (Integer.parseInt(name.replace(" ", "").replace("#", ""), 16));
+        }
         return context.getResources().getColor(getColorIdByName(name), context.getTheme());
     }
 
