@@ -340,7 +340,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 R.string.refreshing_notes_list,
                 storedNotes,
                 getSortOrder(),
-                this.getApplicationContext()).execute();
+                getApplicationContext()).execute();
 
         status.setBackgroundColor(getColor(R.color.StatusBgColor));
         status.setText(R.string.welcome);

@@ -4,10 +4,12 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
+import android.content.SyncRequest;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.net.TrafficStats;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
@@ -505,44 +507,42 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 final Account account = new Account(ImapNotesAccount.accountName, Utilities.PackageName);
                 final AccountManager am = AccountManager.get(accountConfigurationActivity);
                 accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);
+                int resultTxtId;
                 if (action == Actions.EDIT_ACCOUNT) {
-                    final Bundle result = new Bundle();
-                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-                    setAccountAuthenticatorResult(result);
-                    setUserData(am, account);
-                    // Run the Sync Adapter Periodically
-                    ContentResolver.setIsSyncable(account, AUTHORITY, 1);
-                    ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    if (ImapNotesAccount.syncInterval > 0)
-                        ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
-                    return new Result<>("Account has been modified", true);
+                    resultTxtId = R.string.account_modified;
                 } else {
                     if (!am.addAccountExplicitly(account, ImapNotesAccount.password, null)) {
                         return new Result<>(getString(R.string.account_already_exists_or_is_null), false);
                     }
-                    // TODO: make function for these repeated lines.
-                    Bundle result = new Bundle();
-                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-                    setAccountAuthenticatorResult(result);
-                    setUserData(am, account);
-                    // Run the Sync Adapter Periodically
+                    resultTxtId = R.string.account_added;
+                }
+                ;
+                final Bundle result = new Bundle();
+                result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+                result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+                setAccountAuthenticatorResult(result);
+                setUserData(am, account);
+                // Run the Sync Adapter Periodically
+                if (ImapNotesAccount.syncInterval > 0) {
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    if (ImapNotesAccount.syncInterval > 0)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        // we can enable inexact timers in our periodic sync
+                        SyncRequest request = new SyncRequest.Builder().syncPeriodic(ImapNotesAccount.syncInterval, ImapNotesAccount.syncInterval)
+                                .setSyncAdapter(account, AUTHORITY).setExtras(new Bundle()).build();
+                        ContentResolver.requestSync(request);
+                    } else {
                         ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
-                    Log.d(TAG, "doInBackground End");
-                    return new Result<>(getString(R.string.account_added), true);
+                    }
                 }
+                ;
+                Log.d(TAG, "doInBackground success");
+                return new Result<>(getString(resultTxtId), true);
             } catch (Exception e) {
                 e.printStackTrace();
                 return new Result<>("Unexpected exception: " + e.getMessage(), false);
-            } finally {
-                Log.d(TAG, "doInBackground Finally");
             }
         }
-
 
         private void setUserData(@NonNull AccountManager am,
                                  @NonNull Account account) {
@@ -571,7 +571,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeError);
             }
-            Notifier.Show(result.result, getApplicationContext(), 5);
             if (action == Actions.EDIT_ACCOUNT) {
                 finish();
             }
