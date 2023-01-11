@@ -37,8 +37,8 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
+import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.Imaper;
 import de.niendo.ImapNotes3.Miscs.Notifier;
@@ -99,7 +99,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     public static ImapNotesAccount ImapNotesAccount;
     private static AccountManager accountManager;
     @Nullable
-    private static Db storedNotes = null;
+    private static NotesDb storedNotes = null;
     private static List<String> currentList;
     private static Menu actionMenu;
     // FIXME
@@ -150,18 +150,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     statusText = errorMessage;
                     status.setBackgroundColor(getColor(R.color.StatusBgErrColor));
                 }
-                ;
 
                 status.setText(statusText);
 
                 if (isChanged) {
-                    if (storedNotes == null) {
-                        storedNotes = new Db(getApplicationContext());
-                    }
-                    storedNotes.OpenDb();
-                    storedNotes.notes.GetStoredNotes(noteList, accountName, getSortOrder());
+                    storedNotes.GetStoredNotes(noteList, accountName, getSortOrder());
                     listToView.notifyDataSetChanged();
-                    storedNotes.CloseDb();
                 }
             }
         }
@@ -236,8 +230,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Imaper imapFolder = new Imaper();
         ((ImapNotes3) this.getApplicationContext()).SetImaper(imapFolder);
 
-        if (ListActivity.storedNotes == null)
-            storedNotes = new Db(getApplicationContext());
+        storedNotes = NotesDb.getInstance(getApplicationContext());
 
         // When item is clicked, we go to NoteDetailActivity
         listview.setOnItemClickListener((parent, widget, selectedNote, rowId) -> {
@@ -338,7 +331,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 noteList,
                 listToView,
                 R.string.refreshing_notes_list,
-                storedNotes,
                 getSortOrder(),
                 // FIXME: this. ?
                 getApplicationContext()).execute();
@@ -360,8 +352,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 bgColor,
                 // FIXME: this. ?
                 getApplicationContext(),
-                action,
-                storedNotes).execute();
+                action).execute();
     }
 
 

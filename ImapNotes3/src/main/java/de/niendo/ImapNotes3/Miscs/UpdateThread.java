@@ -9,8 +9,8 @@ import androidx.annotation.StringRes;
 import android.text.Html;
 import android.util.Log;
 
-import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
+import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.NotesListAdapter;
@@ -51,7 +51,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private final Action action;
     private String suid;
     private boolean bool_to_return;
-    private Db storedNotes;
+    private final NotesDb storedNotes;
     private OneNote currentNote;
     private int indexToDelete;
 
@@ -67,8 +67,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         String noteBody,
                         String bgColor,
                         Context context,
-                        Action action,
-                        Db storedNotes) {
+                        Action action) {
         Log.d(TAG, "UpdateThread: " + noteBody);
         this.ImapNotesAccount = ImapNotesAccount;
         this.notesList = noteList;
@@ -79,7 +78,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.bgColor = bgColor;
         this.applicationContextRef = new WeakReference<>(context);
         this.action = action;
-        this.storedNotes = storedNotes;
+        this.storedNotes = NotesDb.getInstance(context);
         currentNote = null;
         indexToDelete = -1;
         //Notifier.Show(resId, applicationContext, 1);
@@ -96,9 +95,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //Log.d(TAG,"Delete note in Listview");
                 indexToDelete = getIndexByNumber(suid);
                 MoveMailToDeleted(suid);
-                storedNotes.OpenDb();
-                storedNotes.notes.DeleteANote(suid, ImapNotesAccount.accountName);
-                storedNotes.CloseDb();
+                storedNotes.DeleteANote(suid, ImapNotesAccount.accountName);
                 bool_to_return = true;
             }
 
@@ -123,11 +120,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String stringDate = sdf.format(date);
                 currentNote = new OneNote(title, stringDate, "", ImapNotesAccount.accountName, bgColor);
                 // Add note to database
-                if (storedNotes == null) storedNotes = new Db(applicationContextRef.get());
-                storedNotes.OpenDb();
                 if (!suid.startsWith("-")) {
                     // no temp. suid in use
-                    suid = storedNotes.notes.GetTempNumber(currentNote.GetAccount());
+                    suid = storedNotes.GetTempNumber(currentNote.GetAccount());
                 }
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
@@ -137,9 +132,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
                 }
-                storedNotes.notes.DeleteANote(oldSuid, currentNote.GetAccount());
-                storedNotes.notes.InsertANoteInDb(currentNote);
-                storedNotes.CloseDb();
+                storedNotes.DeleteANote(oldSuid, currentNote.GetAccount());
+                storedNotes.InsertANoteInDb(currentNote);
+
                 // Add note to noteList but change date format before
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);

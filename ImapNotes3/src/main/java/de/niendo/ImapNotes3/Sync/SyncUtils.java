@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import android.net.TrafficStats;
 import android.util.Log;
 
-import de.niendo.ImapNotes3.Data.Db;
+import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Data.Security;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
@@ -193,7 +193,7 @@ public class SyncUtils {
     static void GetNotes(@NonNull Account account,
                          @NonNull Folder imapNotesFolder,
                          @NonNull Context applicationContext,
-                         @NonNull Db storedNotes,
+                         @NonNull NotesDb storedNotes,
                          @NonNull boolean useSticky) throws MessagingException, IOException {
         Log.d(TAG, "GetNotes: " + account.name);
         //Long UIDM;
@@ -512,7 +512,7 @@ public class SyncUtils {
 
     private static void SaveNoteAndUpdateDatabase(@NonNull File outfile,
                                                   @NonNull Message notesMessage,
-                                                  @NonNull Db storedNotes,
+                                                  @NonNull NotesDb storedNotes,
                                                   @NonNull String accountName,
                                                   @NonNull String suid,
                                                   @NonNull String bgColor) throws IOException, MessagingException {
@@ -574,12 +574,12 @@ public class SyncUtils {
                 suid,
                 accountName,
                 bgColor);
-        storedNotes.notes.InsertANoteInDb(aNote);
+        storedNotes.InsertANoteInDb(aNote);
     }
 
     static boolean handleRemoteNotes(@NonNull Context context,
                                      @NonNull javax.mail.Folder remoteIMAPNotesFolder,
-                                     @NonNull Db storedNotes,
+                                     @NonNull NotesDb storedNotes,
                                      @NonNull String accountName,
                                      @NonNull Boolean useSticky)
             throws MessagingException, IOException {
@@ -636,7 +636,7 @@ public class SyncUtils {
             } else if (useSticky) {
                 //Log.d (TAG,"MANAGE STICKY");
                 remoteInternaldate = DateFormat.getDateInstance().format(notesMessage.getSentDate());
-                localInternaldate = storedNotes.notes.GetDate(suid, accountName);
+                localInternaldate = storedNotes.GetDate(suid, accountName);
                 if (!(remoteInternaldate.equals(localInternaldate))) {
                     File outfile = new File(rootDir, suid);
                     SaveNote(outfile, notesMessage);
@@ -654,7 +654,7 @@ public class SyncUtils {
                 //noinspection ResultOfMethodCallIgnored
                 toDelete.delete();
                 // Remove note from database
-                storedNotes.notes.DeleteANote(suid, accountName);
+                storedNotes.DeleteANote(suid, accountName);
                 result = true;
             }
         }
@@ -679,9 +679,7 @@ public class SyncUtils {
             file.delete();
         }
         // Delete account name entries in database
-        Db storedNotes = new Db(context);
-        storedNotes.OpenDb();
-        storedNotes.notes.ClearDb(account.name);
-        storedNotes.CloseDb();
+        NotesDb storedNotes = NotesDb.getInstance(context);
+        storedNotes.ClearDb(account.name);
     }
 }

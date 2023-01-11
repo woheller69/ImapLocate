@@ -4,17 +4,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
-import de.niendo.ImapNotes3.Data.Db;
+import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
-import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.NotesListAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-//import de.niendo.ImapNotes3.Data.NotesDb;
 
 public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     // --Commented out by Inspection (11/26/16 11:48 PM):boolean bool_to_return;
@@ -29,21 +26,22 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
     private final ArrayList<OneNote> notesList;
     private final String sortOrder;
     private final String imapNotesAccountName;
+    //private final WeakReference<Context> applicationContextRef;
+
     /**
      * SQLite database that holds status information about the notes.
      */
     // TODO: NoteDb should probably never be null.
     @NonNull
-    private final Db storedNotes;
+    private final NotesDb storedNotes;
 
     // TODO: remove unused arguments.
     public SyncThread(String imapNotesAccountName,
                       ArrayList<OneNote> noteList,
                       NotesListAdapter listToView,
                       @StringRes int resId,
-                      @Nullable Db storedNotes,
                       String sortOrder,
-                      Context applicationContext) {
+                      Context context) {
         //this.imapFolder = imapFolder;
         this.imapNotesAccountName = imapNotesAccountName;
         this.notesList = noteList;
@@ -51,8 +49,8 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
         this.resId = resId;
         this.sortOrder = sortOrder;
         //Notifier.Show(resId, applicationContext, 1);
-        this.storedNotes = (storedNotes == null) ? new Db(applicationContext) : storedNotes;
-
+        this.storedNotes = NotesDb.getInstance(context);
+        //this applicationContextRef= new WeakReference<>(context);;
     }
 
     // Do not pass arguments via execute; the object is never reused so it is quite safe to pass
@@ -79,10 +77,7 @@ public class SyncThread extends AsyncTask<Object, Void, Boolean> {
         //security = ((ImapNotesAccount) stuffs[1]).GetSecurity();
         //usesticky = ((ImapNotesAccount) stuffs[1]).GetUsesticky();
 
-
-        storedNotes.OpenDb();
-        storedNotes.notes.GetStoredNotes(this.notesList, imapNotesAccountName, sortOrder);
-        storedNotes.CloseDb();
+        storedNotes.GetStoredNotes(this.notesList, imapNotesAccountName, sortOrder);
         return true;
     }
 

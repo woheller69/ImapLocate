@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 
 import de.niendo.ImapNotes3.Data.ConfigurationFieldNames;
-import de.niendo.ImapNotes3.Data.Db;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
+import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.Security;
 import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
@@ -42,7 +42,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int THREAD_ID = 0xF00C;
     @NonNull
     private final Context applicationContext;
-    private Db storedNotes;
+    private NotesDb storedNotes;
     // TODO: Why was this static?
     //private Account account;
     private ImapNotesAccount account;
@@ -99,8 +99,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         //SyncUtils.CreateLocalDirectories(accountArg.name, applicationContext);
         account.CreateLocalDirectories();
-        storedNotes = new Db(applicationContext);
-        storedNotes.OpenDb();
+        storedNotes = NotesDb.getInstance(applicationContext);
 
         AccountManager am = AccountManager.get(applicationContext);
         //String syncInterval = am.getUserData(accountArg, "syncinterval");
@@ -109,7 +108,6 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Connect to remote and get UIDValidity
         ImapNotesResult res = ConnectToRemote();
         if (res.returnCode != ResultCodeSuccess) {
-            storedNotes.CloseDb();
             NotifySyncFinished(false, false, res.errorMessage);
             return;
         }
@@ -122,7 +120,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             // Replace local data by remote.  UIDs are no longer valid.
             try {
                 // delete notes in NotesDb for this account
-                storedNotes.notes.ClearDb(accountArg.name);
+                storedNotes.ClearDb(accountArg.name);
                 // delete notes in folders for this account and recreate dirs
                 //SyncUtils.ClearHomeDir(accountArg, applicationContext);
                 account.ClearHomeDir();
@@ -132,7 +130,6 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 SyncUtils.GetNotes(accountArg,
                         res.notesFolder,
                         applicationContext, storedNotes, account.usesticky);
-                storedNotes.CloseDb();
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
                 errorMessage = e.getMessage();
@@ -176,8 +173,6 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
         if (remoteNotesManaged) isChanged = true;
-
-        storedNotes.CloseDb();
 
         // Disconnect from remote
         SyncUtils.DisconnectFromRemote();
@@ -257,7 +252,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 AppendUID[] uids = SyncUtils.sendMessageToRemote(msg);
                 // Update uid in database entry
                 String newuid = Long.toString(uids[0].uid);
-                storedNotes.notes.UpdateANote(fileNew, newuid, account.accountName);
+                storedNotes.UpdateANote(fileNew, newuid, account.accountName);
                 // move new note from new dir, one level up
                 File fileInNew = new File(dirNew, fileNew);
                 File to = new File(accountDir, newuid);

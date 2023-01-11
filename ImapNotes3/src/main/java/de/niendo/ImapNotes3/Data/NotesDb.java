@@ -1,10 +1,13 @@
 package de.niendo.ImapNotes3.Data;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -14,7 +17,7 @@ import java.util.Date;
 
 import de.niendo.ImapNotes3.Miscs.Utilities;
 
-public class NotesDb {
+public class NotesDb extends SQLiteOpenHelper {
 
     private static final String TAG = "IN_NotesDb";
 
@@ -36,16 +39,41 @@ public class NotesDb {
             + COL_ACCOUNT_NAME + " text not null);";
 
 
-    private final Db db;
+    private static final int NOTES_VERSION = 3;
+    private static final String DATABASE_NAME = "NotesDb";
 
-    public NotesDb(@NonNull Db db) {
-        this.db = db;
+    private static NotesDb instance = null;
 
+    private NotesDb(@NonNull Context context) {
+        super(context, DATABASE_NAME, null, NOTES_VERSION);
     }
 
-    public void InsertANoteInDb(@NonNull OneNote noteElement) {
+    public static NotesDb getInstance(Context context) {
+        if (instance == null && context != null) {
+            instance = new NotesDb(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_NOTES_DB);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion != newVersion) {
+            //SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("Drop table notesTable;");
+            db.execSQL(CREATE_NOTES_DB);
+        }
+    }
+
+    public synchronized void InsertANoteInDb(@NonNull OneNote noteElement) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
         // delete DS with TempNumber
-        db.notesDb.execSQL("delete from notesTable where number = '" + noteElement.GetUid() +
+        db.execSQL("delete from notesTable where number = '" + noteElement.GetUid() +
                 "' and accountname = '" + noteElement.GetAccount() + "' and title = 'tmp'");
 
         ContentValues tableRow = new ContentValues();
@@ -55,42 +83,58 @@ public class NotesDb {
         tableRow.put(COL_BGCOLOR, noteElement.GetBgColor());
         tableRow.put(COL_ACCOUNT_NAME, noteElement.GetAccount());
         db.insert(TABLE_NAME, null, tableRow);
+
+
         //Log.d(TAG, "note inserted");
+        db.close();
     }
 
-    public void DeleteANote(@NonNull String number,
-                            @NonNull String accountname) {
-        db.notesDb.execSQL("delete from notesTable where number = '" + number +
+    public synchronized void DeleteANote(@NonNull String number,
+                                         @NonNull String accountname) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from notesTable where number = '" + number +
                 "' and accountname = '" + accountname + "'");
+        db.close();
     }
 
-    public void UpdateANote(@NonNull String tmpuid,
-                            @NonNull String newuid,
-                            @NonNull String accountname) {
+    public synchronized void UpdateANote(@NonNull String tmpuid,
+                                         @NonNull String newuid,
+                                         @NonNull String accountname) {
         /* TODO: use sql template and placeholders instead of string concatenation.
          */
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
         String req = "update notesTable set number='" + newuid + "' where number='-" + tmpuid + "' and accountname='" + accountname + "'";
-        db.notesDb.execSQL(req);
+        db.execSQL(req);
+        db.close();
     }
 
-    public String GetDate(@NonNull String uid,
-                          @NonNull String accountname) {
+    public synchronized String GetDate(@NonNull String uid,
+                                       @NonNull String accountname) {
        /* Returns a string representing the modification time of the note.
           TODO: use date class.
         */
+        SQLiteDatabase db = this.getWritableDatabase();
+        String RetValue = "";
         String selectQuery = "select date from notesTable where number = '" + uid + "' and accountname='" + accountname + "'";
-        try (Cursor c = db.notesDb.rawQuery(selectQuery, null)) {
+        try (Cursor c = db.rawQuery(selectQuery, null)) {
             if (c.moveToFirst()) {
-                return c.getString(0);
+                RetValue = c.getString(0);
             }
         }
-        return "";
+
+        db.close();
+        return RetValue;
     }
 
-    public String GetTempNumber(@NonNull String accountname) {
+    public synchronized String GetTempNumber(@NonNull String accountname) {
         String RetValue = "-1";
         String selectQuery = "select case when cast(max(abs(number)+2) as int) > 0 then cast(max(abs(number)+1) as int)*-1 else '-1' end from notesTable where number < '0' and accountname='" + accountname + "'";
-        try (Cursor c = db.notesDb.rawQuery(selectQuery, null)) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        try (Cursor c = db.rawQuery(selectQuery, null)) {
             if (c.moveToFirst()) {
                 RetValue = c.getString(0);
             }
@@ -103,15 +147,18 @@ public class NotesDb {
         tableRow.put(COL_ACCOUNT_NAME, accountname);
         tableRow.put(COL_BGCOLOR, "");
         db.insert(TABLE_NAME, null, tableRow);
+        db.close();
         return (RetValue);
     }
 
-    public void GetStoredNotes(@NonNull ArrayList<OneNote> noteList,
-                               @NonNull String accountName,
-                               @NonNull String sortOrder) {
+    public synchronized void GetStoredNotes(@NonNull ArrayList<OneNote> noteList,
+                                            @NonNull String accountName,
+                                            @NonNull String sortOrder) {
         noteList.clear();
         Date date = null;
-        try (Cursor resultPointer = db.notesDb.query(TABLE_NAME, null, "accountname = ?",
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try (Cursor resultPointer = db.query(TABLE_NAME, null, "accountname = ?",
                 new String[]{accountName}, null, null, sortOrder)) {
 
             if (resultPointer.moveToFirst()) {
@@ -141,13 +188,15 @@ public class NotesDb {
                             resultPointer.getString(bgColorIndex)));
 
                 } while (resultPointer.moveToNext());
+                resultPointer.close();
             }
         }
-
+        db.close();
     }
 
-    public void ClearDb(@NonNull String accountname) {
-        db.notesDb.execSQL("delete from notesTable where accountname = '" + accountname + "'");
-
+    public synchronized void ClearDb(@NonNull String accountname) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from notesTable where accountname = '" + accountname + "'");
+        db.close();
     }
 }
