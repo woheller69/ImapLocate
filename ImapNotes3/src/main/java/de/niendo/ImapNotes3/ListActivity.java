@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.PeriodicSync;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -102,27 +103,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     private static NotesDb storedNotes = null;
     private static List<String> currentList;
     private static Menu actionMenu;
-    // FIXME
-    // Hack! accountManager.addOnAccountsUpdatedListener
-    // OnAccountsUpdatedListener is called to early - so not all
-    // Date in AccountManager is saved - it gives crashes on the very first start
-    public Boolean EnableAccountsUpdate = true;
-    // Ensure that we never have to check for null by initializing reference.
-    @NonNull
-    private static Account[] accounts = new Account[0];
-    private static String OldStatus;
-    private final OnClickListener clickListenerEditAccount = v -> {
-        Intent res = new Intent();
-        String mPackage = Utilities.PackageName;
-        String mClass = ".AccountConfigurationActivity";
-        res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-        res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
-        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
-        startActivity(res);
-    };
-    private static final String TAG = "IN_Listactivity";
-    //@Nullable
-    private TextView status;
     @NonNull
     private final BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, @NonNull Intent intent) {
@@ -153,13 +133,35 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
                 status.setText(statusText);
 
-                if (isChanged) {
-                    storedNotes.GetStoredNotes(noteList, accountName, getSortOrder());
-                    listToView.notifyDataSetChanged();
-                }
+                //if (isChanged) {
+                storedNotes.GetStoredNotes(noteList, accountName, getSortOrder());
+                listToView.notifyDataSetChanged();
+                //}
             }
         }
     };
+    // FIXME
+    // Hack! accountManager.addOnAccountsUpdatedListener
+    // OnAccountsUpdatedListener is called to early - so not all
+    // Date in AccountManager is saved - it gives crashes on the very first start
+    public Boolean EnableAccountsUpdate = true;
+    // Ensure that we never have to check for null by initializing reference.
+    @NonNull
+    private static Account[] accounts = new Account[0];
+    private static String OldStatus;
+    private final OnClickListener clickListenerEditAccount = v -> {
+        Intent res = new Intent();
+        String mPackage = Utilities.PackageName;
+        String mClass = ".AccountConfigurationActivity";
+        res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+        res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
+        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
+        startActivity(res);
+    };
+    private static final String TAG = "IN_Listactivity";
+    //@Nullable
+    private TextView status;
+    private AsyncTask updateThread;
 
     public void onDestroy() {
         super.onDestroy();
@@ -301,7 +303,14 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
-        unregisterReceiver(syncFinishedReceiver);
+        if (!(updateThread == null)) {
+            // for some reason this helps...
+            synchronized (updateThread) {
+                if (updateThread.getStatus() == AsyncTask.Status.RUNNING) {
+                    Log.d(TAG, "onPause RUNNING");
+                }
+            }
+        }
     }
 
     @Override
@@ -343,16 +352,18 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                             String noteBody,
                             String bgColor,
                             UpdateThread.Action action) {
-        new UpdateThread(ImapNotesAccount,
-                noteList,
-                listToView,
-                R.string.updating_notes_list,
-                suid,
-                noteBody,
-                bgColor,
-                // FIXME: this. ?
-                getApplicationContext(),
-                action).execute();
+        synchronized (this) {
+            updateThread = new UpdateThread(ImapNotesAccount,
+                    noteList,
+                    listToView,
+                    R.string.updating_notes_list,
+                    suid,
+                    noteBody,
+                    bgColor,
+                    // FIXME: this. ?
+                    getApplicationContext(),
+                    action).execute();
+        }
     }
 
 
@@ -551,7 +562,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         }
         listToView.ResetFilterData(noteList);
         ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
-        this.RefreshList();
+        RefreshList();
     }
 
     @Override
