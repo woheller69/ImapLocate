@@ -3,4 +3,5 @@
 - background sync can be deactivated
 - close account settings after adding a account
 - make database access thread save (thanks to woheller69)
+- improve syncing in background
 

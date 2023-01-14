@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="10015"
+    android:versionCode="10016"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    android:versionName="v1.0-16pre">
+    android:versionName="v1.0-16">
 
     <dist:module dist:instant="true" />
 
