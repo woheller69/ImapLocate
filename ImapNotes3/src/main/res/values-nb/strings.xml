@@ -8,6 +8,7 @@
     <string name="search">søḳ</string>
     <string name="new_note">Ny</string>
     <string name="syncing">Synkronisering..</string>
+    <string name="account_name_description">Velg et navn.</string>
     <string name="username">Brukernavn</string>
     <string name="white">Hvit</string>
     <string name="yellow">Gul</string>
@@ -22,6 +23,5 @@
     <string name="add_account">Legge til konto</string>
     <string name="blue">Bl</string>
     <string name="check_and_create_account">Kontollerer og lag kontoen</string>
-    <string name="account_name_your_email">Velg et navn.</string>
     <string name="app_name">ImapNotes3</string>
 </resources>
