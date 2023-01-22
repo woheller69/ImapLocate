@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.EditorMenuAdapter;
@@ -32,6 +34,9 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
@@ -495,14 +500,31 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void Share() {
         Log.d(TAG, "Share");
         Intent sendIntent = new Intent();
-        Spanned html = Html.fromHtml(editText.getHtml(), Html.FROM_HTML_MODE_COMPACT);
-        String[] tok = html.toString().split("\n", 2);
-        String title = getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + tok[0];
+        String text = editText.getHtml();
+        Spanned html = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+        String title = html.toString().split("\n", 2)[0];
 
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType("text/html");
         sendIntent.putExtra(Intent.EXTRA_TEXT, html);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + title);
+
+        String directory = getApplicationContext().getCacheDir().toString();
+        File outfile = new File(directory, title.replaceAll("[:/]", "") + ".html");
+        Log.d(TAG, "SaveNote: " + outfile);
+        try (OutputStream str = new FileOutputStream(outfile)) {
+            str.write(text.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            Notifier.Show(R.string.share_file_error + e.toString(), getApplicationContext(), 1);
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Uri logUri =
+                FileProvider.getUriForFile(
+                        getApplicationContext(),
+                        BuildConfig.APPLICATION_ID, outfile);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, logUri);
 
         Intent shareIntent = Intent.createChooser(sendIntent, title);
         startActivity(shareIntent);

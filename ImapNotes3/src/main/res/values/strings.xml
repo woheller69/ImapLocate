@@ -76,4 +76,6 @@
     <string name="shared_note_from">Shared note from </string>
     <string name="account_name_not_valid_email">Account Name: not an valid E-Mail address</string>
     <string name="account_modified">Account has been modified</string>
+    <string name="intent_save_as_note">Save as note</string>
+    <string name="share_file_error">Share file error:</string>
 </resources>

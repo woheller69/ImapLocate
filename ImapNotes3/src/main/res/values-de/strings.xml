@@ -76,4 +76,6 @@
     <string name="account_name_your_email">Kontoname: eine gültige E-Mail-Adresse</string>
     <string name="account_name_not_valid_email">Kontoname: keine gültige E-Mail-Adresse</string>
     <string name="account_modified">Konto wurde geändert</string>
+    <string name="intent_save_as_note">Als Notiz speichern</string>
+    <string name="share_file_error">Dateifehler beim Teilen:</string>
 </resources>
