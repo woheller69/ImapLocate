@@ -33,8 +33,11 @@ import de.niendo.ImapNotes3.Miscs.Notifier;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -77,12 +80,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
-        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
         String stringres;
-        String ChangeNote = extras.getString(ActivityType);
+        String ChangeNote = intent.getStringExtra(ActivityType);
         if (ChangeNote.equals(ActivityTypeEdit)) {
-            HashMap hm = (HashMap) extras.getSerializable(selectedNote);
-            usesticky = extras.getBoolean(useSticky);
+            HashMap hm = (HashMap) intent.getSerializableExtra(selectedNote);
+            usesticky = intent.getBooleanExtra(useSticky, false);
 
             if (hm != null) {
                 suid = hm.get(OneNote.UID).toString();
@@ -117,21 +120,50 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
             SetupRichEditor();
 
-            if (extras.getBoolean("SHARE")) {
-                String sharedText = extras.getString(Intent.EXTRA_TEXT);
-                String type = extras.getString("TYPE");
-                String subject = extras.getString(Intent.EXTRA_SUBJECT);
-                if (subject != null) {
-                    subject = "<b>" + subject + "</b><br>";
-                } else subject = "";
-                if (sharedText != null) {
-                    if (type.equals("text/html")) {
-                        editText.setHtml(subject + sharedText);
-                    } else if (type.startsWith("text/")) {
-                        editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(subject + sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
-                        //editText.setHtml(subject+sharedText);
-                    } else if (type.startsWith("image/")) {
-                        // toDo
+            //if (intent.getBooleanExtra(Intent.ACTION_SEND, false)) {
+            if (intent.getAction().equals(Intent.ACTION_SEND)) {
+                String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                String type = intent.getType();
+                String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+
+                Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                Log.d(TAG, "Share 1");
+                if (uri != null) {
+                    Log.d(TAG, "Share 2");
+                    BufferedInputStream bufferedInputStream = null;
+                    try {
+                        bufferedInputStream =
+                                new BufferedInputStream(getContentResolver().openInputStream(uri));
+
+                        byte[] contents = new byte[1024];
+
+                        int bytesRead = 0;
+                        String html = "";
+                        while ((bytesRead = bufferedInputStream.read(contents)) != -1) {
+                            html += new String(contents, 0, bytesRead);
+                        }
+                        Log.d(TAG, "Share 3" + html);
+                        editText.setHtml(html);
+                        bufferedInputStream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d(TAG, "Share 4" + sharedText);
+                    if (subject != null) {
+                        subject = "<b>" + subject + "</b><br>";
+                    } else subject = "";
+                    if (sharedText != null) {
+                        if (type.equals("text/html")) {
+                            editText.setHtml(subject + sharedText);
+                        } else if (type.startsWith("text/")) {
+                            editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(subject + sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+                            //editText.setHtml(subject+sharedText);
+                        } else if (type.startsWith("image/")) {
+                            // toDo
+                        }
                     }
                 }
             }
@@ -510,13 +542,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + title);
 
         String directory = getApplicationContext().getCacheDir().toString();
-        File outfile = new File(directory, title.replaceAll("[:/]", "") + ".html");
-        Log.d(TAG, "SaveNote: " + outfile);
+        File outfile = new File(directory, title.replaceAll("[#:/]", "") + ".html");
+        Log.d(TAG, "Share Note: " + outfile);
         try (OutputStream str = new FileOutputStream(outfile)) {
             str.write(text.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            Notifier.Show(R.string.share_file_error + e.toString(), getApplicationContext(), 1);
-            // TODO Auto-generated catch block
+            Notifier.Show(R.string.share_file_error + e.toString(), getApplicationContext(), 2);
             e.printStackTrace();
         }
 

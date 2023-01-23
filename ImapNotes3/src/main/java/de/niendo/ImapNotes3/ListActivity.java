@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.PeriodicSync;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -250,36 +251,19 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
 
+        Log.d(TAG, "Check_Action_Send");
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
-        String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            //if (type.startsWith("text/")) {
-            Intent toNew = new Intent(this, NoteDetailActivity.class);
-            toNew.putExtra("SHARE", true);
+        if (Intent.ACTION_SEND.equals(action)) {
+            Intent toNew = (Intent) intent.clone();
+            toNew.setClass(this, NoteDetailActivity.class);
+            toNew.setFlags(0);
             toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
             toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-            toNew.putExtra(Intent.EXTRA_TEXT, intent.getStringExtra(Intent.EXTRA_TEXT));
-            toNew.putExtra(Intent.EXTRA_SUBJECT, intent.getStringExtra(Intent.EXTRA_SUBJECT));
-
-            toNew.putExtra("TYPE", type);
             startActivityForResult(toNew, ListActivity.NEW_BUTTON);
-
-            //} else if (type.startsWith("image/")) {
-
-            // handleSendImage(intent); // Handle single image being sent
-            // }
-//        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-            //          if (type.startsWith("image/")) {
-            // handleSendMultipleImages(intent); // Handle multiple images being sent
-            //        }
-//        } else {
-            // Handle other intents, such as being started from the home screen
         }
-
-
     }
 
     public void onStart() {

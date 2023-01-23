@@ -6,9 +6,6 @@
     <external-path
         name="files"
         path="Android/data/${applicationId}/" />
-    <external-files-path
-        name="my_images"
-        path="/" />
     <cache-path
         name="cache"
         path="Android/data/${applicationId}/" />
