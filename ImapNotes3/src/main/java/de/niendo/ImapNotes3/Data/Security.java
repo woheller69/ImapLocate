@@ -28,9 +28,9 @@ public enum Security {
     @SuppressWarnings("unused")
     SSL_TLS_accept_all_certificates("SSL/TLS (accept all certificates)", "993", "imaps", true),
     @SuppressWarnings("unused")
-    STARTTLS("STARTTLS", "143", "imaps", false),
+    STARTTLS("STARTTLS", "143", "imap", false),
     @SuppressWarnings("unused")
-    STARTTLS_accept_all_certificates("STARTTLS (accept all certificates)", "143", "imaps", true);
+    STARTTLS_accept_all_certificates("STARTTLS (accept all certificates)", "143", "imap", true);
 
     @NonNull
     static final String TAG = "IN_Security";
