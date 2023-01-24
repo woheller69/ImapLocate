@@ -120,8 +120,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
             SetupRichEditor();
 
-            //if (intent.getBooleanExtra(Intent.ACTION_SEND, false)) {
-            if (intent.getAction().equals(Intent.ACTION_SEND)) {
+            // Share: Receive Data as new message
+            String strAction = intent.getAction();
+            if ((strAction != null) && strAction.equals(Intent.ACTION_SEND)) {
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 String type = intent.getType();
                 String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
