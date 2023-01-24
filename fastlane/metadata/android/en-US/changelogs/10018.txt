@@ -1,2 +1,3 @@
 * improve sharing
 * improve receiving shared data
+* fix STARTTLS (thanks to axmanA)
