@@ -38,10 +38,6 @@ public class Imaper {
 
         TrafficStats.setThreadStatsTag(threadID);
 
-        if (IsConnected()) {
-            this.close();
-        }
-
         MailSSLSocketFactory sf;
         try {
             sf = new MailSSLSocketFactory();
@@ -113,15 +109,10 @@ public class Imaper {
         return store != null && store.isConnected();
     }
 
-    public void close() throws MessagingException {
-        if (IsConnected()) store.close();
-
-    }
-
     @Override
     protected void finalize() throws MessagingException {
         if (IsConnected()) {
-            this.close();
+            store.close();
         }
     }
 }
