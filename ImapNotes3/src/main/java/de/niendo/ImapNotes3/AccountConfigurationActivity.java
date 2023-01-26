@@ -3,6 +3,7 @@ package de.niendo.ImapNotes3;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.SyncRequest;
 import android.content.res.Configuration;
@@ -66,6 +67,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private static final String AUTHORITY = Utilities.PackageName + ".provider";
     private static final String TAG = "IN_AccountConfActivity";
     private static final int THREAD_ID = 0xF00D;
+
     @Nullable
     private static Account myAccount = null;
     private static AccountManager accountManager;
@@ -202,6 +204,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         }
     };
 
+    @SuppressLint("SetTextI18n")
     private final View.OnFocusChangeListener FinishEmailEdit = (v, r) -> {
         if (!v.hasFocus()) {
             TextView tv = (TextView) v;
@@ -211,7 +214,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             }
         }
     };
-
 
     /*
         private final TextWatcher textWatcher = new TextWatcher(){
@@ -413,13 +415,11 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -516,7 +516,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                     }
                     resultTxtId = R.string.account_added;
                 }
-                ;
+
                 final Bundle result = new Bundle();
                 result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
                 result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -526,16 +526,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 if (ImapNotesAccount.syncInterval > 0) {
                     ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                     ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         // we can enable inexact timers in our periodic sync
                         SyncRequest request = new SyncRequest.Builder().syncPeriodic(ImapNotesAccount.syncInterval, ImapNotesAccount.syncInterval)
                                 .setSyncAdapter(account, AUTHORITY).setExtras(new Bundle()).build();
                         ContentResolver.requestSync(request);
-                    } else {
-                        ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), ImapNotesAccount.syncInterval);
-                    }
                 }
-                ;
+
                 Log.d(TAG, "doInBackground success");
                 return new Result<>(getString(resultTxtId), true);
             } catch (Exception e) {
@@ -552,7 +548,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(ImapNotesAccount.syncInterval));
             am.setUserData(account, ConfigurationFieldNames.Security, ImapNotesAccount.security.name());
             am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(ImapNotesAccount.usesticky));
-            am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.imapfolder);
+            am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.GetFolderName());
         }
 
         protected void onPostExecute(@NonNull Result<String> result) {

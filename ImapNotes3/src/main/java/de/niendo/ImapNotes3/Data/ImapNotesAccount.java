@@ -17,6 +17,8 @@ import java.io.IOException;
 public class ImapNotesAccount {
 
     private static final String TAG = "IN_ImapNotesAccount";
+    private static final String DEFAULT_FOLDER_NAME = "Notes";
+
     @NonNull
     public final String accountName;
     @NonNull
@@ -32,7 +34,7 @@ public class ImapNotesAccount {
     public final boolean usesticky;
     public final int syncInterval;
     @NonNull
-    public final String imapfolder;
+    private final String imapfolder;
     @Nullable
     private final Account account;
     private File dirForNewFiles;
@@ -77,6 +79,7 @@ public class ImapNotesAccount {
         security = Security.from(am.getUserData(account, ConfigurationFieldNames.Security));
         usesticky = "true".equals(am.getUserData(account, ConfigurationFieldNames.UseSticky));
         imapfolder = am.getUserData(account, ConfigurationFieldNames.ImapFolder);
+
     }
 
 
@@ -211,11 +214,15 @@ public class ImapNotesAccount {
     }
 */
 
-/*
+
     @Nullable
-    public String GetFoldername() {
+    public String GetFolderName() {
+        if (this.imapfolder.isEmpty())
+            return DEFAULT_FOLDER_NAME;
         return this.imapfolder;
     }
+
+/*
 
     private void SetFolderName(@NonNull String folder) {
         this.imapfolder = folder;

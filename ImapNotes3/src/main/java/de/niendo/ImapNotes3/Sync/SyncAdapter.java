@@ -211,7 +211,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.Server),
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
                 Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
-                account.imapfolder,
+                account.GetFolderName(),
                 THREAD_ID
         );
         if (res.returnCode != ResultCodeSuccess) {
