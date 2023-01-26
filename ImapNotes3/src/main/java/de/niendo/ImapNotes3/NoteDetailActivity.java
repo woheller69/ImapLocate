@@ -108,12 +108,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    Notifier.Show(R.string.sync_necessary, getApplicationContext(), 1);
+                    Notifier.Show(R.string.sync_necessary, NoteDetailActivity.this, 1);
                     finish();
-                        return;
+                    return;
                     }
             } else { // Entry can not opened..
-                Notifier.Show(R.string.Invalid_Message, getApplicationContext(), 1);
+                Notifier.Show(R.string.Invalid_Message, NoteDetailActivity.this, 1);
                 finish();
                 return;
             }
@@ -461,6 +461,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 return true;
             case R.id.save:
                 Save();
+                finish();//finishing activity
                 return true;
             case R.id.share:
                 Share();
@@ -527,7 +528,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         intent.putExtra(ListActivity.EDIT_ITEM_TXT, editText.getHtml());
         intent.putExtra(ListActivity.EDIT_ITEM_COLOR, bgColor);
         setResult(NoteDetailActivity.EDIT_BUTTON, intent);
-        finish();//finishing activity
     }
 
     private void Share() {
@@ -548,7 +548,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         try (OutputStream str = new FileOutputStream(outfile)) {
             str.write(text.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            Notifier.Show(R.string.share_file_error + e.toString(), getApplicationContext(), 2);
+            Notifier.Show(R.string.share_file_error + e.toString(), NoteDetailActivity.this, 2);
             e.printStackTrace();
         }
 

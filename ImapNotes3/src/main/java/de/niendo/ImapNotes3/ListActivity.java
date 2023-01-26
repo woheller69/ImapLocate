@@ -540,7 +540,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
                 ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), 60);
                 Notifier.Show("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime",
-                        getApplicationContext(),
+                        ListActivity.this,
                         2);
             }
         }

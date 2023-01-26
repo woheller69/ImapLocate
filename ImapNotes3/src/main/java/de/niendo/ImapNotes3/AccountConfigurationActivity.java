@@ -74,7 +74,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         public void onClick(View v) {
             // Click on Remove Button
             accountManager.removeAccount(myAccount, null, null, null);
-            Notifier.Show(R.string.account_removed, getApplicationContext(), 3);
+            Notifier.Show(R.string.account_removed, AccountConfigurationActivity.this, 3);
             finish();//finishing activity
         }
     };
@@ -230,7 +230,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         try {
             String test = String.valueOf(new InternetAddress(accountnameTextView.getText().toString(), true));
         } catch (AddressException e) {
-            Notifier.Show(R.string.account_name_not_valid_email, getApplicationContext(), 3);
+            Notifier.Show(R.string.account_name_not_valid_email, AccountConfigurationActivity.this, 3);
             return;
         }
         DoLogin();
@@ -556,12 +556,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         }
 
         protected void onPostExecute(@NonNull Result<String> result) {
-          /*  try {
-                //imapFolder.close();
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-            */
             TrafficStats.clearThreadStatsTag();
             if (result.succeeded) {
                 accountConfigurationActivity.Clear();
@@ -570,7 +564,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 finish();
             } else {
                 // FIXME shows an exception
-                Notifier.Show(result.result, getApplicationContext(), 5);
+                Notifier.Show(result.result, AccountConfigurationActivity.this, 5);
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeError);
             }
