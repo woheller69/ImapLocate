@@ -1,3 +1,4 @@
 * improve sharing
 * improve receiving shared data
 * fix STARTTLS (thanks to axmanA)
+* logcat data can be send by user
