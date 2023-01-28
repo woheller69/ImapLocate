@@ -52,8 +52,10 @@ import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -473,6 +475,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         })
                         .show();
                 return true;
+            case R.id.send_debug_report:
+                SendLogcatMail();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -579,39 +584,36 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         }
     }
 
-// --Commented out by Inspection START (12/2/16 8:49 PM):
-//    // In case of neccessary debug  with user approval
-//    // This function will be called from onDestroy
-//    public void SendLogcatMail() {
-//        String emailData = "";
-//        try {
-//            Process process = Runtime.getRuntime().exec("logcat -d");
-//            BufferedReader bufferedReader = new BufferedReader(
-//                    new InputStreamReader(process.getInputStream()));
-//
-//            StringBuilder sb = new StringBuilder();
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                sb.append(line).append("\n");
-//            }
-//            emailData = sb.toString();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//        //send file using email
-//        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-//        String to[] = {"nb@dagami.org"};
-//        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-//        // the attachment
-//        emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
-//        // the mail subject
-//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for de.niendo.ImapNotes3 debugging");
-//        emailIntent.setType("message/rfc822");
-//        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-//    }
-// --Commented out by Inspection STOP (12/2/16 8:49 PM)
+    // In case of neccessary debug  with user approval
+    // This function will be called from onDestroy
+    public void SendLogcatMail() {
+        String emailData = "";
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d");
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            emailData = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //send file using email
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        String to[] = {"peter@niendo.de"};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        // the attachment
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
+        // the mail subject
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for de.niendo.ImapNotes3 debugging");
+        emailIntent.setType("message/rfc822");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
 
     @Nullable
     @Override

@@ -78,4 +78,5 @@
     <string name="account_modified">Konto wurde geändert</string>
     <string name="intent_save_as_note">Als Notiz speichern</string>
     <string name="share_file_error">Dateifehler beim Teilen:</string>
+    <string name="send_debug_report">Sende Fehlerreport</string>
 </resources>
