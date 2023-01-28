@@ -196,12 +196,8 @@ public class SyncUtils {
         //Long UIDM;
         //Message notesMessage;
         File directory = new File(applicationContext.getFilesDir(), account.name);
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if ((remoteIMAPNotesFolder.getMode() & Folder.READ_ONLY) != 0)
-                remoteIMAPNotesFolder.open(Folder.READ_ONLY);
-        } else {
-            remoteIMAPNotesFolder.open(Folder.READ_ONLY);
-        }
+        OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
+
         UIDValidity = GetUIDValidity(account, applicationContext);
         SetUIDValidity(account, UIDValidity, applicationContext);
         // From the docs: "Folder implementations are expected to provide light-weight Message
@@ -236,14 +232,7 @@ public class SyncUtils {
 
     static void DeleteNote(int numMessage) throws MessagingException {
         Log.d(TAG, "DeleteNote: " + numMessage);
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if ((remoteIMAPNotesFolder.getMode() & Folder.READ_WRITE) != 0) {
-                remoteIMAPNotesFolder.close();
-                remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-            }
-        } else {
-            remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-        }
+        OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
 
         //Log.d(TAG,"UID to remove:"+numMessage);
         Message[] msgs = {((IMAPFolder) remoteIMAPNotesFolder).getMessageByUID(numMessage)};
@@ -445,27 +434,9 @@ public class SyncUtils {
     }
 
     static AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
-        //remoteIMAPNotesFolder = store.getFolder(sfolder);
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if ((remoteIMAPNotesFolder.getMode() & Folder.READ_WRITE) != 0)
-                remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-        } else {
-            remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-        }
+        OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
         return ((IMAPFolder) remoteIMAPNotesFolder).appendUIDMessages(message);
     }
-
-// --Commented out by Inspection START (12/3/16 11:31 PM):
-//    static void ClearHomeDir(@NonNull Account account, @NonNull Context ctx) {
-//        File directory = new File(ctx.getFilesDir() + "/" + account.name);
-//        try {
-//            FileUtils.deleteDirectory(directory);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-// --Commented out by Inspection STOP (12/3/16 11:31 PM)
 
     /**
      * Do we really need the Context argument or could we call getApplicationContext instead?
@@ -489,10 +460,9 @@ public class SyncUtils {
      * @param notesMessage The note in the form of a mail message.
      */
     private static void SaveNote(@NonNull File outfile,
-                                 @NonNull Message notesMessage) throws IOException, MessagingException {
-
-        Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
+                                 @NonNull Message notesMessage) {
         try (OutputStream str = new FileOutputStream(outfile)) {
+            Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
             notesMessage.writeTo(str);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -588,14 +558,7 @@ public class SyncUtils {
         ArrayList<String> localListOfNotes = new ArrayList<>();
         String remoteInternaldate;
         String localInternaldate;
-        //Flags flags;
 
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if ((remoteIMAPNotesFolder.getMode() & Folder.READ_ONLY) != 0)
-                remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-        } else {
-            remoteIMAPNotesFolder.open(Folder.READ_WRITE);
-        }
 
         // Get local list of notes uids
         String rootString = context.getFilesDir() + "/" + accountName;
@@ -607,6 +570,8 @@ public class SyncUtils {
             }
         }
 
+        OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
+
         // Add to local device, new notes added to remote
         Message[] notesMessages = ((IMAPFolder) remoteIMAPNotesFolder).getMessagesByUID(1, UIDFolder.LASTUID);
         for (int index = notesMessages.length - 1; index >= 0; index--) {
@@ -617,18 +582,6 @@ public class SyncUtils {
             boolean deleted = notesMessage.isSet(Flags.Flag.DELETED);
             // Builds remote list while in the loop, but only if not deleted on remote
             if (!deleted) {
-
-                /*
-                E/AndroidRuntime: FATAL EXCEPTION: SyncAdapterThread-1
-                Process: de.niendo.ImapNotes3, PID: 19966
-                java.lang.IllegalStateException: This operation is not allowed on a closed folder
-                at com.sun.mail.imap.IMAPFolder.checkOpened(IMAPFolder.java:454)
-                at com.sun.mail.imap.IMAPFolder.getUID(IMAPFolder.java:2715)
-                at de.niendo.ImapNotes3.Sync.SyncUtils.handleRemoteNotes(SyncUtils.java:623)
-                at de.niendo.ImapNotes3.Sync.SyncAdapter.onPerformSync(SyncAdapter.java:164)
-                at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:354)
-*/
-
                 uids.add(((IMAPFolder) remoteIMAPNotesFolder).getUID(notesMessage));
             }
             String suid = uid.toString();
@@ -692,12 +645,26 @@ public class SyncUtils {
         storedNotes.ClearDb(account.name);
     }
 
-    @Override
-    protected void finalize() throws MessagingException {
-        if (IsConnected()) {
-            store.close();
+    private static void OpenRemoteIMAPNotesFolder(int mode) throws MessagingException {
+        if (remoteIMAPNotesFolder.isOpen()) {
+            if ((remoteIMAPNotesFolder.getMode() & mode) != 0) {
+                remoteIMAPNotesFolder.close();
+                remoteIMAPNotesFolder.open(mode);
+            }
+        } else {
+            remoteIMAPNotesFolder.open(mode);
         }
     }
 
+    @Override
+    protected void finalize() {
+        if (IsConnected()) {
+            try {
+                store.close();
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
