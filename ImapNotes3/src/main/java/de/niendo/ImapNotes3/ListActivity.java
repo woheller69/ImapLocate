@@ -188,7 +188,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
      * Called when the activity is first created.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.main);
@@ -253,7 +253,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Intent intent = getIntent();
         String action = intent.getAction();
 
-        if (Intent.ACTION_SEND.equals(action)) {
+        if (action.equals(Intent.ACTION_SEND)) {
             Intent toNew = (Intent) intent.clone();
             toNew.setClass(this, NoteDetailActivity.class);
             toNew.setFlags(0);
