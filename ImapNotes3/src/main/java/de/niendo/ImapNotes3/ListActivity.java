@@ -168,11 +168,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     public void onDestroy() {
         super.onDestroy();
-        // in case of debug, uncomment next instruction
-        // logcat will be sent by mail
-        // send mail action is done by the user, so he can refuse
-        // SendLogcatMail();
-//        this.imapFolder.SetPrefs();
     }
 
     private static void TriggerSync(@NonNull TextView statusField) {
@@ -585,7 +580,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     // In case of neccessary debug  with user approval
-    // This function will be called from onDestroy
     public void SendLogcatMail() {
         String emailData = "";
         try {
@@ -605,7 +599,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         //send file using email
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        String to[] = {"peter@niendo.de"};
+        String to[] = {""};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
         // the attachment
         emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
