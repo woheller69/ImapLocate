@@ -534,7 +534,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         Log.d(TAG, "Share");
         Intent sendIntent = new Intent();
         String text = editText.getHtml();
-        Spanned html = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+        Spanned html = Html.fromHtml(text, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
         String title = html.toString().split("\n", 2)[0];
 
         sendIntent.setAction(Intent.ACTION_SEND);
