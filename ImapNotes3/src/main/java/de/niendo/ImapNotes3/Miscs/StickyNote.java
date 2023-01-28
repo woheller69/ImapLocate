@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import de.niendo.ImapNotes3.BuildConfig;
 import de.niendo.ImapNotes3.Data.OneNote;
 
 import org.apache.commons.io.IOUtils;
@@ -127,6 +128,7 @@ public class StickyNote {
         message.setText(body);
         message.setHeader("Content-Transfer-Encoding", "8bit");
         message.setHeader("Content-Type", "text/x-stickynote; charset=\"utf-8\"");
+        message.setHeader("X-Mailer", BuildConfig.APPLICATION_NAME + " " + BuildConfig.VERSION_NAME);
 
         return (message);
     }

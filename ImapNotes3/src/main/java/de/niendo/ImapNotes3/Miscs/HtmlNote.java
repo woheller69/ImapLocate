@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import de.niendo.ImapNotes3.BuildConfig;
 import de.niendo.ImapNotes3.Data.OneNote;
 
 import org.apache.commons.io.IOUtils;
@@ -39,7 +40,6 @@ public class HtmlNote {
     public HtmlNote(String text,
                     @NonNull String color) {
         this.text = text;
-        // this.position = position;
         this.color = color;
     }
 
@@ -52,6 +52,7 @@ public class HtmlNote {
         message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
         UUID uuid = UUID.randomUUID();
         message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
+        message.setHeader("X-Mailer", BuildConfig.APPLICATION_NAME + " " + BuildConfig.VERSION_NAME);
 
 /*
             <!DOCTYPE html>
@@ -63,23 +64,25 @@ public class HtmlNote {
         Document doc = Jsoup.parse(noteBody, "utf-8");
         String bodyStyle = doc.select("body").attr("style");
         doc.outputSettings().prettyPrint(false);
-        Matcher matcherColor = HtmlNote.patternBodyBgColor.matcher(bodyStyle);
-        String BgColorStr = "background-color:" + note.GetBgColor() + ";";
-        if (matcherColor.find()) {
-            bodyStyle = matcherColor.replaceFirst(BgColorStr);
-        } else {
-            bodyStyle = BgColorStr + bodyStyle;
+        if (!note.GetBgColor().equals("none")) {
+            Matcher matcherColor = HtmlNote.patternBodyBgColor.matcher(bodyStyle);
+            String BgColorStr = "background-color:" + note.GetBgColor() + ";";
+            if (matcherColor.find()) {
+                bodyStyle = matcherColor.replaceFirst(BgColorStr);
+            } else {
+                bodyStyle = BgColorStr + bodyStyle;
+            }
+
+            doc.select("body").attr("style", bodyStyle);
         }
-
-        doc.select("body").attr("style", bodyStyle);
-
-/*            body = body.replaceFirst("<p dir=ltr>", "<div>");
+/*          body = body.replaceFirst("<p dir=ltr>", "<div>");
             body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
             body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
             body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
             body = body.replaceAll("</p>", "</div>");
             body = body.replaceAll("<br>\n", "</div><div>");
  */
+
         message.setText(doc.toString(), "utf-8", "html");
         message.setFlag(Flags.Flag.SEEN, true);
 
