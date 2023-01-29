@@ -604,7 +604,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         // the attachment
         emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
         // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for de.niendo.ImapNotes3 debugging");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for " + Utilities.FullApplicationName + " debugging");
         emailIntent.setType("message/rfc822");
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }

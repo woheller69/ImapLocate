@@ -540,7 +540,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType("text/html");
         sendIntent.putExtra(Intent.EXTRA_TEXT, html);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + BuildConfig.APPLICATION_NAME + ": " + title);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.shared_note_from) + Utilities.ApplicationName + ": " + title);
 
         String directory = getApplicationContext().getCacheDir().toString();
         File outfile = new File(directory, title.replaceAll("[#:/]", "") + ".html");
@@ -555,7 +555,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         Uri logUri =
                 FileProvider.getUriForFile(
                         getApplicationContext(),
-                        BuildConfig.APPLICATION_ID, outfile);
+                        Utilities.PackageName, outfile);
         sendIntent.putExtra(Intent.EXTRA_STREAM, logUri);
 
         Intent shareIntent = Intent.createChooser(sendIntent, title);

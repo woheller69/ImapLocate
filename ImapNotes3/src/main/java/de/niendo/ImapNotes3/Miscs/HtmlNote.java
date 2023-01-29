@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import de.niendo.ImapNotes3.BuildConfig;
 import de.niendo.ImapNotes3.Data.OneNote;
 
 import org.apache.commons.io.IOUtils;
@@ -52,7 +51,7 @@ public class HtmlNote {
         message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
         UUID uuid = UUID.randomUUID();
         message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
-        message.setHeader("X-Mailer", BuildConfig.APPLICATION_NAME + " " + BuildConfig.VERSION_NAME);
+        message.setHeader("X-Mailer", Utilities.FullApplicationName);
 
 /*
             <!DOCTYPE html>

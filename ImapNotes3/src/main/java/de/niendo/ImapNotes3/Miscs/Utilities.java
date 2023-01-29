@@ -20,6 +20,10 @@ public final class Utilities {
     @NonNull
     public static final String PackageName = BuildConfig.APPLICATION_ID;
     @NonNull
+    public static final String ApplicationName = BuildConfig.APPLICATION_NAME;
+    @NonNull
+    public static final String FullApplicationName = ApplicationName + " " + BuildConfig.VERSION_NAME;
+    @NonNull
     public static String internalDateFormatString = "yyyy-MM-dd HH:mm:ss";
     @NonNull
     public static SimpleDateFormat internalDateFormat = new SimpleDateFormat(internalDateFormatString, Locale.ROOT);
