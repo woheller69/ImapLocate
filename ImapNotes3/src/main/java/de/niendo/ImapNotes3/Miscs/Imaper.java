@@ -45,8 +45,7 @@ public class Imaper {
             e.printStackTrace();
             return new ImapNotesResult(-1,
                     "Can't connect to server",
-                    -1,
-                    null);
+                    -1);
         }
 
         String proto = security.proto;
@@ -93,15 +92,13 @@ public class Imaper {
 
             return new ImapNotesResult(ResultCodeSuccess,
                     "",
-                    -1,
-                    null);
+                    -1);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, e.getMessage());
             return new ImapNotesResult(ResultCodeException,
                     e.getMessage(),
-                    -1,
-                    null);
+                    -1);
         }
     }
 

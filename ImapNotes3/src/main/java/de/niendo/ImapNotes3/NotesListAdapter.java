@@ -444,7 +444,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                     if (h != null) {
 
                         //String str = (String) h.get(OneNote.TITLE) + (String) h.get(OneNote.DATE);
-                        File directory = new File(mContext.getFilesDir(), (String) h.get(OneNote.ACCOUNT));
+                        File directory = new File(ImapNotes3.GetRootDir(), (String) h.get(OneNote.ACCOUNT));
 
                         String uid = (String) h.get(OneNote.UID);
                         if (uid.startsWith("-")) {

@@ -171,8 +171,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
      * @param suid IMAP ID of the note.
      */
     private void MoveMailToDeleted(@NonNull String suid) {
-        String directory = applicationContextRef.get().getFilesDir() + "/" +
-                ListActivity.ImapNotesAccount.accountName;
+        File directory = ListActivity.ImapNotesAccount.GetRootDirAccount();
         // TODO: Explain why we need to omit the first character of the UID
         File from = new File(directory, suid);
         if (!from.exists()) {
@@ -245,7 +244,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         message.addHeader("Date", headerDate);
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
-        File accountDirectory = new File(applicationContextRef.get().getFilesDir(), note.GetAccount());
+        File accountDirectory = ImapNotesAccount.GetRootDirAccount();
         File directory = new File(accountDirectory, "new");
         try {
             message.setFrom(new InternetAddress(note.GetAccount(), false));

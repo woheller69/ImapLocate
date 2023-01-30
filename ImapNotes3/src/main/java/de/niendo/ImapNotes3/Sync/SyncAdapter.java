@@ -128,7 +128,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 account.CreateLocalDirectories();
                 // Get all notes from remote and replace local
                 SyncUtils.GetNotes(accountArg,
-                        res.notesFolder,
+                        account.GetRootDirAccount(),
                         applicationContext, storedNotes, account.usesticky);
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
@@ -161,7 +161,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         boolean remoteNotesManaged = false;
         boolean useSticky = am.getUserData(accountArg, ConfigurationFieldNames.UseSticky).equals("true");
         try {
-            remoteNotesManaged = SyncUtils.handleRemoteNotes(applicationContext, res.notesFolder,
+            remoteNotesManaged = SyncUtils.handleRemoteNotes(applicationContext, account.GetRootDirAccount(),
                     storedNotes, accountArg.name, useSticky);
         } catch (MessagingException e) {
             errorMessage = e.getMessage();
@@ -211,7 +211,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.Server),
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
                 Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
-                account.GetFolderName(),
+                account.GetImapFolder(),
                 THREAD_ID
         );
         if (res.returnCode != ResultCodeSuccess) {
@@ -225,10 +225,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(TAG, "handleNewNotes");
         //Message message = null;
         boolean newNotesManaged = false;
-        //AppendUID[] uids = null;
-        //String rootString = applicationContext.getFilesDir() + File.separator + account.name;
-        //File rootDir = new File(rootString);
-        File accountDir = new File(applicationContext.getFilesDir(), account.GetAccount().name);
+        File accountDir = account.GetRootDirAccount();
         File dirNew = new File(accountDir, "new");
         Log.d(TAG, "dn path: " + dirNew.getAbsolutePath());
         Log.d(TAG, "dn exists: " + Boolean.toString(dirNew.exists()));
@@ -270,15 +267,13 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
         //Message message = null;
         Log.d(TAG, "handleDeletedNotes");
         boolean deletedNotesManaged = false;
-        String rootString = applicationContext.getFilesDir() + "/" + account.accountName;
-        File rootDir = new File(rootString);
-        File dirDeleted = new File(rootDir + "/deleted");
+        File dirDeleted = new File(account.GetRootDirAccount(), "deleted");
         String[] listOfDeleted = dirDeleted.list();
         for (String fileDeleted : listOfDeleted) {
             try {
                 SyncUtils.DeleteNote(Integer.parseInt(fileDeleted));
             } catch (Exception e) {
-                Log.d(TAG, "DeletNote failed:");
+                Log.d(TAG, "DeleteNote failed:");
                 e.printStackTrace();
             }
 

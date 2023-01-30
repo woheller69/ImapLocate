@@ -10,7 +10,6 @@ import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.net.TrafficStats;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
@@ -548,7 +547,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             am.setUserData(account, ConfigurationFieldNames.SyncInterval, Integer.toString(ImapNotesAccount.syncInterval));
             am.setUserData(account, ConfigurationFieldNames.Security, ImapNotesAccount.security.name());
             am.setUserData(account, ConfigurationFieldNames.UseSticky, String.valueOf(ImapNotesAccount.usesticky));
-            am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.GetFolderName());
+            am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.GetImapFolder());
         }
 
         protected void onPostExecute(@NonNull Result<String> result) {

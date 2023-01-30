@@ -13,6 +13,7 @@ import android.util.Log;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Data.Security;
+import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
 import de.niendo.ImapNotes3.Miscs.Imaper;
@@ -29,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -61,13 +63,13 @@ public class SyncUtils {
     private static Long UIDValidity;
 
     @NonNull
-    static ImapNotesResult ConnectToRemote(@NonNull String username,
-                                           @NonNull String password,
-                                           @NonNull String server,
-                                           String portnum,
-                                           @NonNull Security security,
-                                           @NonNull String ImapFolderName,
-                                           int threadID
+    static synchronized ImapNotesResult ConnectToRemote(@NonNull String username,
+                                                        @NonNull String password,
+                                                        @NonNull String server,
+                                                        String portnum,
+                                                        @NonNull Security security,
+                                                        @NonNull String ImapFolderName,
+                                                        int threadID
     ) {
         Log.d(TAG, "ConnectToRemote: " + username);
 
@@ -92,12 +94,7 @@ public class SyncUtils {
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
             return new ImapNotesResult(Imaper.ResultCodeCantConnect,
-                    "Can't connect to server: " + e.getMessage(),
-                    -1,
-                    null);
-            //res.errorMessage = "Can't connect to server: " + e.getMessage();
-            //res.returnCode = Imaper.ResultCodeCantConnect;
-            //return res;
+                    "Can't connect to server: " + e.getMessage(), -1);
         }
 
         Properties props = new Properties();
@@ -164,22 +161,12 @@ public class SyncUtils {
 //          store.close();
             return new ImapNotesResult(Imaper.ResultCodeSuccess,
                     "",
-                    ((IMAPFolder) remoteIMAPNotesFolder).getUIDValidity(),
-                    remoteIMAPNotesFolder);
-            //res.UIDValidity = ((IMAPFolder) notesFolder).getUIDValidity();
-            //res.errorMessage = "";
-            //res.returnCode = Imaper.ResultCodeSuccess;
-            //res.notesFolder = notesFolder;
-            //return res;
+                    ((IMAPFolder) remoteIMAPNotesFolder).getUIDValidity());
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
             return new ImapNotesResult(Imaper.ResultCodeException,
                     e.getMessage(),
-                    -1,
-                    null);
-            //res.errorMessage = e.getMessage();
-            //res.returnCode = Imaper.ResultCodeException;
-            //return res;
+                    -1);
         }
 
     }
@@ -187,15 +174,14 @@ public class SyncUtils {
     /* Copy all notes from the IMAP server to the local directory using the UID as the file name.
 
      */
-    static void GetNotes(@NonNull Account account,
-                         @NonNull Folder remoteIMAPNotesFolder,
-                         @NonNull Context applicationContext,
-                         @NonNull NotesDb storedNotes,
-                         @NonNull boolean useSticky) throws MessagingException, IOException {
+    static synchronized void GetNotes(@NonNull Account account,
+                                      @NonNull File RootDirAccount,
+                                      @NonNull Context applicationContext,
+                                      @NonNull NotesDb storedNotes,
+                                      @NonNull boolean useSticky) throws MessagingException, IOException {
         Log.d(TAG, "GetNotes: " + account.name);
         //Long UIDM;
         //Message notesMessage;
-        File directory = new File(applicationContext.getFilesDir(), account.name);
         OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
 
         UIDValidity = GetUIDValidity(account, applicationContext);
@@ -220,7 +206,7 @@ public class SyncUtils {
                 bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
             }
 
-            File outfile = new File(directory, suid);
+            File outfile = new File(RootDirAccount, suid);
             SaveNoteAndUpdateDatabase(outfile, notesMessage, storedNotes, account.name, suid, bgColor);
         }
     }
@@ -230,7 +216,7 @@ public class SyncUtils {
         return store != null && store.isConnected();
     }
 
-    static void DeleteNote(int numMessage) throws MessagingException {
+    static synchronized void DeleteNote(int numMessage) throws MessagingException {
         Log.d(TAG, "DeleteNote: " + numMessage);
         OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
 
@@ -433,25 +419,22 @@ public class SyncUtils {
         return null;
     }
 
-    static AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
+    static synchronized AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
         OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
-        return ((IMAPFolder) remoteIMAPNotesFolder).appendUIDMessages(message);
+        AppendUID[] ret = ((IMAPFolder) remoteIMAPNotesFolder).appendUIDMessages(message);
+        return (ret);
     }
 
     /**
      * Do we really need the Context argument or could we call getApplicationContext instead?
      *
-     * @param accountName        Name of the account as defined by the user, this is not the email address.
-     * @param applicationContext Global context not an activity context.
+     * @param rootDirAccount Name of the account as defined by the user, this is not the email address.
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void CreateLocalDirectories(@NonNull String accountName, @NonNull Context applicationContext) {
-        Log.d(TAG, "CreateDirs(String: " + accountName);
-        File dir = new File(applicationContext.getFilesDir(), accountName);
-        //File directory = new File(stringDir);
-        //directory.mkdirs();
-        (new File(dir, "new")).mkdirs();
-        (new File(dir, "deleted")).mkdirs();
+    public static void CreateLocalDirectories(@NonNull File rootDirAccount) {
+        Log.d(TAG, "CreateDirs(String: " + rootDirAccount);
+        (new File(rootDirAccount, "new")).mkdirs();
+        (new File(rootDirAccount, "deleted")).mkdirs();
     }
 
 
@@ -464,13 +447,7 @@ public class SyncUtils {
         try (OutputStream str = new FileOutputStream(outfile)) {
             Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
             notesMessage.writeTo(str);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MessagingException e) {
+        } catch (IOException | MessagingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -509,14 +486,14 @@ public class SyncUtils {
         if (rawvalue[0].length() >= 2) {
             if (!(rawvalue[0].substring(0, 2).equals("=?"))) {
                 try {
-                    title = new String(title.getBytes("ISO-8859-1"));
+                    title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         } else {
             try {
-                title = new String(title.getBytes("ISO-8859-1"));
+                title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -544,11 +521,11 @@ public class SyncUtils {
         storedNotes.InsertANoteInDb(aNote);
     }
 
-    static boolean handleRemoteNotes(@NonNull Context context,
-                                     @NonNull javax.mail.Folder remoteIMAPNotesFolder,
-                                     @NonNull NotesDb storedNotes,
-                                     @NonNull String accountName,
-                                     @NonNull Boolean useSticky)
+    static synchronized boolean handleRemoteNotes(@NonNull Context context,
+                                                  @NonNull File rootFolderAccount,
+                                                  @NonNull NotesDb storedNotes,
+                                                  @NonNull String accountName,
+                                                  @NonNull Boolean useSticky)
             throws MessagingException, IOException {
         Log.d(TAG, "handleRemoteNotes: " + remoteIMAPNotesFolder.getFullName() + " " + accountName + " " + useSticky);
 
@@ -561,9 +538,7 @@ public class SyncUtils {
 
 
         // Get local list of notes uids
-        String rootString = context.getFilesDir() + "/" + accountName;
-        File rootDir = new File(rootString);
-        File[] files = rootDir.listFiles();
+        File[] files = rootFolderAccount.listFiles();
         for (File file : files) {
             if (file.isFile()) {
                 localListOfNotes.add(file.getName());
@@ -586,7 +561,7 @@ public class SyncUtils {
             }
             String suid = uid.toString();
             if (!(localListOfNotes.contains(suid))) {
-                File outfile = new File(rootDir, suid);
+                File outfile = new File(rootFolderAccount, suid);
                 String bgColor;
                 if (useSticky) {
                     bgColor = StickyNote.GetStickyFromMessage(notesMessage).color;
@@ -600,7 +575,7 @@ public class SyncUtils {
                 remoteInternaldate = DateFormat.getDateInstance().format(notesMessage.getSentDate());
                 localInternaldate = storedNotes.GetDate(suid, accountName);
                 if (!(remoteInternaldate.equals(localInternaldate))) {
-                    File outfile = new File(rootDir, suid);
+                    File outfile = new File(rootFolderAccount, suid);
                     SaveNote(outfile, notesMessage);
                     result = true;
                 }
@@ -612,7 +587,7 @@ public class SyncUtils {
             Long uid = Long.valueOf(suid);
             if (!(uids.contains(uid))) {
                 // remove file from deleted
-                File toDelete = new File(rootDir, suid);
+                File toDelete = new File(rootFolderAccount, suid);
                 //noinspection ResultOfMethodCallIgnored
                 toDelete.delete();
                 // Remove note from database
@@ -627,19 +602,16 @@ public class SyncUtils {
     static void RemoveAccount(@NonNull Context context, @NonNull Account account) {
         Log.d(TAG, "RemoveAccount: " + account.name);
         // remove Shared Preference file
-        String rootString = context.getFilesDir().getParent() +
-                File.separator + "shared_prefs";
-        File rootDir = new File(rootString);
-        File toDelete = new File(rootDir, account.name + ".xml");
+        File toDelete = new File(ImapNotes3.GetSharedPrefsDir(), account.name + ".xml");
         //noinspection ResultOfMethodCallIgnored
         toDelete.delete();
         // Remove all files and sub directories
-        File filesDir = context.getFilesDir();
-        File[] files = filesDir.listFiles();
-        for (File file : files) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
+        File[] files = ImapNotes3.GetRootDir().listFiles();
+        if (files != null)
+            for (File file : files) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
         // Delete account name entries in database
         NotesDb storedNotes = NotesDb.getInstance(context);
         storedNotes.ClearDb(account.name);
@@ -647,7 +619,7 @@ public class SyncUtils {
 
     private static void OpenRemoteIMAPNotesFolder(int mode) throws MessagingException {
         if (remoteIMAPNotesFolder.isOpen()) {
-            if ((remoteIMAPNotesFolder.getMode() & mode) != 0) {
+            if (remoteIMAPNotesFolder.getMode() != mode) {
                 remoteIMAPNotesFolder.close();
                 remoteIMAPNotesFolder.open(mode);
             }

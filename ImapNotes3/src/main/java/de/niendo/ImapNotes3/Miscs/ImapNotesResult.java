@@ -1,9 +1,6 @@
 package de.niendo.ImapNotes3.Miscs;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import javax.mail.Folder;
 
 public class ImapNotesResult {
 
@@ -11,27 +8,13 @@ public class ImapNotesResult {
     @NonNull
     public final String errorMessage;
     public final Long UIDValidity;
-    @Nullable
-    public final Folder notesFolder;
 
     public ImapNotesResult(int returnCode,
-                            String errorMessage,
-                            long UIDValidity,
-                            Folder notesFolder) {
+                           String errorMessage,
+                           long UIDValidity) {
         this.returnCode = returnCode;
         this.errorMessage = errorMessage;
         this.UIDValidity = UIDValidity;
-        this.notesFolder = notesFolder;
     }
-
-/*
-    public ImapNotesResult() {
-        returnCode = -1;
-        errorMessage = "";
-        UIDValidity = (long) -1;
-        //hasUIDPLUS = true;
-        notesFolder = null;
-    }
-*/
 
 }

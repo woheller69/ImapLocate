@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.content.PeriodicSync;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -652,8 +651,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         iter.remove();
                         // Why try here?
                         try {
-                            String stringDir = ImapNotes3.ConfigurationDirPath(getApplicationContext()) + "/" + s;
-                            FileUtils.deleteDirectory(new File(stringDir));
+                            FileUtils.deleteDirectory(new File(ImapNotes3.GetRootDir(), s));
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -664,7 +662,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 for (String accountName : newList) {
                     if (!(ListActivity.currentList.contains(accountName))) {
                         ListActivity.currentList.add(accountName);
-                        SyncUtils.CreateLocalDirectories(accountName, getApplicationContext());
+                        SyncUtils.CreateLocalDirectories(new File(ImapNotes3.GetRootDir(), accountName));
 
                         equalLists = false;
                     }
@@ -674,7 +672,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             } else {
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 if (EnableAccountsUpdate) {
-                    File filesDir = ImapNotes3.ConfigurationDir(getApplicationContext());
+                    File filesDir = ImapNotes3.GetRootDir();
                     EnableAccountsUpdate = false;
                     ListActivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
                     try {

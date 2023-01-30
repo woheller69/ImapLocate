@@ -89,7 +89,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
             if (hm != null) {
                 suid = hm.get(OneNote.UID).toString();
-                File rootDir = new File(getApplicationContext().getFilesDir(), hm.get(OneNote.ACCOUNT).toString());
+                File rootDir = new File(ImapNotes3.GetRootDir(), hm.get(OneNote.ACCOUNT).toString());
                 Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
                 //Log.d(TAG, "rootDir is null: " + (rootDir == null));
                 Log.d(TAG, "rootDir: " + rootDir);

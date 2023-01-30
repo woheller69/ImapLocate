@@ -40,6 +40,7 @@ public class ImapNotesAccount {
     private File dirForNewFiles;
     private File dirForDeletedFiles;
     private File rootDir;
+    private File rootDirAccount;
 
     public ImapNotesAccount(@NonNull String accountName,
                              @NonNull String username,
@@ -65,9 +66,10 @@ public class ImapNotesAccount {
     public ImapNotesAccount(@NonNull Account account,
                              @NonNull Context applicationContext) {
         this.accountName = account.name;
-        rootDir = new File(applicationContext.getFilesDir(), accountName);
-        dirForNewFiles = new File(rootDir, "new");
-        dirForDeletedFiles = new File(rootDir, "deleted");
+        rootDir = applicationContext.getFilesDir();
+        rootDirAccount = new File(rootDir, accountName);
+        dirForNewFiles = new File(rootDirAccount, "new");
+        dirForDeletedFiles = new File(rootDirAccount, "deleted");
 
         this.account = account;
         AccountManager am = AccountManager.get(applicationContext);
@@ -93,7 +95,7 @@ public class ImapNotesAccount {
 
     public void ClearHomeDir() {
         try {
-            FileUtils.deleteDirectory(rootDir);
+            FileUtils.deleteDirectory(rootDirAccount);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -216,10 +218,15 @@ public class ImapNotesAccount {
 
 
     @Nullable
-    public String GetFolderName() {
+    public String GetImapFolder() {
         if (this.imapfolder.isEmpty())
             return DEFAULT_FOLDER_NAME;
         return this.imapfolder;
+    }
+
+    @Nullable
+    public File GetRootDirAccount() {
+        return rootDirAccount;
     }
 
 /*
