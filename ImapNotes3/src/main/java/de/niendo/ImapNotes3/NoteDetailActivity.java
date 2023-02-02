@@ -56,6 +56,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     public static final String ActivityType = "ActivityType";
     public static final String ActivityTypeEdit = "ActivityTypeEdit";
     public static final String ActivityTypeAdd = "ActivityTypeAdd";
+    public static final String ActivityTypeAddShare = "ActivityTypeAddShare";
     //private static final int DELETE_BUTTON = 3;
     private static final int EDIT_BUTTON = 6;
     // --Commented out by Inspection (11/26/16 11:52 PM):private final static int ROOT_AND_NEW = 3;
@@ -82,7 +83,25 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
         Intent intent = getIntent();
         String stringres;
+        Log.d(TAG, "Check_Action_Send");
+        // Get intent, action and MIME type
+        String action = intent.getAction();
         String ChangeNote = intent.getStringExtra(ActivityType);
+        if (ChangeNote == null)
+            ChangeNote = "";
+        if (action == null)
+            action = "";
+
+        if (action.equals(Intent.ACTION_SEND) && !ChangeNote.equals(ActivityTypeAddShare)) {
+            ImapNotes3.showNotesPickerInDetail(this, R.string.insert_in_note, R.string.ok,
+                    () -> {
+                        if (!editText.hasFocus())
+                            editText.focusEditor();
+                        //editText.insertHTML(getSharedText(intent));
+                        editText.loadUrl("javascript:RE.prepareInsert();");
+                        editText.loadUrl("javascript:RE.insertHTML('" + getSharedText(intent) + "');");
+                    });
+        }
         if (ChangeNote.equals(ActivityTypeEdit)) {
             HashMap hm = (HashMap) intent.getSerializableExtra(selectedNote);
             usesticky = intent.getBooleanExtra(useSticky, false);
@@ -111,64 +130,21 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     Notifier.Show(R.string.sync_necessary, NoteDetailActivity.this, 1);
                     finish();
                     return;
-                    }
+                }
             } else { // Entry can not opened..
                 Notifier.Show(R.string.Invalid_Message, NoteDetailActivity.this, 1);
                 finish();
                 return;
             }
-        } else if (ChangeNote.equals(ActivityTypeAdd)) {   // neuer Eintrag
+        } else if (ChangeNote.equals(ActivityTypeAdd)) {   // new entry
             SetupRichEditor();
-
-            // Share: Receive Data as new message
-            String strAction = intent.getAction();
-            if ((strAction != null) && strAction.equals(Intent.ACTION_SEND)) {
-                String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-                String type = intent.getType();
-                String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-
-                Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                Log.d(TAG, "Share 1");
-                if (uri != null) {
-                    Log.d(TAG, "Share 2");
-                    BufferedInputStream bufferedInputStream = null;
-                    try {
-                        bufferedInputStream =
-                                new BufferedInputStream(getContentResolver().openInputStream(uri));
-
-                        byte[] contents = new byte[1024];
-
-                        int bytesRead = 0;
-                        String html = "";
-                        while ((bytesRead = bufferedInputStream.read(contents)) != -1) {
-                            html += new String(contents, 0, bytesRead);
-                        }
-                        Log.d(TAG, "Share 3" + html);
-                        editText.setHtml(html);
-                        bufferedInputStream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d(TAG, "Share 4" + sharedText);
-                    if (subject != null) {
-                        subject = "<b>" + subject + "</b><br>";
-                    } else subject = "";
-                    if (sharedText != null) {
-                        if (type.equals("text/html")) {
-                            editText.setHtml(subject + sharedText);
-                        } else if (type.startsWith("text/")) {
-                            editText.setHtml(Html.toHtml(new SpannedString(Html.fromHtml(subject + sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
-                            //editText.setHtml(subject+sharedText);
-                        } else if (type.startsWith("image/")) {
-                            // toDo
-                        }
-                    }
-                }
-            }
+        } else if (ChangeNote.equals(ActivityTypeAddShare)) {   // new Entry from Share
+            SetupRichEditor();
+            editText.setHtml(getSharedText(intent));
         }
+
+
+
 /*        // TODO: Watch for changes so that we can auto save.
         // See http://stackoverflow.com/questions/7117209/how-to-know-key-presses-in-edittext#14251047
         editText.addTextChangedListener(new TextWatcher() {
@@ -562,20 +538,53 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         startActivity(shareIntent);
     }
 
-// --Commented out by Inspection START (12/2/16 8:50 PM):
-//    private void WriteMailToFile(@NonNull String suid, @NonNull Message message) {
-//        String directory = getApplicationContext().getFilesDir() + "/" +
-//                ListActivity.ImapNotesAccount.accountName;
-//        try {
-//            File outfile = new File(directory, suid);
-//            OutputStream str = new FileOutputStream(outfile);
-//            message.writeTo(str);
-//        } catch (Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-// --Commented out by Inspection STOP (12/2/16 8:50 PM)
+    private String getSharedText(Intent intent) {
+        String html = "";
+        // Share: Receive Data as new message
+        String strAction = intent.getAction();
+        if ((strAction != null) && strAction.equals(Intent.ACTION_SEND)) {
+            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            String type = intent.getType();
+            String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
 
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            Log.d(TAG, "Share 1");
+            if (uri != null) {
+                Log.d(TAG, "Share 2");
+                BufferedInputStream bufferedInputStream = null;
+                try {
+                    bufferedInputStream =
+                            new BufferedInputStream(getContentResolver().openInputStream(uri));
+                    byte[] contents = new byte[1024];
+                    int bytesRead = 0;
+                    while ((bytesRead = bufferedInputStream.read(contents)) != -1) {
+                        html += new String(contents, 0, bytesRead);
+                    }
+                    Log.d(TAG, "Share 3" + html);
+                    bufferedInputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d(TAG, "Share 4" + sharedText);
+                if (subject != null) {
+                    subject = "<b>" + subject + "</b><br>";
+                } else subject = "";
+                if (sharedText != null) {
+                    if (type.equals("text/html")) {
+                        editText.setHtml(subject + sharedText);
+                    } else if (type.startsWith("text/")) {
+                        html = Html.toHtml(new SpannedString(Html.fromHtml(subject + sharedText, Html.FROM_HTML_MODE_LEGACY)), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL);
 
+                    } else if (type.startsWith("image/")) {
+                        // toDo
+                    }
+                }
+            }
+
+        }
+        return html;
+    }
 }

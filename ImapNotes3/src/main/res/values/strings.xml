@@ -79,4 +79,7 @@
     <string name="intent_save_as_note">Save as note</string>
     <string name="share_file_error">Share file error:</string>
     <string name="send_debug_report">Create Error Report</string>
+    <string name="insert_as_new_note">Insert shared data as new note</string>
+    <string name="insert_in_note">Insert shared data</string>
+    <string name="ok">OK</string>
 </resources>

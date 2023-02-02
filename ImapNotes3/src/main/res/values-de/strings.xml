@@ -79,4 +79,7 @@
     <string name="intent_save_as_note">Als Notiz speichern</string>
     <string name="share_file_error">Dateifehler beim Teilen:</string>
     <string name="send_debug_report">Erstelle Fehlerreport</string>
+    <string name="insert_as_new_note">Geteilte Daten als neue Notiz einfügen</string>
+    <string name="insert_in_note">Geteilte Daten einfügen</string>
+    <string name="ok">OK</string>
 </resources>

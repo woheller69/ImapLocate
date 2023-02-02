@@ -93,7 +93,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     private static final String SORT_BY_TITLE = "SORT_BY_TITLE";
     private static final String SORT_BY_COLOR = "SORT_BY_COLOR";
     //endregion
-
+    private Intent intentActionSend;
     private ArrayList<OneNote> noteList;
     private NotesListAdapter listToView;
     private ArrayAdapter<String> spinnerList;
@@ -234,7 +234,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         // When item is clicked, we go to NoteDetailActivity
         listview.setOnItemClickListener((parent, widget, selectedNote, rowId) -> {
             Log.d(TAG, "onItemClick");
-            Intent toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
+            Intent toDetail;
+            if (intentActionSend != null)
+                toDetail = intentActionSend;
+            else
+                toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
             toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
             toDetail.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
             toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
@@ -252,13 +256,18 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         Intent intent = getIntent();
         String action = intent.getAction();
 
+        intentActionSend = null;
         if (action.equals(Intent.ACTION_SEND)) {
-            Intent toNew = (Intent) intent.clone();
-            toNew.setClass(this, NoteDetailActivity.class);
-            toNew.setFlags(0);
-            toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-            toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-            startActivityForResult(toNew, ListActivity.NEW_BUTTON);
+            intentActionSend = (Intent) intent.clone();
+            intentActionSend.setClass(this, NoteDetailActivity.class);
+            intentActionSend.setFlags(0);
+            intentActionSend.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
+            intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
+            ImapNotes3.showNotesPickerInList(this, R.string.insert_as_new_note, R.string.ok,
+                    () -> {
+                        startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
+                        intentActionSend = null;
+                    });
         }
     }
 
@@ -440,7 +449,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 TriggerSync(status);
                 return true;
             case R.id.newnote:
-                Intent toNew = new Intent(this, NoteDetailActivity.class);
+                Intent toNew;
+                if (intentActionSend != null)
+                    toNew = intentActionSend;
+                else
+                    toNew = new Intent(this, NoteDetailActivity.class);
                 toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
                 toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
                 startActivityForResult(toNew, ListActivity.NEW_BUTTON);

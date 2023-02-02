@@ -1,10 +1,14 @@
 package de.niendo.ImapNotes3;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import de.niendo.ImapNotes3.Miscs.Imaper;
 
@@ -54,5 +58,42 @@ public class ImapNotes3 extends Application {
                     .penaltyLog()
 //                    .penaltyDeath()
                     .build());
+    }
+
+    public static Snackbar showNotesPickerInList(
+            Activity activity,
+            @StringRes int actionTextId,
+            @StringRes int actionButtonId,
+            Runnable actionCallback) {
+
+        Snackbar snackbar =
+                Snackbar.make(activity.findViewById(R.id.notesList), mContext.getText(actionTextId), BaseTransientBottomBar.LENGTH_INDEFINITE)
+                        .setAction(actionButtonId, v -> actionCallback.run());
+        snackbar
+                .getView()
+                .setBackgroundColor(mContext.getColor(R.color.ShareActionBgColor));
+        snackbar.setTextColor(mContext.getColor(R.color.ShareActionTxtColor));
+        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
+        snackbar.show();
+        return snackbar;
+    }
+
+    public static Snackbar showNotesPickerInDetail(
+            Activity activity,
+            @StringRes int actionTextId,
+            @StringRes int actionButtonId,
+            Runnable actionCallback) {
+
+        Snackbar snackbar =
+                Snackbar.make(activity.findViewById(R.id.bodyView), mContext.getText(actionTextId), BaseTransientBottomBar.LENGTH_INDEFINITE)
+                        .setAction(actionButtonId, v -> actionCallback.run());
+        snackbar
+                .getView()
+                .setBackgroundColor(mContext.getColor(R.color.ShareActionBgColor));
+        snackbar.setTextColor(mContext.getColor(R.color.ShareActionTxtColor));
+        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
+
+        snackbar.show();
+        return snackbar;
     }
 }

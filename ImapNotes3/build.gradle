@@ -78,6 +78,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.sun.mail:android-mail:1.6.7'
     implementation 'com.sun.mail:android-activation:1.6.7'
@@ -85,7 +86,6 @@ dependencies {
     implementation 'jp.wasabeef:richeditor-android:2.0.0'
     implementation 'org.jetbrains:annotations:23.1.0'
     implementation 'org.jsoup:jsoup:1.15.3'
-
 }
 
 // ToDo
