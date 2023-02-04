@@ -79,6 +79,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+        editText = findViewById(R.id.bodyView);
 
         Intent intent = getIntent();
         String stringres;
@@ -172,7 +173,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         // more functions, maybe use this editor...
         // https://github.com/Andrew-Chen-Wang/RichEditorView/blob/master/Sources/RichEditorView/Resources/editor/rich_editor.js
         // https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_collapsible_symbol
-        editText = findViewById(R.id.bodyView);
         editText.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         editText.setPlaceholder(getString(R.string.placeholder));
