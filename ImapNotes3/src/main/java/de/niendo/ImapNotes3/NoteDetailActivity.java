@@ -29,7 +29,6 @@ import de.niendo.ImapNotes3.Miscs.EditorMenuAdapter;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.NDSpinner;
 import de.niendo.ImapNotes3.Miscs.StickyNote;
-import de.niendo.ImapNotes3.Miscs.Notifier;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 
@@ -93,7 +92,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             action = "";
 
         if (action.equals(Intent.ACTION_SEND) && !ChangeNote.equals(ActivityTypeAddShare)) {
-            ImapNotes3.showNotesPickerInDetail(this, R.string.insert_in_note, R.string.ok,
+            ImapNotes3.showAction(editText, R.string.insert_in_note, R.string.ok,
                     () -> {
                         if (!editText.hasFocus())
                             editText.focusEditor();
@@ -127,12 +126,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    Notifier.Show(R.string.sync_necessary, NoteDetailActivity.this, 1);
+                    ImapNotes3.ShowMessage(R.string.sync_necessary, editText, 3);
                     finish();
                     return;
                 }
             } else { // Entry can not opened..
-                Notifier.Show(R.string.Invalid_Message, NoteDetailActivity.this, 1);
+                ImapNotes3.ShowMessage(R.string.Invalid_Message, editText, 3);
                 finish();
                 return;
             }
@@ -524,7 +523,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         try (OutputStream str = new FileOutputStream(outfile)) {
             str.write(text.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            Notifier.Show(R.string.share_file_error + e.toString(), NoteDetailActivity.this, 2);
+            ImapNotes3.ShowMessage(R.string.share_file_error + e.toString(), editText, 2);
             e.printStackTrace();
         }
 

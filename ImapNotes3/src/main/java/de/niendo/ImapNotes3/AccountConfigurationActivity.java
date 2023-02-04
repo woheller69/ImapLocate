@@ -43,7 +43,6 @@ import de.niendo.ImapNotes3.Data.Security;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
 import de.niendo.ImapNotes3.Miscs.Imaper;
 import de.niendo.ImapNotes3.Miscs.Result;
-import de.niendo.ImapNotes3.Miscs.Notifier;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 
 import java.util.List;
@@ -75,7 +74,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         public void onClick(View v) {
             // Click on Remove Button
             accountManager.removeAccount(myAccount, null, null, null);
-            Notifier.Show(R.string.account_removed, AccountConfigurationActivity.this, 3);
+            ImapNotes3.ShowMessage(R.string.account_removed, accountnameTextView, 3);
             finish();//finishing activity
         }
     };
@@ -231,7 +230,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         try {
             String test = String.valueOf(new InternetAddress(accountnameTextView.getText().toString(), true));
         } catch (AddressException e) {
-            Notifier.Show(R.string.account_name_not_valid_email, AccountConfigurationActivity.this, 3);
+            ImapNotes3.ShowMessage(R.string.account_name_not_valid_email, accountnameTextView, 3);
             return;
         }
         DoLogin();
@@ -467,23 +466,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             this.ImapNotesAccount = ImapNotesAccount;
             this.accountConfigurationActivity = accountConfigurationActivity;
             this.action = action;
-            Notifier.Show(R.string.logging_in, accountConfigurationActivity, 1);
-            //this.synchronizationInterval = synchronizationInterval;
+            ImapNotes3.ShowMessage(R.string.logging_in, accountnameTextView, 3);
         }
 
-        /*
-
-                class Result{
-                    final String message;
-                    final boolean succeeded;
-
-                    Result(String message,
-                           boolean succeeded) {
-                        this.message = message;
-                        this.succeeded = succeeded;
-                    }
-                }
-        */
         @NonNull
         protected Result<String> doInBackground(Void... none) {
             Log.d(TAG, "doInBackground");
@@ -558,8 +543,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 setResult(ListActivity.ResultCodeSuccess);
                 finish();
             } else {
-                // FIXME shows an exception
-                Notifier.Show(result.result, AccountConfigurationActivity.this, 5);
+                ImapNotes3.ShowMessage(result.result, usernameTextView, 5);
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeError);
             }

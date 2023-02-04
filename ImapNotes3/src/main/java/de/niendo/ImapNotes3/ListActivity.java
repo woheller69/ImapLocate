@@ -42,7 +42,6 @@ import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Miscs.Imaper;
-import de.niendo.ImapNotes3.Miscs.Notifier;
 import de.niendo.ImapNotes3.Miscs.SyncThread;
 import de.niendo.ImapNotes3.Miscs.UpdateThread;
 import de.niendo.ImapNotes3.Miscs.Utilities;
@@ -263,7 +262,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             intentActionSend.setFlags(0);
             intentActionSend.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
             intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
-            ImapNotes3.showNotesPickerInList(this, R.string.insert_as_new_note, R.string.ok,
+
+            ImapNotes3.showAction(listview, R.string.insert_as_new_note, R.string.ok,
                     () -> {
                         startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
                         intentActionSend = null;
@@ -551,9 +551,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                 ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
                 ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), 60);
-                Notifier.Show("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime",
-                        ListActivity.this,
-                        2);
+                ImapNotes3.ShowMessage("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime", accountSpinner, 2);
             }
         }
         listToView.ResetFilterData(noteList);

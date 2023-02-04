@@ -1,9 +1,9 @@
 package de.niendo.ImapNotes3;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
+import android.view.View;
 
 import androidx.annotation.StringRes;
 
@@ -14,11 +14,6 @@ import de.niendo.ImapNotes3.Miscs.Imaper;
 
 import java.io.File;
 
-
-/*
-Changed name by appending a k so that I can have this and the original installed side by side,
-perhaps.
- */
 public class ImapNotes3 extends Application {
     private static Context mContext;
     private Imaper thisSessionImapFolder;
@@ -60,14 +55,14 @@ public class ImapNotes3 extends Application {
                     .build());
     }
 
-    public static Snackbar showNotesPickerInList(
-            Activity activity,
+    public static Snackbar showAction(
+            View view,
             @StringRes int actionTextId,
             @StringRes int actionButtonId,
             Runnable actionCallback) {
 
         Snackbar snackbar =
-                Snackbar.make(activity.findViewById(R.id.notesList), mContext.getText(actionTextId), BaseTransientBottomBar.LENGTH_INDEFINITE)
+                Snackbar.make(view, actionTextId, BaseTransientBottomBar.LENGTH_INDEFINITE)
                         .setAction(actionButtonId, v -> actionCallback.run());
         snackbar
                 .getView()
@@ -78,15 +73,14 @@ public class ImapNotes3 extends Application {
         return snackbar;
     }
 
-    public static Snackbar showNotesPickerInDetail(
-            Activity activity,
-            @StringRes int actionTextId,
-            @StringRes int actionButtonId,
-            Runnable actionCallback) {
 
+    public static void ShowMessage(@StringRes int resId, View view, int durationSeconds) {
+        ShowMessage(mContext.getResources().getString(resId), view, durationSeconds);
+    }
+
+    public static void ShowMessage(String message, View view, int durationSeconds) {
         Snackbar snackbar =
-                Snackbar.make(activity.findViewById(R.id.bodyView), mContext.getText(actionTextId), BaseTransientBottomBar.LENGTH_INDEFINITE)
-                        .setAction(actionButtonId, v -> actionCallback.run());
+                Snackbar.make(view, message, durationSeconds * 1000);
         snackbar
                 .getView()
                 .setBackgroundColor(mContext.getColor(R.color.ShareActionBgColor));
@@ -94,6 +88,6 @@ public class ImapNotes3 extends Application {
         snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
 
         snackbar.show();
-        return snackbar;
     }
+
 }
