@@ -29,7 +29,8 @@
     <color name="EditorTxtColor">#3C490D</color>
 
     <color name="ShareActionBgColor">#3C490D</color>
-    <color name="ShareActionTxtColor">#FFFFAE</color>
+    <color name="ShareActionTxtColor">#C7C49E</color>
+    <color name="ShareActionActionColor">#2F7F7F</color>
 
     <color name="transparent">#00000000</color>
 
