@@ -16,6 +16,7 @@ import java.io.File;
 
 public class ImapNotes3 extends Application {
     private static Context mContext;
+    private static View mContent;
     private Imaper thisSessionImapFolder;
 
     public static Context getAppContext() {
@@ -33,6 +34,10 @@ public class ImapNotes3 extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+    }
+
+    public static void setContent(View content) {
+        mContent = content;
     }
 
     // ?
@@ -61,6 +66,9 @@ public class ImapNotes3 extends Application {
             @StringRes int actionButtonId,
             Runnable actionCallback) {
 
+        if (view == null)
+            view = mContent;
+
         Snackbar snackbar =
                 Snackbar.make(view, actionTextId, BaseTransientBottomBar.LENGTH_INDEFINITE)
                         .setAction(actionButtonId, v -> actionCallback.run());
@@ -79,6 +87,10 @@ public class ImapNotes3 extends Application {
     }
 
     public static void ShowMessage(String message, View view, int durationSeconds) {
+
+        if (view == null)
+            view = mContent;
+
         Snackbar snackbar =
                 Snackbar.make(view, message, durationSeconds * 1000);
         snackbar
