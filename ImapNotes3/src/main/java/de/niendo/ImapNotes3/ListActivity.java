@@ -476,7 +476,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 about += getString(R.string.internet) + "\n";
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.about) + " " + BuildConfig.APPLICATION_NAME)
-                        .setIcon(R.drawable.ic_launcher)
+                        .setIcon(R.mipmap.ic_launcher)
                         .setMessage(about)
                         .setPositiveButton("OK", (dialog, which) -> {
                             // Do nothing
