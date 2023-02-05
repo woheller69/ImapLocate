@@ -16,7 +16,6 @@ import java.io.File;
 
 public class ImapNotes3 extends Application {
     private static Context mContext;
-    private static View mContent;
     private Imaper thisSessionImapFolder;
 
     public static Context getAppContext() {
@@ -34,10 +33,6 @@ public class ImapNotes3 extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-    }
-
-    public static void setContent(View content) {
-        mContent = content;
     }
 
     // ?

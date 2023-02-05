@@ -200,7 +200,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         this.accountSpinner.setOnItemSelectedListener(this);
 
-        ImapNotes3.setContent(findViewById(android.R.id.content));
         //ImapNotesAccount = new ImapNotesAccount();
         ListActivity.accountManager = AccountManager.get(getApplicationContext());
         ListActivity.accountManager.addOnAccountsUpdatedListener(
