@@ -127,7 +127,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    ImapNotes3.ShowMessage(R.string.sync_necessary, null, 3);
+                    ImapNotes3.ShowMessage(R.string.sync_wait_necessary, null, 3);
                     finish();
                     return;
                 }

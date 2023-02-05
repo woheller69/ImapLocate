@@ -56,7 +56,7 @@
     <string name="alignment">Alignment</string>
     <string name="insert">insert</string>
     <string name="note_last_change">Last Change</string>
-    <string name="sync_necessary">Synchronisation necessary</string>
+    <string name="sync_wait_necessary">Wait for Synchronization finished</string>
     <string name="security">Security</string>
     <string name="note_title">Note Title</string>
     <string name="brown">Brown</string>

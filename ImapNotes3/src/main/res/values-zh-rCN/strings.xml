@@ -55,7 +55,7 @@
     <string name="alignment">对齐</string>
     <string name="insert">插入</string>
     <string name="note_last_change">上次更改</string>
-    <string name="sync_necessary">需要同步</string>
+    <string name="sync_wait_necessary">需要同步</string>
     <string name="security">安全性</string>
     <string name="note_title">笔记标题</string>
     <string name="brown">棕</string>
