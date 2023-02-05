@@ -93,7 +93,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             action = "";
 
         if (action.equals(Intent.ACTION_SEND) && !ChangeNote.equals(ActivityTypeAddShare)) {
-            ImapNotes3.showAction(R.string.insert_in_note, R.string.ok,
+            ImapNotes3.showAction(editText, R.string.insert_in_note, R.string.ok,
                     () -> {
                         if (!editText.hasFocus())
                             editText.focusEditor();
@@ -127,12 +127,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.setHtml(stringres);
                 } else {
                     // Entry can not opened..
-                    ImapNotes3.ShowMessage(R.string.sync_necessary, 3);
+                    ImapNotes3.ShowMessage(R.string.sync_necessary, editText, 3);
                     finish();
                     return;
                 }
             } else { // Entry can not opened..
-                ImapNotes3.ShowMessage(R.string.Invalid_Message, 3);
+                ImapNotes3.ShowMessage(R.string.Invalid_Message, editText, 3);
                 finish();
                 return;
             }
@@ -523,7 +523,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         try (OutputStream str = new FileOutputStream(outfile)) {
             str.write(text.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            ImapNotes3.ShowMessage(R.string.share_file_error + e.toString(), 2);
+            ImapNotes3.ShowMessage(R.string.share_file_error + e.toString(), editText, 2);
             e.printStackTrace();
         }
 

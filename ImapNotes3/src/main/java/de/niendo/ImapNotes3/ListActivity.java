@@ -263,7 +263,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             intentActionSend.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
             intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
 
-            ImapNotes3.showAction(R.string.insert_as_new_note, R.string.ok,
+            ImapNotes3.showAction(listview, R.string.insert_as_new_note, R.string.ok,
                     () -> {
                         startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
                         intentActionSend = null;
@@ -551,7 +551,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 ContentResolver.setIsSyncable(account, AUTHORITY, 1);
                 ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
                 ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), 60);
-                ImapNotes3.ShowMessage("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime", 2);
+                ImapNotes3.ShowMessage("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime", accountSpinner, 2);
             }
         }
         listToView.ResetFilterData(noteList);

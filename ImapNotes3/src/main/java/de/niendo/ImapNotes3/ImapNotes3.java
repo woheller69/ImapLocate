@@ -56,35 +56,36 @@ public class ImapNotes3 extends Application {
     }
 
     public static Snackbar showAction(
+            View view,
             @StringRes int actionTextId,
             @StringRes int actionButtonId,
             Runnable actionCallback) {
 
         Snackbar snackbar =
-                Snackbar.make(mContent, actionTextId, BaseTransientBottomBar.LENGTH_INDEFINITE)
+                Snackbar.make(view, actionTextId, BaseTransientBottomBar.LENGTH_INDEFINITE)
                         .setAction(actionButtonId, v -> actionCallback.run());
         snackbar
                 .getView()
                 .setBackgroundColor(mContext.getColor(R.color.ShareActionBgColor));
         snackbar.setTextColor(mContext.getColor(R.color.ShareActionTxtColor));
-        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionActionColor));
+        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
         snackbar.show();
         return snackbar;
     }
 
 
-    public static void ShowMessage(@StringRes int resId, int durationSeconds) {
-        ShowMessage(mContext.getResources().getString(resId), durationSeconds);
+    public static void ShowMessage(@StringRes int resId, View view, int durationSeconds) {
+        ShowMessage(mContext.getResources().getString(resId), view, durationSeconds);
     }
 
-    public static void ShowMessage(String message, int durationSeconds) {
+    public static void ShowMessage(String message, View view, int durationSeconds) {
         Snackbar snackbar =
-                Snackbar.make(mContent, message, durationSeconds * 1000);
+                Snackbar.make(view, message, durationSeconds * 1000);
         snackbar
                 .getView()
                 .setBackgroundColor(mContext.getColor(R.color.ShareActionBgColor));
         snackbar.setTextColor(mContext.getColor(R.color.ShareActionTxtColor));
-        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionActionColor));
+        snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
 
         snackbar.show();
     }

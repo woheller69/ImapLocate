@@ -74,7 +74,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         public void onClick(View v) {
             // Click on Remove Button
             accountManager.removeAccount(myAccount, null, null, null);
-            ImapNotes3.ShowMessage(R.string.account_removed, 3);
+            ImapNotes3.ShowMessage(R.string.account_removed, accountnameTextView, 3);
             finish();//finishing activity
         }
     };
@@ -230,7 +230,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         try {
             String test = String.valueOf(new InternetAddress(accountnameTextView.getText().toString(), true));
         } catch (AddressException e) {
-            ImapNotes3.ShowMessage(R.string.account_name_not_valid_email, 3);
+            ImapNotes3.ShowMessage(R.string.account_name_not_valid_email, accountnameTextView, 3);
             return;
         }
         DoLogin();
@@ -466,7 +466,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             this.ImapNotesAccount = ImapNotesAccount;
             this.accountConfigurationActivity = accountConfigurationActivity;
             this.action = action;
-            ImapNotes3.ShowMessage(R.string.logging_in, 3);
+            ImapNotes3.ShowMessage(R.string.logging_in, accountnameTextView, 3);
         }
 
         @NonNull
@@ -543,7 +543,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 setResult(ListActivity.ResultCodeSuccess);
                 finish();
             } else {
-                ImapNotes3.ShowMessage(result.result, 5);
+                ImapNotes3.ShowMessage(result.result, usernameTextView, 5);
                 // Hack! accountManager.addOnAccountsUpdatedListener
                 setResult(ListActivity.ResultCodeError);
             }
