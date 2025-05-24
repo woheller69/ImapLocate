@@ -4,74 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/newnote"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/new_note"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/start_gps"
+        android:icon="@drawable/ic_action_start"
+        android:title="Start GPS"
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_action_search"
-        android:title="@string/search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom" />
+        android:id="@+id/stop_gps"
+        android:icon="@drawable/ic_action_stop"
+        android:title="Stop GPS"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/refresh"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/refresh"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
-    <group
-        android:checkableBehavior="single"
-        android:icon="@drawable/ic_action_sort"
-        android:title="@string/sort"
-        android:visible="true"
-        app:actionViewClass="android.widget.CheckBox">
-        <item
-            android:id="@+id/sort_date"
-            android:checked="true"
-            android:icon="@drawable/ic_action_sort_date"
-            android:title="@string/sort_date"
-            android:visible="true"
-            app:showAsAction="collapseActionView" />
-
-        <item
-            android:id="@+id/sort_title"
-            android:checked="false"
-            android:icon="@drawable/ic_action_sort_title"
-            android:title="@string/sort_title"
-            android:visible="true"
-            app:showAsAction="ifRoom|collapseActionView" />
-
-        <item
-            android:id="@+id/sort_color"
-            android:checked="false"
-            android:icon="@drawable/ic_action_sort_color"
-            android:title="@string/sort_color"
-            android:visible="true"
-            app:showAsAction="ifRoom|collapseActionView" />
-    </group>
-
-    <item
-        android:id="@+id/newaccount"
-        android:icon="@drawable/ic_action_add_user"
-        android:title="@string/new_account"
-        app:showAsAction="ifRoom|collapseActionView" />
-
-    <item
-        android:id="@+id/send_debug_report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/ic_action_send_debug_report"
-        android:title="@string/send_debug_report"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/about"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/ic_action_about"
-        android:title="@string/about"
-        app:showAsAction="ifRoom" />
 </menu>

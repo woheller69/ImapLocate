@@ -6,7 +6,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -39,7 +38,6 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -62,11 +60,11 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
 import static de.niendo.ImapNotes3.AccountConfigurationActivity.ACTION;
+import static de.niendo.ImapNotes3.GpsSvc.ACTION_STOP_SERVICE;
 
 
 public class ListActivity extends AppCompatActivity implements OnItemSelectedListener, Filterable {
@@ -141,7 +139,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 status.setText(statusText);
 
                 //if (isChanged) {
-                storedNotes.GetStoredNotes(noteList, accountName, getSortOrder());
+                storedNotes.GetStoredNotes(noteList, accountName, OneNote.DATE + " DESC");
                 listToView.notifyDataSetChanged();
                 //}
             }
@@ -277,16 +275,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     });
         }
 
-        Intent intentSvc = new Intent(this, GpsSvc.class);
-        // If startForeground() in Service is called on UI thread, it won't show notification
-        // unless Service is started with startForegroundService().
-        if (SDK_INT >= Build.VERSION_CODES.O) {
-            if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
-            startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
-        } else {
-            if (!GpsSvc.mIsRunning) startService(intentSvc);
-            startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
-        }
     }
 
     public void onStart() {
@@ -327,11 +315,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
         preferences.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
-
-        preferences.putBoolean(SORT_BY_DATE, actionMenu.findItem(R.id.sort_date).isChecked());
-        preferences.putBoolean(SORT_BY_TITLE, actionMenu.findItem(R.id.sort_title).isChecked());
-        preferences.putBoolean(SORT_BY_COLOR, actionMenu.findItem(R.id.sort_color).isChecked());
-
         preferences.apply();
     }
 
@@ -347,7 +330,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 noteList,
                 listToView,
                 R.string.refreshing_notes_list,
-                getSortOrder(),
+                OneNote.DATE + " DESC",
                 // FIXME: this. ?
                 getApplicationContext()).execute();
 
@@ -355,12 +338,10 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         status.setText(R.string.welcome);
     }
 
-    private void UpdateList(String suid,
-                            String noteBody,
+    private void UpdateList(String noteBody,
                             UpdateThread.Action action) {
         synchronized (this) {
-            updateThread = new UpdateThread(ImapNotesAccount,
-                    suid,
+            updateThread = new UpdateThread(
                     noteBody,
                     action).execute();
         }
@@ -375,91 +356,39 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         MenuBuilder m = (MenuBuilder) menu;
         m.setOptionalIconsVisible(true);
 
-        // Associate searchable configuration with the SearchView
-        // disable SearchManager and setSearchableInfo .. it seems confusing and useless
-        //SearchManager searchManager =
-        //        (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView =
-                (SearchView) menuItem.getActionView();
-        // searchView.setSearchableInfo(
-        //         searchManager.getSearchableInfo(getComponentName()));
-        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // this is your adapter that will be filtered
-                listToView.getFilter().filter(newText);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // this is your adapter that will be filtered
-                listToView.getFilter().filter(query);
-                return true;
-            }
-        };
-        // restore List and Filter after closing search
-        searchView.setOnCloseListener(() -> {
-            this.listToView.ResetFilterData(noteList);
-            return true;
-        });
-
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                accountSpinner.setEnabled(false);
-                listToView.getFilter().filter("");
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                accountSpinner.setEnabled(true);
-                listToView.getFilter().filter("");
-                return true;
-            }
-        });
-
-        searchView.setOnQueryTextListener(textChangeListener);
-
-        // load values from disk
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
-
-        if (preferences.getBoolean(SORT_BY_TITLE, false))
-            actionMenu.findItem(R.id.sort_title).setChecked(true);
-        else if (preferences.getBoolean(SORT_BY_COLOR, false))
-            actionMenu.findItem(R.id.sort_color).setChecked(true);
-        else
-            actionMenu.findItem(R.id.sort_date).setChecked(true);
 
         return true;
     }
 
-    private String getSortOrder() {
-        if (actionMenu.findItem(R.id.sort_title).isChecked())
-            return "UPPER(" + OneNote.TITLE + ") ASC";
-        if (actionMenu.findItem(R.id.sort_color).isChecked()) return OneNote.BGCOLOR + " ASC";
-
-        return OneNote.DATE + " DESC";
-    }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newaccount:
-                Intent res = new Intent();
+            case R.id.stop_gps:
+                /*Intent res = new Intent();
                 String mPackage = Utilities.PackageName;
                 String mClass = ".AccountConfigurationActivity";
                 res.setComponent(new ComponentName(mPackage, mPackage + mClass));
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
                 res.putExtra(ACCOUNTNAME, ImapNotesAccount.accountName);
-                startActivity(res);
+                startActivity(res);*/
+                startService(new Intent(ImapNotes3.getAppContext(), GpsSvc.class).setAction(ACTION_STOP_SERVICE));
                 return true;
             case R.id.refresh:
                 //TextView status = (TextView) findViewById(R.id.status);
                 TriggerSync(status);
                 return true;
-            case R.id.newnote:
+            case R.id.start_gps:
+                Intent intentSvc = new Intent(this, GpsSvc.class);
+                // If startForeground() in Service is called on UI thread, it won't show notification
+                // unless Service is started with startForegroundService().
+                if (SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
+                    startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
+                } else {
+                    if (!GpsSvc.mIsRunning) startService(intentSvc);
+                    startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
+                }
+                /*
                 Intent toNew;
                 if (intentActionSend != null){
                     toNew = intentActionSend;
@@ -470,50 +399,18 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 else {
                     if (noteList.isEmpty()){
                         String txt = String.valueOf(System.currentTimeMillis());
-                        String suid = "";
-                        String bgcolor = "blue";
-                        this.UpdateList(suid, txt, UpdateThread.Action.Insert);
-                        TriggerSync(status);
+                        this.UpdateList(txt, UpdateThread.Action.Insert);
+                        //TriggerSync(status);
                     }
                     else {
-                        HashMap hm = noteList.get(0);
                         String txt = String.valueOf(System.currentTimeMillis());
-                        String suid = hm.get(OneNote.UID).toString();
-                        String bgcolor = "blue";
-                        this.UpdateList(suid, txt, UpdateThread.Action.Update);
-                        TriggerSync(status);
+                        this.UpdateList( txt, UpdateThread.Action.Update);
+                        //TriggerSync(status);
 
                     }
 
                 }
-
-                return true;
-            case R.id.sort_date:
-            case R.id.sort_title:
-            case R.id.sort_color: {
-                item.setChecked(true);
-                RefreshList();
-                return true;
-            }
-
-            case R.id.about:
-                String about = getString(R.string.license) + "\n";
-                about += "Name: " + BuildConfig.APPLICATION_ID + "\n";
-                about += "Version: " + BuildConfig.VERSION_NAME + "\n";
-                about += "Code: " + BuildConfig.VERSION_CODE + "\n";
-                about += "Build typ: " + BuildConfig.BUILD_TYPE + "\n";
-                about += getString(R.string.internet) + "\n";
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.about) + " " + BuildConfig.APPLICATION_NAME)
-                        .setIcon(R.mipmap.ic_launcher)
-                        .setMessage(about)
-                        .setPositiveButton("OK", (dialog, which) -> {
-                            // Do nothing
-                        })
-                        .show();
-                return true;
-            case R.id.send_debug_report:
-                SendLogcatMail();
+*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -530,7 +427,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     // Delete Message asked for
                     // String suid will contain the Message Imap UID to delete
                     String suid = data.getStringExtra(DELETE_ITEM_NUM_IMAP);
-                    this.UpdateList(suid, null, UpdateThread.Action.Delete);
+                    this.UpdateList(null, UpdateThread.Action.Delete);
                 }
                 if (resultCode == ListActivity.EDIT_BUTTON) {
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
@@ -538,9 +435,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     //Log.d(TAG,"Received request to edit message:"+suid);
                     //Log.d(TAG,"Received request to replace message with:"+txt);
-                    this.UpdateList(suid, txt, UpdateThread.Action.Update);
+                    this.UpdateList(txt, UpdateThread.Action.Update);
                     //TextView status = (TextView) findViewById(R.id.status);
-                    TriggerSync(status);
+                    //TriggerSync(status);
                 }
                 break;
             case ListActivity.NEW_BUTTON:
@@ -550,8 +447,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
-                    this.UpdateList("", txt, UpdateThread.Action.Insert);
-                    TriggerSync(status);
+                    this.UpdateList(txt, UpdateThread.Action.Insert);
+                    //TriggerSync(status);
                 }
                 break;
             case ListActivity.ADD_ACCOUNT:
@@ -586,6 +483,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         }
         listToView.ResetFilterData(noteList);
         ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
+        UpdateThread.setImapNotesAccount(ListActivity.ImapNotesAccount);
         RefreshList();
     }
 
@@ -606,6 +504,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         if (ListActivity.currentList.size() == 1) {
             Account account = ListActivity.accounts[0];
             ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
+            UpdateThread.setImapNotesAccount(ListActivity.ImapNotesAccount);
 /*            ImapNotesAccount.SetUsername(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.UserName));
             String pwd = ListActivity.accountManager.getPassword(account);
             ImapNotesAccount.SetPassword(pwd);

@@ -28,11 +28,12 @@ import androidx.core.app.NotificationCompat.BigTextStyle;
 import androidx.core.app.NotificationCompat.Builder;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import de.niendo.ImapNotes3.Miscs.SyncThread;
+import de.niendo.ImapNotes3.Miscs.UpdateThread;
 
 public class GpsSvc extends Service implements LocationListener {
 
@@ -118,6 +119,8 @@ public class GpsSvc extends Service implements LocationListener {
   private final int NOTIF_ID = 100;
   private static final String CHANNEL_ID = "channel_gps_lock";
   private static final String CHANNEL_NAME = "GPS";
+  private static long lastSyncTime;
+  private static Location lastSyncLocation;
 
   private void showNotif() {
     mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -235,7 +238,26 @@ public class GpsSvc extends Service implements LocationListener {
         if (mGpsLoc != null
                 && (mGpsLoc.getLatitude()) != 0
                 && (mGpsLoc.getLongitude()) != 0) {
-          sText = "Lat:" + mGpsLoc.getLatitude() + "\nLon:" + mGpsLoc.getLongitude();
+          sText = String.format(Locale.ENGLISH,"Lat: %.5f\nLon: %.5f", mGpsLoc.getLatitude(), mGpsLoc.getLongitude());
+
+          float distance;
+          if (lastSyncLocation==null) distance = Float.MAX_VALUE;
+          else distance = mGpsLoc.distanceTo(lastSyncLocation);
+          long currentTime = System.currentTimeMillis();
+
+          if (((currentTime-lastSyncTime) > 30 * 60000) ||
+              (((currentTime-lastSyncTime) > 15 * 60000) && distance > 30) ||
+              (((currentTime-lastSyncTime) > 5 * 60000) && distance > 100)){
+
+            String updateMessage = String.format(Locale.ENGLISH,"Location<br>Lat,Lon: %.5f,%.5f<br>Time:%d",
+                    mGpsLoc.getLatitude(),
+                    mGpsLoc.getLongitude(),
+                    System.currentTimeMillis());
+
+            new UpdateThread(updateMessage, UpdateThread.Action.Update).execute();
+            lastSyncTime = System.currentTimeMillis();
+            lastSyncLocation = mGpsLoc;
+          }
         }
       }
       mNotifBuilder.setContentText(sText);

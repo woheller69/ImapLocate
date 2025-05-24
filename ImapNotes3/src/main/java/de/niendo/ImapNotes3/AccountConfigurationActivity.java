@@ -258,7 +258,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         syncIntervalNumberPicker = findViewById(R.id.syncintervalMinutes);
         syncIntervalNumberPicker.setMaxValue(24 * 60);
         syncIntervalNumberPicker.setMinValue(0);
-        syncIntervalNumberPicker.setValue(15);
+        syncIntervalNumberPicker.setValue(0);
 
         folderTextView = findTextViewById(R.id.folderEdit);
         stickyCheckBox = findViewById(R.id.stickyCheckBox);

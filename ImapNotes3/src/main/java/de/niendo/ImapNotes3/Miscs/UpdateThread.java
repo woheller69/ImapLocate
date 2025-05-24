@@ -1,30 +1,32 @@
 package de.niendo.ImapNotes3.Miscs;
 
-import android.content.Context;
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
+import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.widget.TextView;
 
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.ListActivity;
-import de.niendo.ImapNotes3.NotesListAdapter;
+import de.niendo.ImapNotes3.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.mail.Message;
@@ -41,7 +43,7 @@ import javax.mail.internet.MimeMultipart;
 // TODO: move arguments from execute to constructor.
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private static final String TAG = "IN_UpdateThread";
-    private final ImapNotesAccount ImapNotesAccount;
+    private static ImapNotesAccount imapNotesAccount;
     private final String noteBody;
     private final String bgColor;
     private final Action action;
@@ -49,26 +51,47 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private boolean bool_to_return;
     private final NotesDb storedNotes;
     private OneNote currentNote;
+    private ArrayList<OneNote> noteList;
+    private static final String AUTHORITY = Utilities.PackageName + ".provider";
 
+    public static void setImapNotesAccount(ImapNotesAccount account){
+        imapNotesAccount = account;
+    }
     /*
     Assign all fields in the constructor because we never reuse this object.  This makes the code
     typesafe.  Make them final to prevent accidental reuse.
     */
-    public UpdateThread(ImapNotesAccount ImapNotesAccount,
-                        String suid,
-                        String noteBody,
+    public UpdateThread(String noteBody,
                         Action action) {
         Log.d(TAG, "UpdateThread: " + noteBody);
-        this.ImapNotesAccount = ImapNotesAccount;
-        this.suid = suid;
         this.noteBody = noteBody;
         this.bgColor = "blue";
         this.action = action;
         this.storedNotes = NotesDb.getInstance(ImapNotes3.getAppContext());
         currentNote = null;
         //Notifier.Show(resId, applicationContext, 1);
+        this.noteList = new ArrayList<>();
+        storedNotes.GetStoredNotes(noteList, imapNotesAccount.accountName, OneNote.DATE + " DESC");
+        if (noteList.isEmpty()) this.suid = "";
+        else {
+            HashMap hm = noteList.get(0);
+            this.suid = hm.get(OneNote.UID).toString();
+        }
+        Log.d("IN_UpdateThread","SUID "+suid);
+        TriggerSync();
     }
 
+    private static void TriggerSync() {
+        Account mAccount = imapNotesAccount.GetAccount();
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        Log.d(TAG,"Request a sync for:"+mAccount);
+        ContentResolver.cancelSync(mAccount, AUTHORITY);
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+    }
     @Override
     protected Boolean doInBackground(Object... stuffs) {
 
@@ -79,7 +102,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Here we delete the note from the local notes list
                 //Log.d(TAG,"Delete note in Listview");
                 MoveMailToDeleted(suid);
-                storedNotes.DeleteANote(suid, ImapNotesAccount.accountName);
+                storedNotes.DeleteANote(suid, imapNotesAccount.accountName);
                 bool_to_return = true;
             }
 
@@ -93,7 +116,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 String[] tok = Html.fromHtml(noteBody, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
                 String title = tok[0];
                 //String position = "0 0 0 0";
-                String body = (ImapNotesAccount.usesticky) ?
+                String body = (imapNotesAccount.usesticky) ?
                         noteBody.replaceAll("\n", "\\\\n") : noteBody;
 
                 //"<html><head></head><body>" + noteBody + "</body></html>";
@@ -102,7 +125,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
                 String stringDate = sdf.format(date);
-                currentNote = new OneNote(title, stringDate, "", ImapNotesAccount.accountName, bgColor);
+                currentNote = new OneNote(title, stringDate, "", imapNotesAccount.accountName, bgColor);
                 // Add note to database
                 if (!suid.startsWith("-")) {
                     // no temp. suid in use
@@ -112,7 +135,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: " + body);
-                WriteMailToNew(currentNote, ImapNotesAccount.usesticky, body);
+                WriteMailToNew(currentNote, imapNotesAccount.usesticky, body);
                 if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
                 }
@@ -216,7 +239,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         message.addHeader("Date", headerDate);
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
-        File accountDirectory = ImapNotesAccount.GetRootDirAccount();
+        File accountDirectory = imapNotesAccount.GetRootDirAccount();
         File directory = new File(accountDirectory, "new");
         try {
             message.setFrom(new InternetAddress(note.GetAccount(), false));
