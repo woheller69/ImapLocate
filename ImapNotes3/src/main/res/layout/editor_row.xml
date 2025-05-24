@@ -15,7 +15,7 @@
         android:contentDescription="@string/undo"
         android:src="@drawable/undo" />
 
-    <de.niendo.ImapLocate.Miscs.NDSpinner
+    <org.woheller69.ImapLocate.Miscs.NDSpinner
         android:id="@+id/row_spinner_dummy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,7 +8,7 @@ android {
 
     //Folder structure, applicationId, namespace, APPLICATION_NAME, authenticator.xml and syncadapter.xml must be coherent.
     defaultConfig {
-        applicationId "de.niendo.ImapLocate"
+        applicationId "org.woheller69.ImapLocate"
         targetSdkVersion 33
         minSdkVersion 25
         buildConfigField 'String', 'APPLICATION_NAME', '"ImapLocate"'
@@ -47,7 +47,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace 'de.niendo.ImapLocate'
+    namespace 'org.woheller69.ImapLocate'
 
 }
 

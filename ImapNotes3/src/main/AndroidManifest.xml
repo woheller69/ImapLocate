@@ -62,25 +62,25 @@
         <activity
             android:name=".AccountConfigurationActivity"
             android:exported="true"
-            android:parentActivityName="de.niendo.ImapLocate.ListActivity">
+            android:parentActivityName="org.woheller69.ImapLocate.ListActivity">
             <!-- What is this meta-data for?  There doesn't seem to be any code that uses it -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.niendo.ImapLocate.ListActivity" />
+                android:value="org.woheller69.ImapLocate.ListActivity" />
         </activity>
 
         <activity
             android:name=".NoteDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName="de.niendo.ImapLocate.ListActivity">
+            android:parentActivityName="org.woheller69.ImapLocate.ListActivity">
             <!-- What is this meta-data for?  There doesn't seem to be any code that uses it -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.niendo.ImapLocate.ListActivity" />
+                android:value="org.woheller69.ImapLocate.ListActivity" />
         </activity>
 
         <service
-            android:name="de.niendo.ImapLocate.Sync.ImapNotesAuthenticatorService"
+            android:name="org.woheller69.ImapLocate.Sync.ImapNotesAuthenticatorService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -96,12 +96,12 @@
          works.-->
         <!--suppress AndroidDomInspection -->
         <provider
-            android:name="de.niendo.ImapLocate.Sync.StubProvider"
-            android:authorities="de.niendo.ImapLocate.provider"
+            android:name="org.woheller69.ImapLocate.Sync.StubProvider"
+            android:authorities="org.woheller69.ImapLocate.provider"
             android:exported="false" />
 
         <service
-            android:name="de.niendo.ImapLocate.Sync.SyncService"
+            android:name="org.woheller69.ImapLocate.Sync.SyncService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />

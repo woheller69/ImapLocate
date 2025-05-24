@@ -1,7 +1,7 @@
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="de.niendo.ImapLocate"
+    android:accountType="org.woheller69.ImapLocate"
     android:allowParallelSyncs="false"
-    android:contentAuthority="de.niendo.ImapLocate.provider"
+    android:contentAuthority="org.woheller69.ImapLocate.provider"
     android:isAlwaysSyncable="false"
     android:supportsUploading="true"
     android:userVisible="true" />
