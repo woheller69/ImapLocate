@@ -5,11 +5,13 @@ android {
     buildToolsVersion "33.0.0"
 
     //noinspection GroovyMissingReturnStatement
+
+    //Folder structure, applicationId, namespace, APPLICATION_NAME, authenticator.xml and syncadapter.xml must be coherent.
     defaultConfig {
-        applicationId "de.niendo.ImapNotes3"
+        applicationId "de.niendo.ImapLocate"
         targetSdkVersion 33
         minSdkVersion 25
-        buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
+        buildConfigField 'String', 'APPLICATION_NAME', '"ImapLocate"'
     }
     buildTypes {
         release {
@@ -45,7 +47,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace 'de.niendo.ImapNotes3'
+    namespace 'de.niendo.ImapLocate'
 
 }
 

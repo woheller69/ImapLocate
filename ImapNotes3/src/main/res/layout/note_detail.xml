@@ -41,7 +41,7 @@
                 android:contentDescription="@string/redo"
                 android:src="@drawable/redo" />
 
-            <de.niendo.ImapNotes3.Miscs.NDSpinner
+            <de.niendo.ImapLocate.Miscs.NDSpinner
                 android:id="@+id/action_format"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:minHeight="48dp"
                 android:title="@string/format" />
 
-            <de.niendo.ImapNotes3.Miscs.NDSpinner
+            <de.niendo.ImapLocate.Miscs.NDSpinner
                 android:id="@+id/action_insert"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:minHeight="48dp"
                 android:title="@string/insert" />
 
-            <de.niendo.ImapNotes3.Miscs.NDSpinner
+            <de.niendo.ImapLocate.Miscs.NDSpinner
                 android:id="@+id/action_heading"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:minHeight="48dp"
                 android:title="@string/heading" />
 
-            <de.niendo.ImapNotes3.Miscs.NDSpinner
+            <de.niendo.ImapLocate.Miscs.NDSpinner
                 android:id="@+id/action_alignment"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
