@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ImapNotes3</string>
+    <string name="app_name" translatable="false">ImapLocate</string>
     <string name="new_account">New Account</string>
     <string name="new_note">New Note</string>
     <string name="refresh">Refresh</string>

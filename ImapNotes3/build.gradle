@@ -1,15 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('../keystore.jks')
-            storePassword 'ImapNotes2'
-            keyAlias 'ImapNotes'
-            keyPassword 'ImapNotes'
-        }
-    }
-
     compileSdkVersion 33
     buildToolsVersion "33.0.0"
 
@@ -18,13 +9,10 @@ android {
         applicationId "de.niendo.ImapNotes3"
         targetSdkVersion 33
         minSdkVersion 25
-        signingConfig signingConfigs.release
         buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
-
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type.
             minifyEnabled false
@@ -42,21 +30,14 @@ android {
 
         }
         debug {
-
             debuggable true
-        }
-    }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "${project.name}-${variant.versionName}-${variant.buildType.name}.apk"
         }
     }
 
     //noinspection GroovyMissingReturnStatement
     packagingOptions {
         resources {
-            excludes += ['META-INF/LICENSE.txt']
+            excludes += ['META-INF/*']
         }
     }
 
@@ -65,15 +46,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'de.niendo.ImapNotes3'
-
-    packagingOptions {
-        resources.excludes.add("META-INF/*")
-    }
-
-    //lint {
-    //    baseline = file("lint-baseline.xml")
-    //}
-
 
 }
 
@@ -87,10 +59,3 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.1.0'
     implementation 'org.jsoup:jsoup:1.15.3'
 }
-
-// ToDo
-//allprojects {
-//    tasks.withType(JavaCompile) {
-//        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-//    }
-//}

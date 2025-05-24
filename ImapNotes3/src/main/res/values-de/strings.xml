@@ -73,7 +73,6 @@
     <string name="minutes_short">min</string>
     <string name="share">Teilen</string>
     <string name="shared_note_from">"geteilte Notiz von "</string>
-    <string name="app_name">ImapNotes3</string>
     <string name="account_name_not_valid_email">Kontoname ist keine E-Mail-Adresse</string>
     <string name="account_modified">Konto wurde geändert</string>
     <string name="intent_save_as_note">Als Notiz speichern</string>
