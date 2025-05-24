@@ -108,6 +108,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
             if (hm != null) {
                 suid = hm.get(OneNote.UID).toString();
+                Log.d("SUID", suid);
                 File rootDir = new File(ImapNotes3.GetRootDir(), hm.get(OneNote.ACCOUNT).toString());
                 Message message = SyncUtils.ReadMailFromFileRootAndNew(suid, rootDir);
                 //Log.d(TAG, "rootDir is null: " + (rootDir == null));
@@ -124,7 +125,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         bgColor = htmlNote.color;
                     }
                     SetupRichEditor();
-                    editText.setHtml(stringres);
+                    editText.setHtml(String.valueOf(System.currentTimeMillis()));
+                    Save();
+                    finish();
                 } else {
                     // Entry can not opened..
                     ImapNotes3.ShowMessage(R.string.sync_wait_necessary, null, 3);
@@ -138,6 +141,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // new entry
             SetupRichEditor();
+            editText.setHtml(String.valueOf(System.currentTimeMillis()));
+            Save();
+            finish();//finishing activity
         } else if (ChangeNote.equals(ActivityTypeAddShare)) {   // new Entry from Share
             SetupRichEditor();
             editText.setHtml(getSharedText(intent));
@@ -496,7 +502,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
      * the calling activity to be saved in whatever fashion it that activity wishes.
      */
     private void Save() {
-        Log.d(TAG, "Save");
+        Log.d(TAG, "Save SUID " + suid );
         Intent intent = new Intent();
         intent.putExtra(ListActivity.EDIT_ITEM_NUM_IMAP, suid);
         Log.d(TAG, "Save html: " + editText.getHtml());

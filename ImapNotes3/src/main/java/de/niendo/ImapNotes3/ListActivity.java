@@ -1,5 +1,7 @@
 package de.niendo.ImapNotes3;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
@@ -14,7 +16,9 @@ import android.content.IntentFilter;
 import android.content.PeriodicSync;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +62,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -233,7 +239,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         // When item is clicked, we go to NoteDetailActivity
         listview.setOnItemClickListener((parent, widget, selectedNote, rowId) -> {
-            Log.d(TAG, "onItemClick");
+            Log.d(TAG, "onItemClick It"+ selectedNote);
             Intent toDetail;
             if (intentActionSend != null)
                 toDetail = intentActionSend;
@@ -269,6 +275,17 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
                         intentActionSend = null;
                     });
+        }
+
+        Intent intentSvc = new Intent(this, GpsSvc.class);
+        // If startForeground() in Service is called on UI thread, it won't show notification
+        // unless Service is started with startForegroundService().
+        if (SDK_INT >= Build.VERSION_CODES.O) {
+            if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
+            startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
+        } else {
+            if (!GpsSvc.mIsRunning) startService(intentSvc);
+            startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
         }
     }
 
@@ -451,13 +468,32 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 return true;
             case R.id.newnote:
                 Intent toNew;
-                if (intentActionSend != null)
+                if (intentActionSend != null){
                     toNew = intentActionSend;
-                else
-                    toNew = new Intent(this, NoteDetailActivity.class);
-                toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-                toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-                startActivityForResult(toNew, ListActivity.NEW_BUTTON);
+                    toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
+                    toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
+                    startActivityForResult(toNew, ListActivity.NEW_BUTTON);
+                }
+                else {
+                    if (noteList.isEmpty()){
+                        String txt = String.valueOf(System.currentTimeMillis());
+                        String suid = "";
+                        String bgcolor = "blue";
+                        this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Insert);
+                        TriggerSync(status);
+                    }
+                    else {
+                        HashMap hm = noteList.get(0);
+                        String txt = String.valueOf(System.currentTimeMillis());
+                        String suid = hm.get(OneNote.UID).toString();
+                        String bgcolor = "blue";
+                        this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Update);
+                        TriggerSync(status);
+
+                    }
+
+                }
+
                 return true;
             case R.id.sort_date:
             case R.id.sort_title:
