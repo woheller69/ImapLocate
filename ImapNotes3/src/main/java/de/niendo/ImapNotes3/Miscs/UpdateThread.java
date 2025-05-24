@@ -12,6 +12,7 @@ import android.util.Log;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
+import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.NotesListAdapter;
 
@@ -41,46 +42,30 @@ import javax.mail.internet.MimeMultipart;
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private static final String TAG = "IN_UpdateThread";
     private final ImapNotesAccount ImapNotesAccount;
-    private final @StringRes
-    int resId;
-    private final NotesListAdapter adapter;
-    private final ArrayList<OneNote> notesList;
     private final String noteBody;
     private final String bgColor;
-    private final WeakReference<Context> applicationContextRef;
     private final Action action;
     private String suid;
     private boolean bool_to_return;
     private final NotesDb storedNotes;
     private OneNote currentNote;
-    private int indexToDelete;
 
     /*
     Assign all fields in the constructor because we never reuse this object.  This makes the code
     typesafe.  Make them final to prevent accidental reuse.
     */
     public UpdateThread(ImapNotesAccount ImapNotesAccount,
-                        ArrayList<OneNote> noteList,
-                        NotesListAdapter listToView,
-                        @StringRes int resId,
                         String suid,
                         String noteBody,
-                        String bgColor,
-                        Context context,
                         Action action) {
         Log.d(TAG, "UpdateThread: " + noteBody);
         this.ImapNotesAccount = ImapNotesAccount;
-        this.notesList = noteList;
-        this.adapter = listToView;
-        this.resId = resId;
         this.suid = suid;
         this.noteBody = noteBody;
-        this.bgColor = bgColor;
-        this.applicationContextRef = new WeakReference<>(context);
+        this.bgColor = "blue";
         this.action = action;
-        this.storedNotes = NotesDb.getInstance(context);
+        this.storedNotes = NotesDb.getInstance(ImapNotes3.getAppContext());
         currentNote = null;
-        indexToDelete = -1;
         //Notifier.Show(resId, applicationContext, 1);
     }
 
@@ -93,7 +78,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //Log.d(TAG,"Received request to delete message #"+suid);
                 // Here we delete the note from the local notes list
                 //Log.d(TAG,"Delete note in Listview");
-                indexToDelete = getIndexByNumber(suid);
                 MoveMailToDeleted(suid);
                 storedNotes.DeleteANote(suid, ImapNotesAccount.accountName);
                 bool_to_return = true;
@@ -139,7 +123,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
-                indexToDelete = getIndexByNumber(oldSuid);
                 bool_to_return = true;
             }
 
@@ -152,20 +135,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     }
 
     protected void onPostExecute(Boolean result) {
-        if (result) {
-            if (indexToDelete >= 0) notesList.remove(indexToDelete);
-            if (!(currentNote == null)) notesList.add(0, currentNote);
-            adapter.notifyDataSetChanged();
-        }
+
     }
 
-    private int getIndexByNumber(String pNumber) {
-        for (OneNote _item : notesList) {
-            if (_item.GetUid().equals(pNumber))
-                return notesList.indexOf(_item);
-        }
-        return -1;
-    }
 
     /**
      * @param suid IMAP ID of the note.

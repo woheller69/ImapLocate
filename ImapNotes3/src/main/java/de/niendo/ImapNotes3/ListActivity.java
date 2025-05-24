@@ -357,18 +357,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     private void UpdateList(String suid,
                             String noteBody,
-                            String bgColor,
                             UpdateThread.Action action) {
         synchronized (this) {
             updateThread = new UpdateThread(ImapNotesAccount,
-                    noteList,
-                    listToView,
-                    R.string.updating_notes_list,
                     suid,
                     noteBody,
-                    bgColor,
-                    // FIXME: this. ?
-                    getApplicationContext(),
                     action).execute();
         }
     }
@@ -479,7 +472,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         String txt = String.valueOf(System.currentTimeMillis());
                         String suid = "";
                         String bgcolor = "blue";
-                        this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Insert);
+                        this.UpdateList(suid, txt, UpdateThread.Action.Insert);
                         TriggerSync(status);
                     }
                     else {
@@ -487,7 +480,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         String txt = String.valueOf(System.currentTimeMillis());
                         String suid = hm.get(OneNote.UID).toString();
                         String bgcolor = "blue";
-                        this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Update);
+                        this.UpdateList(suid, txt, UpdateThread.Action.Update);
                         TriggerSync(status);
 
                     }
@@ -537,7 +530,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     // Delete Message asked for
                     // String suid will contain the Message Imap UID to delete
                     String suid = data.getStringExtra(DELETE_ITEM_NUM_IMAP);
-                    this.UpdateList(suid, null, null, UpdateThread.Action.Delete);
+                    this.UpdateList(suid, null, UpdateThread.Action.Delete);
                 }
                 if (resultCode == ListActivity.EDIT_BUTTON) {
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
@@ -545,7 +538,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     //Log.d(TAG,"Received request to edit message:"+suid);
                     //Log.d(TAG,"Received request to replace message with:"+txt);
-                    this.UpdateList(suid, txt, bgcolor, UpdateThread.Action.Update);
+                    this.UpdateList(suid, txt, UpdateThread.Action.Update);
                     //TextView status = (TextView) findViewById(R.id.status);
                     TriggerSync(status);
                 }
@@ -557,7 +550,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String txt = data.getStringExtra(EDIT_ITEM_TXT);
                     //Log.d(TAG,"Received request to save message:"+res);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
-                    this.UpdateList("", txt, bgcolor, UpdateThread.Action.Insert);
+                    this.UpdateList("", txt, UpdateThread.Action.Insert);
                     TriggerSync(status);
                 }
                 break;
