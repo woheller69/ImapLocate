@@ -82,4 +82,5 @@
     <string name="insert_as_new_note">Insert shared data as new note</string>
     <string name="insert_in_note">Insert shared data</string>
     <string name="ok">OK</string>
+    <string name="gps_background">Allow background GPS usage</string>
 </resources>

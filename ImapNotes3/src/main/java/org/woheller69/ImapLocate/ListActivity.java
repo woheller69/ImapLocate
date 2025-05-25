@@ -1,7 +1,6 @@
 package org.woheller69.ImapLocate;
 
-import static android.os.Build.VERSION.SDK_INT;
-
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
@@ -14,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.PeriodicSync;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,9 +22,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.app.ActivityCompat;
 
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -199,6 +202,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportActionBar().setElevation(0); // or other
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
 
+        checkAndRequestPerms();
+
         this.accountSpinner = findViewById(R.id.accountSpinner);
         ListActivity.currentList = new ArrayList<>();
 
@@ -291,7 +296,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        registerReceiver(syncFinishedReceiver, new IntentFilter(SyncService.SYNC_FINISHED));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(syncFinishedReceiver, new IntentFilter(SyncService.SYNC_FINISHED), Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(syncFinishedReceiver, new IntentFilter(SyncService.SYNC_FINISHED));
+        }
     }
 
     @Override
@@ -378,16 +387,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 TriggerSync(status);
                 return true;
             case R.id.start_gps:
+                checkAndRequestPerms();
                 Intent intentSvc = new Intent(this, GpsSvc.class);
                 // If startForeground() in Service is called on UI thread, it won't show notification
                 // unless Service is started with startForegroundService().
-                if (SDK_INT >= Build.VERSION_CODES.O) {
-                    if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
-                    startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
-                } else {
-                    if (!GpsSvc.mIsRunning) startService(intentSvc);
-                    startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
-                }
+                if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
+                startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
                 /*
                 Intent toNew;
                 if (intentActionSend != null){
@@ -634,5 +639,36 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             }
         }
     }
+
+    private void checkAndRequestPerms() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        List<String> perms = new ArrayList<>();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                perms.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+                perms.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        } else  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                String message = this.getString(R.string.gps_background) + " \n\n >> " + getPackageManager().getBackgroundPermissionOptionLabel().toString() + " <<";
+
+                alertDialogBuilder.setMessage(message);
+                alertDialogBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 2));
+                alertDialogBuilder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+        }
+
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) && (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)){
+            perms.add(Manifest.permission.POST_NOTIFICATIONS);
+        }
+        if (!perms.isEmpty()) {
+            ActivityCompat.requestPermissions(this, perms.toArray(new String[] {}), 1);
+        }
+    }
+
 }
 

@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "33.0.0"
+    compileSdk 34
 
     //noinspection GroovyMissingReturnStatement
 
     //Folder structure, applicationId, namespace, APPLICATION_NAME, authenticator.xml and syncadapter.xml must be coherent.
     defaultConfig {
         applicationId "org.woheller69.ImapLocate"
-        targetSdkVersion 33
-        minSdkVersion 25
+        targetSdk 34
+        minSdkVersion 30
         buildConfigField 'String', 'APPLICATION_NAME', '"ImapLocate"'
     }
     buildTypes {
