@@ -1,1 +1,0 @@
-Anzeigen, Bearbeiten und Synchronisieren von HTML-Notizen in IMAP-Postfächern

@@ -1,6 +1,0 @@
-* improve sharing
-* improve receiving shared data
-* shared data can be inserted as new note or in an existing note
-* fix STARTTLS (thanks to axmanA)
-* logcat data can be send by user
-* make IMAP operations thread save
