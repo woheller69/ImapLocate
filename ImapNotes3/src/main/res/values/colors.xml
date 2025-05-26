@@ -14,15 +14,15 @@
     <color name="ActionBgColor">#C7C49E</color>
     <color name="ActionTxtColor">#3C490D</color>
 
-    <color name="ListBgColor">#FFFFAE</color>
+    <color name="ListBgColor">#FFFFFF</color>
     <color name="ListTxtColor">#3C490D</color>
     <color name="ListInfoTxtColor">#C7C49E</color>
 
-    <color name="StatusBgColor">#FFFFAE</color>
+    <color name="StatusBgColor">#FFFFFF</color>
     <color name="StatusBgErrColor">#FE877C</color>
-    <color name="StatusTxtColor">#C7C49E</color>
+    <color name="StatusTxtColor">#3C490D</color>
 
-    <color name="AccountBgColor">#FFFFAE</color>
+    <color name="AccountBgColor">#FFFFFF</color>
     <color name="AccountTxtColor">#3C490D</color>
 
     <color name="EditorMenuBgColor">#C7C49E</color>

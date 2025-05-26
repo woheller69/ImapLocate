@@ -1,54 +1,14 @@
-ImapNotes3
-==========
+# ImapLocate
+By leveraging existing IMAP infrastructure, **ImapLocate** provides a decentralized, protocol-driven approach to synchronizing device location data, avoiding reliance on third-party tracking services.
 
-This project is a clone from https://github.com/nbenm/ImapNote2. It also uses some changes
-from https://github.com/kwhitefoot/ImapNote2 and maybe others
+Inspired by the original *ImapNotes3* project (which stored notes in an IMAP "Notes" folder), this app repurposes the concept to store GPS coordinates in an IMAP folder named "Location" by default. It uses Android’s GPS location services to determine the device’s current coordinates and synchronizes them to the IMAP account under the following conditions:
+- **Time-based**: Sync occurs if **30+ minutes** have passed since the last sync, regardless of movement.
+- **Hybrid time/distance**:
+     - Sync if **15+ minutes** have passed **and** the device has moved **>30 meters** since the last sync.
+     - Sync if **5+ minutes** have passed **and** the device has moved **>100 meters**.
 
-Sync your notes between Android, iOs devices and different accounts like Gmail, iCloud and others
+This logic balances battery efficiency with location accuracy, ensuring updates during both prolonged inactivity (e.g., stationary devices) and significant movement.
 
-This project is a fork of "imapnote" one created by boemianrapsodi (boemianrapsody@gmail.com).
-Probably Pasquale Boemio. Some things didn't work correctly but it was impossible to contact him to
-correct these bugs.
+## **Origins & Licensing**
+This project is forked from [ImapNotes3](https://github.com/niendo1/ImapNotes3) and incorporates code from [GPS Cockpit](https://github.com/woheller69/gpscockpit), both published under the **GNU GPL v3.0** license.
 
-Original app is named "imapnote", and is available at https://code.google.com/p/imapnote/, So I
-decided to name this one "imapnote2". It is under the GPL v3 License, same as "imapnote"
-
-It is based on Apple way to manage notes. They are stored in an imap folder named "Notes". imapnote
-uses Gmail for syncing. As I use my own imap server, I have modified it to be used with any imap
-server that respects Apple method. It has been tested with Gmail, iCloud (imap.mail.me.com),
-Yahoo! (imap.mail.yahoo.com), AOL (imap.aol.com), posteo.de and of course my server. Even if not
-still tested, it should work with others.
-
-Main changes in ImapNotes3 are:
-
-- runs und android studio 2021
-- HTML Editor
-- color support
-- full text search
-- sdk version 33
-- notes from posteo.de and gmail.com are working again
-
-Main changes in ImapNote2 are :
-
-- app can be used with other servers, not only gmail
-- it's possible to open notes
-- no permissions are needed by the app
-- it works in landscape and portrait modes. Landscape is useful with some devices
-- it's possible to delete notes (trash option on detail screen)
-- it's possible to create new notes ("new note" option on list screen)
-- it's possible to modify notes (change note on detail screen, then save it with disk icon)
-- navigation uses ActionBar (minSdkVersion=14)
-- app has been modified to handle sticky notes used by Kerio Connect servers and Courier IMAP servers
-- even if not recommended, untrusted certificates can be used.
-- imap port number can be chosen. 993 is no more the only one accepted
-- security can be plain text, SSL/TLS or STARTTLS
-- multiple accounts can be used. Android account manager is used
-- works offline and sync is done in the background. Sync interval can be different for each account
-
-## Download
-
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/de.niendo.ImapNotes3/)
-
-Or get the APK from the [Releases Section](https://github.com/niendo1/ImapNotes3/releases/latest).

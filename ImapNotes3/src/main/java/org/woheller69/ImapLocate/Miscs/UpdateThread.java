@@ -64,7 +64,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         Action action) {
         Log.d(TAG, "UpdateThread: " + noteBody);
         this.noteBody = noteBody;
-        this.bgColor = "blue";
+        this.bgColor = "white";
         this.action = action;
         this.storedNotes = NotesDb.getInstance(ImapNotes3.getAppContext());
         currentNote = null;

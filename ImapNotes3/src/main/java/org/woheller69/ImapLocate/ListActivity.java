@@ -11,7 +11,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.PeriodicSync;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -27,19 +26,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +42,6 @@ import org.woheller69.ImapLocate.Data.ImapNotesAccount;
 import org.woheller69.ImapLocate.Data.NotesDb;
 import org.woheller69.ImapLocate.Data.OneNote;
 import org.woheller69.ImapLocate.Miscs.Imaper;
-import org.woheller69.ImapLocate.Miscs.SyncThread;
 import org.woheller69.ImapLocate.Miscs.UpdateThread;
 import org.woheller69.ImapLocate.Miscs.Utilities;
 import org.woheller69.ImapLocate.Sync.SyncService;
@@ -56,10 +49,9 @@ import org.woheller69.ImapLocate.Sync.SyncUtils;
 
 import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,7 +62,7 @@ import static org.woheller69.ImapLocate.AccountConfigurationActivity.ACTION;
 import static org.woheller69.ImapLocate.GpsSvc.ACTION_STOP_SERVICE;
 
 
-public class ListActivity extends AppCompatActivity implements OnItemSelectedListener, Filterable {
+public class ListActivity extends AppCompatActivity {
     private static final int SEE_DETAIL = 2;
     public static final int DELETE_BUTTON = 3;
     private static final int NEW_BUTTON = 4;
@@ -207,7 +199,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         this.accountSpinner = findViewById(R.id.accountSpinner);
         ListActivity.currentList = new ArrayList<>();
 
-        this.accountSpinner.setOnItemSelectedListener(this);
         ImapNotes3.setContent(findViewById(android.R.id.content));
 
         //ImapNotesAccount = new ImapNotesAccount();
@@ -240,45 +231,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         storedNotes = NotesDb.getInstance(getApplicationContext());
 
-        // When item is clicked, we go to NoteDetailActivity
-        listview.setOnItemClickListener((parent, widget, selectedNote, rowId) -> {
-            Log.d(TAG, "onItemClick It"+ selectedNote);
-            Intent toDetail;
-            if (intentActionSend != null)
-                toDetail = intentActionSend;
-            else
-                toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
-            toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
-            toDetail.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-            toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
-            startActivityForResult(toDetail, SEE_DETAIL);
-            Log.d(TAG, "onItemClick, back from detail.");
-
-            //TriggerSync(status);
-        });
-
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
-
-        Log.d(TAG, "Check_Action_Send");
-        // Get intent, action and MIME type
-        Intent intent = getIntent();
-        String action = intent.getAction();
-
-        intentActionSend = null;
-        if (action.equals(Intent.ACTION_SEND)) {
-            intentActionSend = (Intent) intent.clone();
-            intentActionSend.setClass(this, NoteDetailActivity.class);
-            intentActionSend.setFlags(0);
-            intentActionSend.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-            intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
-
-            ImapNotes3.showAction(listview, R.string.insert_as_new_note, R.string.ok,
-                    () -> {
-                        startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
-                        intentActionSend = null;
-                    });
-        }
 
     }
 
@@ -333,20 +287,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    private void RefreshList() {
-        new SyncThread(
-                ImapNotesAccount.accountName,
-                noteList,
-                listToView,
-                R.string.refreshing_notes_list,
-                OneNote.DATE + " DESC",
-                // FIXME: this. ?
-                getApplicationContext()).execute();
-
-        status.setBackgroundColor(getColor(R.color.StatusBgColor));
-        status.setText(R.string.welcome);
-    }
-
     private void UpdateList(String noteBody,
                             UpdateThread.Action action) {
         synchronized (this) {
@@ -393,29 +333,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 // unless Service is started with startForegroundService().
                 if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
                 startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
-                /*
-                Intent toNew;
-                if (intentActionSend != null){
-                    toNew = intentActionSend;
-                    toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-                    toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-                    startActivityForResult(toNew, ListActivity.NEW_BUTTON);
-                }
-                else {
-                    if (noteList.isEmpty()){
-                        String txt = String.valueOf(System.currentTimeMillis());
-                        this.UpdateList(txt, UpdateThread.Action.Insert);
-                        //TriggerSync(status);
-                    }
-                    else {
-                        String txt = String.valueOf(System.currentTimeMillis());
-                        this.UpdateList( txt, UpdateThread.Action.Update);
-                        //TriggerSync(status);
 
-                    }
-
-                }
-*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -470,38 +388,10 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         }
     }
 
-    // Spinner item selected listener
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Account account = ListActivity.accounts[pos];
-        // Check periodic sync. If set to 86400 (once a day), set it to 900 (15 minutes)
-        // this is due to bad upgrade to v4 which handles offline mode and syncing
-        // Remove this code after V4.0 if version no more used
-        List<PeriodicSync> currentSyncs = ContentResolver.getPeriodicSyncs(account, AUTHORITY);
-        for (PeriodicSync onesync : currentSyncs) {
-            if (onesync.period == 86400) {
-                ContentResolver.setIsSyncable(account, AUTHORITY, 1);
-                ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
-                ContentResolver.addPeriodicSync(account, AUTHORITY, new Bundle(), 60);
-                ImapNotes3.ShowMessage("Recreating this account is recommended to manage sync interval. Set to 15 minutes in the meantime", accountSpinner, 2);
-            }
-        }
-        listToView.ResetFilterData(noteList);
-        ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
-        UpdateThread.setImapNotesAccount(ListActivity.ImapNotesAccount);
-        RefreshList();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // TODO Auto-generated method stub
-
-    }
 
     private void updateAccountSpinner() {
 
         this.spinnerList.notifyDataSetChanged();
-        //this.accountSpinner.setSelection(spinnerList.getPosition(currentAccountname));
         if (this.accountSpinner.getSelectedItemId() == android.widget.AdapterView.INVALID_ROW_ID) {
             this.accountSpinner.setSelection(0);
         }
@@ -510,53 +400,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             Account account = ListActivity.accounts[0];
             ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
             UpdateThread.setImapNotesAccount(ListActivity.ImapNotesAccount);
-/*            ImapNotesAccount.SetUsername(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.UserName));
-            String pwd = ListActivity.accountManager.getPassword(account);
-            ImapNotesAccount.SetPassword(pwd);
-            ImapNotesAccount.SetServer(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.Server));
-            ImapNotesAccount.SetPortnum(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.PortNumber));
-            ImapNotesAccount.SetSecurity(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.Security));
-            ImapNotesAccount.SetUsesticky("true".equals(accountManager.getUserData(account, ConfigurationFieldNames.UseSticky)));
-            ImapNotesAccount.SetSyncinterval(ListActivity.accountManager.getUserData(account, ConfigurationFieldNames.SyncInterval));
-            //ImapNotesAccount.SetaccountHasChanged();
- */
         }
-    }
-
-    // In case of neccessary debug  with user approval
-    public void SendLogcatMail() {
-        String emailData = "";
-        try {
-            Process process = Runtime.getRuntime().exec("logcat -d");
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            emailData = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //send file using email
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        String to[] = {""};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        // the attachment
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
-        // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for " + Utilities.FullApplicationName + " debugging");
-        emailIntent.setType("message/rfc822");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-    }
-
-    @Nullable
-    @Override
-    public Filter getFilter() {
-        return null;
     }
 
     private class AccountsUpdateListener implements OnAccountsUpdateListener {
@@ -641,7 +485,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     private void checkAndRequestPerms() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         List<String> perms = new ArrayList<>();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
