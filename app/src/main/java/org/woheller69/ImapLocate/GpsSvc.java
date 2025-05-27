@@ -38,23 +38,25 @@ import org.woheller69.ImapLocate.Miscs.UpdateThread;
 public class GpsSvc extends Service implements LocationListener {
 
   public static final String ACTION_STOP_SERVICE = APPLICATION_ID + ".action.STOP_SERVICE";
-
   public static boolean mIsRunning = false;
-
   private GnssStatus.Callback mGnssStatusCallback;
-
-
-  private final LocationManager mLocManager =
-      (LocationManager) ImapNotes3.getAppContext().getSystemService(Context.LOCATION_SERVICE);
-
-  private final PowerManager mPowerManager =
-      (PowerManager) ImapNotes3.getAppContext().getSystemService(Context.POWER_SERVICE);
-
-  private final NotificationManagerCompat mNotifManager =
-      NotificationManagerCompat.from(ImapNotes3.getAppContext());
-
+  private final LocationManager mLocManager = (LocationManager) ImapNotes3.getAppContext().getSystemService(Context.LOCATION_SERVICE);
+  private final PowerManager mPowerManager = (PowerManager) ImapNotes3.getAppContext().getSystemService(Context.POWER_SERVICE);
+  private final NotificationManagerCompat mNotifManager = NotificationManagerCompat.from(ImapNotes3.getAppContext());
   private Location mGpsLoc;
   private long mGpsLocTime;
+  public static final long MIN_DELAY = 10000;
+  private WakeLock mWakeLock;
+  private Builder mNotifBuilder;
+  private final int NOTIF_ID = 100;
+  private static final String CHANNEL_ID = "channel_gps_lock";
+  private static final String CHANNEL_NAME = "GPS";
+  private static long lastSyncTime;
+  private static Location lastSyncLocation;
+  private int mTotalSats, mUsedSats;
+  private Future<?> mFuture;
+  private final Object NOTIF_UPDATE_LOCK = new Object();
+  private long mLastUpdate;
 
   @Deprecated
   @Override
@@ -87,8 +89,6 @@ public class GpsSvc extends Service implements LocationListener {
     super.onDestroy();
   }
 
-
-
   @Override
   public void onLocationChanged(Location location) {
     mGpsLoc = location;
@@ -116,15 +116,6 @@ public class GpsSvc extends Service implements LocationListener {
     }
     stopSelf();
   }
-
-  private WakeLock mWakeLock;
-  private Builder mNotifBuilder;
-
-  private final int NOTIF_ID = 100;
-  private static final String CHANNEL_ID = "channel_gps_lock";
-  private static final String CHANNEL_NAME = "GPS";
-  private static long lastSyncTime;
-  private static Location lastSyncLocation;
 
   private void showNotif() {
     mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -164,20 +155,16 @@ public class GpsSvc extends Service implements LocationListener {
     updateNotification();
   }
 
-  public static final long MIN_DELAY = 10000;
-
   @SuppressLint("MissingPermission")
   private void startGpsLocListener() {
     mGnssStatusCallback = new GnssStatus.Callback() {
       @Override
       public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
 
-        mTotalSats = mSatsStrongSig = mUsedSats = 0;
+        mTotalSats = mUsedSats = 0;
         for (int i=0;i<status.getSatelliteCount();i++) {
           mTotalSats++;
-          if (status.getCn0DbHz(i) != 0) {
-            mSatsStrongSig++;
-          }
+
           if (status.usedInFix(i)) {
             mUsedSats++;
           }
@@ -205,11 +192,6 @@ public class GpsSvc extends Service implements LocationListener {
     mLocManager.unregisterGnssStatusCallback(mGnssStatusCallback);
   }
 
-  private int mTotalSats, mSatsStrongSig, mUsedSats;
-
-
-  private Future<?> mFuture;
-
   private synchronized void updateNotification() {
     final ExecutorService BG_EXECUTOR = Executors.newCachedThreadPool();
     if (mFuture != null) {
@@ -217,9 +199,6 @@ public class GpsSvc extends Service implements LocationListener {
     }
     mFuture = BG_EXECUTOR.submit(this::updateNotifBg);
   }
-
-  private final Object NOTIF_UPDATE_LOCK = new Object();
-  private long mLastUpdate;
 
   private void updateNotifBg() {
     synchronized (NOTIF_UPDATE_LOCK) {
@@ -234,7 +213,7 @@ public class GpsSvc extends Service implements LocationListener {
       mLastUpdate = System.currentTimeMillis();
 
       String sText = "", bText="";
-      long when = 0;
+
       mNotifBuilder.setContentTitle("GPS " +mUsedSats+" / " + mTotalSats);
       if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         sText = bText = "GPS off";
@@ -243,6 +222,11 @@ public class GpsSvc extends Service implements LocationListener {
                 && (mGpsLoc.getLatitude()) != 0
                 && (mGpsLoc.getLongitude()) != 0) {
           sText = String.format(Locale.ENGLISH,"Lat: %.5f\nLon: %.5f", mGpsLoc.getLatitude(), mGpsLoc.getLongitude());
+
+          String updateMessage;
+          String speedMessage;
+          String bearingMessage;
+          String distanceMessage;
 
           float distance;
           if (lastSyncLocation==null) distance = Float.MAX_VALUE;
@@ -253,12 +237,22 @@ public class GpsSvc extends Service implements LocationListener {
               (((currentTime-lastSyncTime) > 15 * 60000) && distance > 30) ||
               (((currentTime-lastSyncTime) > 5 * 60000) && distance > 100)){
 
-            String updateMessage = String.format(Locale.ENGLISH,"Location<br>Lat,Lon: %.5f,%.5f<br>Time:%d",
+            updateMessage = String.format(Locale.ENGLISH,"Lat,Lon: %.5f,%.5f<br>Time: %d<br>%s",
                     mGpsLoc.getLatitude(),
                     mGpsLoc.getLongitude(),
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    "https://www.openstreetmap.org/?mlat="+mGpsLoc.getLatitude()+"&mlon="+mGpsLoc.getLongitude()+"#map=16/"+mGpsLoc.getLatitude()+"/"+mGpsLoc.getLongitude());
 
-            new UpdateThread(updateMessage).execute();
+            if (distance != Float.MAX_VALUE) distanceMessage = String.format(Locale.ENGLISH,"<br>Distance: %.0f m",lastSyncLocation.distanceTo(mGpsLoc));
+            else distanceMessage = "";
+
+            if (mGpsLoc.hasSpeed()) speedMessage = String.format(Locale.ENGLISH,"<br>Speed: %.0f m/s",mGpsLoc.getSpeed());
+            else speedMessage = "";
+
+            if (mGpsLoc.hasBearing()) bearingMessage = String.format(Locale.ENGLISH,"<br>Bearing: %.1f °",mGpsLoc.getBearing());
+            else bearingMessage = "";
+
+            new UpdateThread(updateMessage + speedMessage + bearingMessage + distanceMessage).execute();
             lastSyncTime = System.currentTimeMillis();
             lastSyncLocation = mGpsLoc;
           }
@@ -266,12 +260,7 @@ public class GpsSvc extends Service implements LocationListener {
       }
       mNotifBuilder.setContentText(sText);
       mNotifBuilder.setStyle(new BigTextStyle().bigText(bText));
-      if (when != 0) {
-        mNotifBuilder.setWhen(when);
-        mNotifBuilder.setShowWhen(true);
-      } else {
-        mNotifBuilder.setShowWhen(false);
-      }
+      mNotifBuilder.setShowWhen(false);
       mNotifManager.notify(NOTIF_ID, mNotifBuilder.build());
     }
   }
