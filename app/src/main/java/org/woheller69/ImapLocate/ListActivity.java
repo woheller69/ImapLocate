@@ -63,35 +63,18 @@ import static org.woheller69.ImapLocate.GpsSvc.ACTION_STOP_SERVICE;
 
 
 public class ListActivity extends AppCompatActivity {
-    private static final int SEE_DETAIL = 2;
-    public static final int DELETE_BUTTON = 3;
-    private static final int NEW_BUTTON = 4;
-    private static final int SAVE_BUTTON = 5;
-    private static final int EDIT_BUTTON = 6;
     private static final int ADD_ACCOUNT = 7;
 
     public static final int ResultCodeSuccess = 0;
     public static final int ResultCodeError = -1;
 
-
-    //region Intent item names
-    public static final String EDIT_ITEM_NUM_IMAP = "EDIT_ITEM_NUM_IMAP";
-    public static final String EDIT_ITEM_TXT = "EDIT_ITEM_TXT";
-    public static final String EDIT_ITEM_COLOR = "EDIT_ITEM_COLOR";
     public static final String ACCOUNTNAME = "ACCOUNTNAME";
     public static final String SYNCINTERVAL = "SYNCINTERVAL";
     public static final String CHANGED = "CHANGED";
     public static final String SYNCED = "SYNCED";
     public static final String SYNCED_ERR_MSG = "SYNCED_ERR_MSG";
-    private static final String SAVE_ITEM_COLOR = "SAVE_ITEM_COLOR";
-    private static final String SAVE_ITEM = "SAVE_ITEM";
-    private static final String DELETE_ITEM_NUM_IMAP = "DELETE_ITEM_NUM_IMAP";
     private static final String ACCOUNTSPINNER_POS = "ACCOUNTSPINNER_POS";
-    private static final String SORT_BY_DATE = "SORT_BY_DATE";
-    private static final String SORT_BY_TITLE = "SORT_BY_TITLE";
-    private static final String SORT_BY_COLOR = "SORT_BY_COLOR";
-    //endregion
-    private Intent intentActionSend;
+
     private ArrayList<OneNote> noteList;
     private NotesListAdapter listToView;
     private ArrayAdapter<String> spinnerList;
@@ -102,13 +85,12 @@ public class ListActivity extends AppCompatActivity {
     @Nullable
     private static NotesDb storedNotes = null;
     private static List<String> currentList;
-    private static Menu actionMenu;
+
     @NonNull
     private final BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, @NonNull Intent intent) {
             Log.d(TAG, "BroadcastReceiver.onReceive");
             String accountName = intent.getStringExtra(ACCOUNTNAME);
-            boolean isChanged = intent.getBooleanExtra(CHANGED, false);
             boolean isSynced = intent.getBooleanExtra(SYNCED, false);
             String syncInterval = String.valueOf(intent.getIntExtra(SYNCINTERVAL, 14));
             String errorMessage = intent.getStringExtra(SYNCED_ERR_MSG);
@@ -133,10 +115,9 @@ public class ListActivity extends AppCompatActivity {
 
                 status.setText(statusText);
 
-                //if (isChanged) {
                 storedNotes.GetStoredNotes(noteList, accountName, OneNote.DATE + " DESC");
                 listToView.notifyDataSetChanged();
-                //}
+
             }
         }
     };
@@ -161,7 +142,6 @@ public class ListActivity extends AppCompatActivity {
     private static final String TAG = "IN_Listactivity";
     //@Nullable
     private TextView status;
-    private AsyncTask updateThread;
 
     public void onDestroy() {
         super.onDestroy();
@@ -176,7 +156,7 @@ public class ListActivity extends AppCompatActivity {
                 ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        //Log.d(TAG,"Request a sync for:"+mAccount);
+        Log.d(TAG,"Request a sync for:"+mAccount);
         ContentResolver.cancelSync(mAccount, AUTHORITY);
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
     }
@@ -213,7 +193,7 @@ public class ListActivity extends AppCompatActivity {
         accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
-        //((de.niendo.ImapNotes3) this.getApplicationContext()).SetNotesList(this.noteList);
+
         this.listToView = new NotesListAdapter(
                 this,
                 this.noteList,
@@ -233,17 +213,17 @@ public class ListActivity extends AppCompatActivity {
 
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
-
     }
 
     public void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-        //int len = accounts.length;
+
         int len = accountManager.getAccounts().length;
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
         accountSpinner.setSelection((int) preferences.getLong(ACCOUNTSPINNER_POS, 0));
         if (len > 0) updateAccountSpinner();
+
     }
 
     @Override
@@ -261,14 +241,7 @@ public class ListActivity extends AppCompatActivity {
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
-        if (!(updateThread == null)) {
-            // for some reason this helps...
-            synchronized (updateThread) {
-                if (updateThread.getStatus() == AsyncTask.Status.RUNNING) {
-                    Log.d(TAG, "onPause RUNNING");
-                }
-            }
-        }
+
     }
 
     @Override
@@ -287,19 +260,10 @@ public class ListActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    private void UpdateList(String noteBody,
-                            UpdateThread.Action action) {
-        synchronized (this) {
-            updateThread = new UpdateThread(
-                    noteBody,
-                    action).execute();
-        }
-    }
-
 
     @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        actionMenu = menu;
+
         getMenuInflater().inflate(R.menu.list, menu);
 
         MenuBuilder m = (MenuBuilder) menu;
@@ -313,20 +277,13 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.stop_gps:
-                /*Intent res = new Intent();
-                String mPackage = Utilities.PackageName;
-                String mClass = ".AccountConfigurationActivity";
-                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-                res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
-                res.putExtra(ACCOUNTNAME, ImapNotesAccount.accountName);
-                startActivity(res);*/
                 startService(new Intent(ImapNotes3.getAppContext(), GpsSvc.class).setAction(ACTION_STOP_SERVICE));
                 return true;
             case R.id.refresh:
-                //TextView status = (TextView) findViewById(R.id.status);
                 TriggerSync(status);
                 return true;
             case R.id.start_gps:
+                TriggerSync(status);
                 checkAndRequestPerms();
                 Intent intentSvc = new Intent(this, GpsSvc.class);
                 // If startForeground() in Service is called on UI thread, it won't show notification
@@ -344,36 +301,6 @@ public class ListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode);
         switch (requestCode) {
-            case ListActivity.SEE_DETAIL:
-                // Returning from NoteDetailActivity
-                if (resultCode == ListActivity.DELETE_BUTTON) {
-                    // Delete Message asked for
-                    // String suid will contain the Message Imap UID to delete
-                    String suid = data.getStringExtra(DELETE_ITEM_NUM_IMAP);
-                    this.UpdateList(null, UpdateThread.Action.Delete);
-                }
-                if (resultCode == ListActivity.EDIT_BUTTON) {
-                    String txt = data.getStringExtra(EDIT_ITEM_TXT);
-                    String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
-                    String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
-                    //Log.d(TAG,"Received request to edit message:"+suid);
-                    //Log.d(TAG,"Received request to replace message with:"+txt);
-                    this.UpdateList(txt, UpdateThread.Action.Update);
-                    //TextView status = (TextView) findViewById(R.id.status);
-                    //TriggerSync(status);
-                }
-                break;
-            case ListActivity.NEW_BUTTON:
-                // Returning from NewNoteActivity
-                if (resultCode == ListActivity.EDIT_BUTTON) {
-                    //String res = data.getStringExtra(SAVE_ITEM);
-                    String txt = data.getStringExtra(EDIT_ITEM_TXT);
-                    //Log.d(TAG,"Received request to save message:"+res);
-                    String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
-                    this.UpdateList(txt, UpdateThread.Action.Insert);
-                    //TriggerSync(status);
-                }
-                break;
             case ListActivity.ADD_ACCOUNT:
                 Log.d(TAG, "onActivityResult AccountsUpdateListener");
                 // Hack! accountManager.addOnAccountsUpdatedListener
@@ -409,7 +336,7 @@ public class ListActivity extends AppCompatActivity {
         public void onAccountsUpdated(@NonNull Account[] accounts) {
             Log.d(TAG, "onAccountsUpdated");
             List<String> newList;
-            //Integer newListSize = 0;
+
             //invoked when the AccountManager starts up and whenever the account set changes
             ArrayList<Account> newAccounts = new ArrayList<>();
             for (final Account account : accounts) {

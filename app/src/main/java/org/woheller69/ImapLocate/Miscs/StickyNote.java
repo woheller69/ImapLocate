@@ -40,38 +40,7 @@ public class StickyNote {
         // this.position = position;
         this.color = color;
     }
-/*
-    @Nullable
-    public static StickyNote GetStickyFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
-        String stringres = "";
-        //InputStream iis = null;
-        //Colors color = NONE;
-        //String charset;
-        try {
-            Log.d(TAG, "message :" + message);
-            contentType = new ContentType(message.getContentType());
-            String charset = contentType.getParameter("charset");
-            InputStream iis = (InputStream) message.getContent();
-            stringres = IOUtils.toString(iis, charset);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "Exception GetStickyFromMessage:");
-            Log.d(TAG, e.toString());
-            e.printStackTrace();
-        }
-        return ReadStickyNote(stringres);
-    }
 
-*/
-/*
-    private static String getPosition(String stringres) {
-
-        Matcher matcherPosition = patternPosition.matcher(stringres);
-        return matcherPosition.find() ?
-                matcherPosition.group(1) :
-                "";
-    }*/
 
     @Nullable
     public static StickyNote GetStickyFromMessage(@NonNull Message message) {
@@ -193,29 +162,4 @@ public class StickyNote {
         }
     }
 
-
-/*
-    public String GetPosition() {
-        return StickyNote.position;
-    }
-
-    public String GetText() {
-        return StickyNote.text;
-    }
-
-    public Colors GetColor() {
-        return StickyNote.color;
-    }
-
-    public void SetText(String text) {
-        StickyNote.text = text;
-    }
-
-    public void SetPosition(String position) {
-        StickyNote.position = position;
-    }
-
-    public void SetColor(Colors color) {
-        StickyNote.color = color;
-    }*/
 }

@@ -15,7 +15,6 @@ import org.woheller69.ImapLocate.Data.NotesDb;
 import org.woheller69.ImapLocate.Data.OneNote;
 import org.woheller69.ImapLocate.ImapNotes3;
 import org.woheller69.ImapLocate.ListActivity;
-import org.woheller69.ImapLocate.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,14 +29,10 @@ import java.util.Locale;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MailDateFormat;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 // TODO: move arguments from execute to constructor.
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
@@ -60,21 +55,22 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     Assign all fields in the constructor because we never reuse this object.  This makes the code
     typesafe.  Make them final to prevent accidental reuse.
     */
-    public UpdateThread(String noteBody,
-                        Action action) {
+    public UpdateThread(String noteBody) {
         Log.d(TAG, "UpdateThread: " + noteBody);
         this.noteBody = noteBody;
         this.bgColor = "white";
-        this.action = action;
         this.storedNotes = NotesDb.getInstance(ImapNotes3.getAppContext());
         currentNote = null;
         //Notifier.Show(resId, applicationContext, 1);
         this.noteList = new ArrayList<>();
         storedNotes.GetStoredNotes(noteList, imapNotesAccount.accountName, OneNote.DATE + " DESC");
-        if (noteList.isEmpty()) this.suid = "";
-        else {
+        if (noteList.isEmpty()){
+            this.suid = "";
+            this.action = Action.Insert;
+        }   else {
             HashMap hm = noteList.get(0);
             this.suid = hm.get(OneNote.UID).toString();
+            this.action = Action.Update;
         }
         Log.d("IN_UpdateThread","SUID "+suid);
         TriggerSync();
@@ -180,41 +176,6 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
             //noinspection ResultOfMethodCallIgnored
             from.renameTo(to);
         }
-    }
-
-    @NonNull
-    private Message MakeMessageWithAttachment(String subject,
-                                              String message,
-                                              String filePath,
-                                              Session session)
-            throws IOException, MessagingException {
-
-        Message msg = new MimeMessage(session);
-
-
-        msg.setSubject(subject);
-        msg.setSentDate(new Date());
-
-        // creates message part
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent(message, "text/html");
-
-        // creates multi-part
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(messageBodyPart);
-
-        // add attachment
-
-        MimeBodyPart attachPart = new MimeBodyPart();
-
-        attachPart.attachFile(filePath);
-
-
-        multipart.addBodyPart(attachPart);
-
-        // sets the multi-part as e-mail's content
-        msg.setContent(multipart);
-        return msg;
     }
 
     private void WriteMailToNew(@NonNull OneNote note,

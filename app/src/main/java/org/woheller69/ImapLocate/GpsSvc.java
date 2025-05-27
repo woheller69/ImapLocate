@@ -53,6 +53,9 @@ public class GpsSvc extends Service implements LocationListener {
   private final NotificationManagerCompat mNotifManager =
       NotificationManagerCompat.from(ImapNotes3.getAppContext());
 
+  private Location mGpsLoc;
+  private long mGpsLocTime;
+
   @Deprecated
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras){
@@ -68,6 +71,8 @@ public class GpsSvc extends Service implements LocationListener {
     if (intent == null || !ACTION_STOP_SERVICE.equals(intent.getAction())) {
       showNotif();
       startGpsLocListener();
+      lastSyncLocation = null;
+      lastSyncTime = 0;
       mIsRunning = true;
       return START_STICKY;
     } else {
@@ -82,8 +87,7 @@ public class GpsSvc extends Service implements LocationListener {
     super.onDestroy();
   }
 
-  private Location mGpsLoc;
-  private long mGpsLocTime;
+
 
   @Override
   public void onLocationChanged(Location location) {
@@ -231,7 +235,7 @@ public class GpsSvc extends Service implements LocationListener {
 
       String sText = "", bText="";
       long when = 0;
-      mNotifBuilder.setContentTitle("GPS");
+      mNotifBuilder.setContentTitle("GPS " +mUsedSats+" / " + mTotalSats);
       if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         sText = bText = "GPS off";
       } else {
@@ -254,7 +258,7 @@ public class GpsSvc extends Service implements LocationListener {
                     mGpsLoc.getLongitude(),
                     System.currentTimeMillis());
 
-            new UpdateThread(updateMessage, UpdateThread.Action.Update).execute();
+            new UpdateThread(updateMessage).execute();
             lastSyncTime = System.currentTimeMillis();
             lastSyncLocation = mGpsLoc;
           }
