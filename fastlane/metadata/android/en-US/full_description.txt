@@ -1,0 +1,1 @@
+<p><i>ImapLocate</i> uses Android’s GPS location services to determine the device’s current coordinates and synchronizes them to an IMAP account.</p>

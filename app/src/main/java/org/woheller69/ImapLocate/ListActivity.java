@@ -24,12 +24,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.View.OnClickListener;
 
 import android.widget.ArrayAdapter;
@@ -268,21 +270,14 @@ public class ListActivity extends AppCompatActivity {
 
         MenuBuilder m = (MenuBuilder) menu;
         m.setOptionalIconsVisible(true);
+        // Find the menu item with the Switch
+        MenuItem item = menu.findItem(R.id.start_gps);
+        View actionView = item.getActionView();
+        // Find the Switch inside the action layout
+        SwitchCompat switchView = actionView.findViewById(R.id.switchForActionBar); // Use the ID from your switch_layout.xml
 
-
-        return true;
-    }
-
-
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.stop_gps:
-                startService(new Intent(ImapNotes3.getAppContext(), GpsSvc.class).setAction(ACTION_STOP_SERVICE));
-                return true;
-            case R.id.refresh:
-                TriggerSync(status);
-                return true;
-            case R.id.start_gps:
+        switchView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
                 TriggerSync(status);
                 checkAndRequestPerms();
                 Intent intentSvc = new Intent(this, GpsSvc.class);
@@ -290,11 +285,21 @@ public class ListActivity extends AppCompatActivity {
                 // unless Service is started with startForegroundService().
                 if (!GpsSvc.mIsRunning) startForegroundService(intentSvc);
                 startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"+getPackageName())));
+            } else {
+                startService(new Intent(ImapNotes3.getAppContext(), GpsSvc.class).setAction(ACTION_STOP_SERVICE));
+            }
+        });
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.refresh) {
+            TriggerSync(status);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {

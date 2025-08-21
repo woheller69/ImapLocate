@@ -11,4 +11,5 @@ This logic balances battery efficiency with location accuracy, ensuring updates 
 
 ## **Origins & Licensing**
 This project is forked from [ImapNotes3](https://github.com/niendo1/ImapNotes3) and incorporates code from [GPS Cockpit](https://github.com/woheller69/gpscockpit), both published under the **GNU GPL v3.0** license.
+ImapLocate is published under **GNU GPL v3.0** license.
 

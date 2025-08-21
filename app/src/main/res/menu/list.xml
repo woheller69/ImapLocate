@@ -5,15 +5,9 @@
 
     <item
         android:id="@+id/start_gps"
-        android:icon="@drawable/ic_action_start"
-        android:title="Start GPS"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/stop_gps"
-        android:icon="@drawable/ic_action_stop"
-        android:title="Stop GPS"
-        app:showAsAction="always" />
+        android:title="Start/Stop GPS"
+        app:showAsAction="always"
+        app:actionLayout="@layout/switch_layout"/>
 
     <item
         android:id="@+id/refresh"
