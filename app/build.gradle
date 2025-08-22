@@ -50,6 +50,12 @@ android {
     }
     namespace 'org.woheller69.ImapLocate'
 
+    dependenciesInfo {
+        // Disable including dependency metadata when building APKs
+        includeInApk = false
+        // Disable including dependency metadata when building Android App Bundles
+        includeInBundle = false
+    }
 }
 
 dependencies {
